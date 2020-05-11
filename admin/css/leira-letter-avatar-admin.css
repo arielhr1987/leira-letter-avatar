@@ -1,0 +1,9 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+#wpadminbar #wp-admin-bar-my-account.with-avatar > a img {
+  background: transparent;
+  border-radius: 50%; }
+
+/*# sourceMappingURL=leira-letter-avatar-admin.css.map */

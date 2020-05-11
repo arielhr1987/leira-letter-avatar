@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA;;;GAGG;AASK,wDAAI;EACF,UAAU,EAAE,WAAW;EAEvB,aAAa,EAAE,GAAG",
+"sources": ["leira-letter-avatar-admin.scss"],
+"names": [],
+"file": "leira-letter-avatar-admin.css"
+}

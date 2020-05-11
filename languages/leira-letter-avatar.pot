@@ -1,0 +1,35 @@
+# Copyright (C) 2020 Ariel
+# This file is distributed under the same license as the Leira Letter Avatar plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Leira Letter Avatar 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/leira-letter-avatar\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2020-05-11T07:51:55+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.4.0\n"
+"X-Domain: leira-letter-avatar\n"
+
+#. Plugin Name of the plugin
+msgid "Leira Letter Avatar"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://wordpress.org/plugins/leira-letter-avatar/"
+msgstr ""
+
+#. Description of the plugin
+msgid "Enables custom avatars for users base on its initial letters."
+msgstr ""
+
+#. Author of the plugin
+msgid "Ariel"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://leira.dev"
+msgstr ""
