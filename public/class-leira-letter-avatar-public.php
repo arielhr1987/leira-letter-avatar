@@ -73,8 +73,9 @@ class Leira_Letter_Avatar_Public{
 		 * class.
 		 */
 
-		//wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/leira-letter-avatar-public.css', array(), $this->version, 'all' );
-
+		if ( is_admin_bar_showing() && get_option( 'avatar_default', 'mystery' ) === 'leira_letter_avatar' ) {
+			wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/leira-letter-avatar-public.css', array(), $this->version, 'all' );
+		}
 	}
 
 	/**
@@ -188,7 +189,7 @@ class Leira_Letter_Avatar_Public{
 		 * Determine avatar url parameters base on user and email hash
 		 */
 
-		$current_option = 'auto';
+		$current_option = get_option( 'leira_letter_avatar_method', 'auto' );
 		$options        = array(
 			'auto',
 			'fixed',
@@ -201,7 +202,7 @@ class Leira_Letter_Avatar_Public{
 		 */
 		switch ( $current_option ) {
 			case  'fixed':
-				$bg = 'fc91ad';
+				$bg = get_option( 'leira_letter_avatar_bg', 'fc91ad' );
 				break;
 			case 'random':
 
@@ -209,16 +210,16 @@ class Leira_Letter_Avatar_Public{
 
 				if ( empty( $bg ) || ! ctype_xdigit( $bg ) ) {
 					//calculate and save
-					$backgrounds = array(
-						'fc91ad',
-						'37c5ab',
-						'fd9a00',
-						'#794fcf',
-						'19C976'
-					);
-					$bg          = rand( 0, count( $backgrounds ) - 1 );
-					$bg          = $backgrounds[ $bg ]; //random background from array
-					$bg          = sprintf( '%06X', mt_rand( 0, 0xFFFFFF ) ); //random background
+					$backgrounds = get_option( 'leira_letter_avatar_method', 'fc91ad' );
+					$backgrounds = explode( ',', $backgrounds );
+					$backgrounds = array_map( 'trim', $backgrounds );
+					$backgrounds = array_filter( $backgrounds, 'ctype_xdigit' );
+					if ( empty( $backgrounds ) ) {
+						$backgrounds = array( 'fc91ad' ); // 'fc91ad', '37c5ab','fd9a00', '794fcf', '19C976'
+						//$backgrounds[] = sprintf( '%06X', mt_rand( 0, 0xFFFFFF ) ); //random background
+					}
+					$bg = rand( 0, count( $backgrounds ) - 1 );
+					$bg = $backgrounds[ $bg ]; //random background from array
 
 					if ( $user instanceof WP_User ) {
 						update_user_meta( $user->ID, '_leira_letter_avatar_bg', $bg );
@@ -226,6 +227,8 @@ class Leira_Letter_Avatar_Public{
 						update_comment_meta( $id_or_email->comment_ID, '_leira_letter_avatar_bg', $bg );
 					}
 
+				} else {
+					$bg = 'fc91ad';
 				}
 				break;
 			case 'auto':
@@ -233,6 +236,7 @@ class Leira_Letter_Avatar_Public{
 				$bg = substr( $email_hash, 0, 6 );
 		}
 		$bg = trim( trim( $bg ), '#' );
+		$bg = ctype_xdigit( $bg ) ? $bg : 'fc91ad';
 
 		/**
 		 * Determine letters to show in the avatar
@@ -255,10 +259,17 @@ class Leira_Letter_Avatar_Public{
 			$letters = ! empty( trim( $id_or_email->comment_author ) ) ? trim( $id_or_email->comment_author ) : trim( $id_or_email->comment_author_email );
 		}
 
-		$regex   = '/([^\pL]*(\pL)\pL*)/';// \pL => matches any kind of letter from any language
-		$letters = preg_replace( $regex, "$2", $letters );//get all initials in the string
-		$letters = substr( $letters, 0, 2 );//reduce to 2 or less initials
-		$letters = strtoupper( $letters );//uppercase initials
+		$regex         = '/([^\pL]*(\pL)\pL*)/';// \pL => matches any kind of letter from any language
+		$letters_count = get_option( 'leira_letter_avatar_letters', 2 );
+		$letters_count = filter_var( $letters_count, FILTER_VALIDATE_INT );
+		$letters_count = $letters_count > 2 ? 2 : $letters_count;
+		$letters_count = $letters_count < 1 ? 1 : $letters_count;
+		$letters       = preg_replace( $regex, "$2", $letters );//get all initials in the string
+		$letters       = substr( $letters, 0, $letters_count );//reduce to 2 or less initials
+
+		if ( get_option( 'leira_letter_avatar_uppercase', true ) ) {
+			$letters = strtoupper( $letters );//uppercase initials
+		}
 
 		/** Parameters:
 		 *  s    => size [16 , 512] default 64
@@ -275,8 +286,9 @@ class Leira_Letter_Avatar_Public{
 			's'  => $args['size'],
 			'bg' => $bg,
 			't'  => $letters,
-			'r'  => '1',
-			'c'  => 'fff'
+			'r'  => get_option( 'leira_letter_avatar_rounded', true ) ? '1' : 'no',
+			'c'  => $this->get_contrast_color( $bg ),
+			'b'  => get_option( 'leira_letter_avatar_bold', false ) ? '1' : 'no'
 		);
 
 		/**
@@ -295,4 +307,19 @@ class Leira_Letter_Avatar_Public{
 		return $url;
 	}
 
+	/**
+	 * Return best color given a background color
+	 *
+	 * @param string $hexcolor Hex color
+	 *
+	 * @return string Hex color
+	 */
+	public function get_contrast_color( $hexcolor ) {
+		$r   = hexdec( substr( $hexcolor, 1, 2 ) );
+		$g   = hexdec( substr( $hexcolor, 3, 2 ) );
+		$b   = hexdec( substr( $hexcolor, 5, 2 ) );
+		$yiq = ( ( $r * 299 ) + ( $g * 587 ) + ( $b * 114 ) ) / 1000;
+
+		return ( $yiq >= ( 256 * 0.75 ) ) ? '000' : 'fff';
+	}
 }

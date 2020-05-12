@@ -179,9 +179,17 @@ class Leira_Letter_Avatar{
 
 			$this->loader->add_filter( 'avatar_defaults', $plugin_admin, 'avatar_defaults' );
 
+			$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_settings_admin_menu' );
+
+			$this->loader->add_action( 'admin_init', $plugin_admin, 'init_settings' );
+
+			$this->loader->add_filter( 'pre_update_option', $plugin_admin, 'pre_update_option', 10, 3 );
+
+			$this->loader->add_filter( 'plugin_action_links', $plugin_admin, 'plugin_action_links', 10, 2 );
+
 			$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 
-			//$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+			$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		}
 	}
 
@@ -199,7 +207,7 @@ class Leira_Letter_Avatar{
 
 		$this->loader->add_filter( 'get_avatar_url', $plugin_public, 'get_avatar_url', 10, 3 );
 
-		//$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
+		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 
 		//$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 
@@ -280,6 +288,17 @@ class Leira_Letter_Avatar{
 	 */
 	public function __set( $key, $value ) {
 		$this->get_loader()->set( $key, $value );
+	}
+
+	/**
+	 * Determine if "Letter" is enabled as Avatar
+	 *
+	 * @return bool
+	 */
+	public function is_active() {
+		$option = get_option( 'avatar_default', 'mystery' );
+
+		return $option === 'leira_letter_avatar';
 	}
 
 }

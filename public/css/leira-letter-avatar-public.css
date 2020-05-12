@@ -2,3 +2,8 @@
  * All of the CSS for your public-facing functionality should be
  * included in this file.
  */
+body.admin-bar #wpadminbar #wp-admin-bar-my-account.with-avatar > a img {
+  background: transparent;
+  border: none; }
+
+/*# sourceMappingURL=leira-letter-avatar-public.css.map */

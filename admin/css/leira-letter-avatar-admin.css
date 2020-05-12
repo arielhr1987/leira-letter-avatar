@@ -2,8 +2,27 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
-#wpadminbar #wp-admin-bar-my-account.with-avatar > a img {
-  background: transparent;
-  border-radius: 50%; }
+body.settings_page_leira_letter_avatar {
+    /**
+     * Fix color control issue
+     */
+}
+
+body.settings_page_leira_letter_avatar .wp-picker-container {
+    line-height: 2;
+}
+
+body.settings_page_leira_letter_avatar .wp-picker-container .wp-color-result.button {
+    margin: 0 6px 0 6px;
+}
+
+body.settings_page_leira_letter_avatar .wp-picker-container .wp-picker-holder {
+    position: absolute;
+}
+
+body.admin-bar #wpadminbar #wp-admin-bar-my-account.with-avatar > a img {
+    background: transparent;
+    border: none;
+}
 
 /*# sourceMappingURL=leira-letter-avatar-admin.css.map */
