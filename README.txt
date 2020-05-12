@@ -9,7 +9,7 @@ Requires PHP: 5.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Manage easily your wordpress cron jobs.
+Generate beautiful avatars with user initial letters.
 
 == Description ==
 
@@ -26,11 +26,7 @@ With the plugin you will be able to:
 
 == Installation ==
 
-This section describes how to install the plugin and get it working.
-
-e.g.
-
-1. Upload the plugin files to the `/wp-content/plugins/leira-cron-jobs` directory, or install the plugin through the WordPress plugins screen directly.
+1. Upload the plugin files to the `/wp-content/plugins/leira-letter-avatar` directory, or install the plugin through the WordPress plugins screen directly.
 2. Activate the plugin through the 'Plugins' screen in WordPress
 3. Use the Settings->Plugin Name screen to configure the plugin
 4. Happy coding :)
@@ -63,24 +59,6 @@ No. At the moment you won't be able to manage schedules, but we plan to have tha
 10. You will only be able to delete cron jobs with a missing hook.
 
 == Changelog ==
-
-= 1.2.2 =
-* Adding spanish language
-* More information about cron jobs in Help tab
-
-= 1.2.1 =
-* New help information about blue and red list table rows
-* Date time editor css fix
-
-= 1.2.0 =
-* Plugin refactored
-
-= 1.1.2 =
-* Improve list table sort
-
-= 1.1.1 =
-* Screenshot 6 updated
-* Source code improvement
 
 = 1.0.0 =
 * The first plugin release
