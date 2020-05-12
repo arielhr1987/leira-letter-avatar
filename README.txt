@@ -9,20 +9,13 @@ Requires PHP: 5.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Generate beautiful avatars with user initial letters.
+Automatically generate beautiful user avatars using their initial letters.
 
 == Description ==
 
-Cron Jobs is a simple, but powerful plugin that will help you to manage your site cron jobs easily.
+Letters Avatar allows you to generate automatically user avatar base on their initial letters.
 
-We provide basic actions to manage cron jobs. New features are plan to be available soon
-
-With the plugin you will be able to:
-
-* Run and bulk run selected cron jobs.
-* Quick edit the cron jobs with a simple wordpress like tool directly in the list.
-* Manage your screen display options in the top right corner "Screen Options" section.
-* Get help and documentation about cron jobs.
+Fully customizable from admin area. You will be able edit avatar settings like shape, background color, etc.
 
 == Installation ==
 
@@ -33,30 +26,19 @@ With the plugin you will be able to:
 
 == Frequently Asked Questions ==
 
-= Can I create new cron jobs with this plugin =
+= What is the format the generated avatar  =
 
-No. The plugin only allows you to run, edit and delete the cron job.
+.svg
 
-= What aspects of the cron job i will be able to edit =
+= How avatars are stored  =
 
-The tool will help you to edit schedule, next execution time and the cron job arguments
+Avatars are svg images generated on the fly.
 
-= Can I manage wordpress schedules =
+= Will I be able to select my own letters =
 
-No. At the moment you won't be able to manage schedules, but we plan to have that feature soon.
-
+No. The plugin automatically generate the image with the initial letters of you First name and Last name.
 
 == Screenshots ==
-1. You will find a new menu item "Cron Jobs" under "Tools" menu.
-2. List of all available cron jobs. Cron jobs without action will be marked in red.
-3. Quick edit any cron job. You will be able to edit cron "arguments", "schedules" and "next run".
-4. Bulk actions for selected cron jobs.
-5. Customize your page in the "Screen Options" section.
-6. Quick information about Wordpress cron jobs.
-7. Information about "Screen Options" customization.
-8. Status of your Wordpress installation constants.
-9. Search for cron jobs.
-10. You will only be able to delete cron jobs with a missing hook.
 
 == Changelog ==
 
