@@ -73,7 +73,7 @@ $length = $length > 2 ? 2 : $length;
 /**
  * Text
  */
-$text = isset( $_GET['t'] ) ? (string) $_GET['t'] : '';
+$text = isset( $_GET['t'] ) ? filter_var( $_GET['t'], FILTER_SANITIZE_STRING ) : '';
 $text = substr( $text, 0, $length );
 
 /**
