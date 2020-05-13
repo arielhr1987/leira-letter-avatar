@@ -97,13 +97,13 @@ if ( $uppercase ) {
 /**
  * Background color
  */
-$background = ( isset( $_GET['bg'] ) && sanitize_hex_color( $_GET['bg'] ) ) ? trim( $_GET['bg'], '#' ) : 'fc91ad';
+$background = ( isset( $_GET['bg'] ) && sanitize_hex_color( $_GET['bg'] ) ) ? sanitize_hex_color( trim( $_GET['bg'], '#' ) ) : 'fc91ad';
 
 /**
  * Text color
  */
 $color = ( hexdec( $background ) > 0xffffff / 2 ) ? '000' : 'fff';
-$color = isset( $_GET['c'] ) && sanitize_hex_color( $_GET['c'] ) ? trim( $_GET['c'], '#' ) : $color;
+$color = isset( $_GET['c'] ) && sanitize_hex_color( $_GET['c'] ) ? sanitize_hex_color( trim( $_GET['c'], '#' ) ) : $color;
 
 $avatar = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="' . $size . 'px" height="' . $size . 'px" viewBox="0 0 ' . $size . ' ' . $size . '" style="user-select: none;" version="1.1"><' . ( $rounded ? 'circle' : 'rect' ) . ' fill="#' . trim( $background, '#' ) . '" cx="' . ( $size / 2 ) . '" width="' . $size . '" height="' . $size . '" cy="' . ( $size / 2 ) . '" r="' . ( $size / 2 ) . '"/><text x="50%" y="50%" style="color: #' . trim( $color, '#' ) . '; line-height: 1;font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', \'Roboto\', \'Oxygen\', \'Ubuntu\', \'Fira Sans\', \'Droid Sans\', \'Helvetica Neue\', sans-serif;" alignment-baseline="middle" text-anchor="middle" font-size="' . $font_size . '" font-weight="' . ( $bold ? 600 : 400 ) . '" dy=".1em" dominant-baseline="middle" fill="#' . trim( $color, '#' ) . '">' . $text . '</text></svg>';
 
