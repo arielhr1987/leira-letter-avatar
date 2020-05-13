@@ -50,6 +50,13 @@ class Leira_Letter_Avatar_Admin{
 	protected $capability = 'manage_options';
 
 	/**
+	 * Helper class
+	 *
+	 * @var Leira_Letter_Avatar_Sanitizer
+	 */
+	protected $sanitize = null;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @param string $plugin_name The name of this plugin.
@@ -61,6 +68,7 @@ class Leira_Letter_Avatar_Admin{
 
 		$this->plugin_name = $plugin_name;
 		$this->version     = $version;
+		$this->sanitize    = leira_letter_avatar()->sanitizer;
 
 	}
 
@@ -229,15 +237,56 @@ class Leira_Letter_Avatar_Admin{
 		/**
 		 * Register settings
 		 */
-		register_setting( 'leira_letter_avatar_settings', 'avatar_default', array( 'default' => 'mystery' ) );
-		register_setting( 'leira_letter_avatar_settings', 'leira_letter_avatar_rounded', array( 'default' => true ) );
-		register_setting( 'leira_letter_avatar_settings', 'leira_letter_avatar_letters', array( 'default' => 2 ) );
-		register_setting( 'leira_letter_avatar_settings', 'leira_letter_avatar_bold', array( 'default' => false ) );
-		register_setting( 'leira_letter_avatar_settings', 'leira_letter_avatar_uppercase', array( 'default' => true ) );
-		register_setting( 'leira_letter_avatar_settings', 'leira_letter_avatar_method', array( 'default' => 'auto' ) );
-		register_setting( 'leira_letter_avatar_settings', 'leira_letter_avatar_bg', array( 'default' => '' ) );
-		register_setting( 'leira_letter_avatar_settings', 'leira_letter_avatar_bgs', array( 'default' => '' ) );
-
+		register_setting( 'leira_letter_avatar_settings', 'avatar_default', array(
+			'type'              => 'string',
+			'sanitize_callback' => array( $this->sanitize, 'avatar_default' ),
+			'default'           => 'mystery'
+		) );
+		register_setting( 'leira_letter_avatar_settings', 'leira_letter_avatar_rounded', array(
+			//Valid values: 'string', 'boolean', 'integer', 'number', 'array', and 'object'.
+			'type'              => 'boolean',
+			//A description of the data attached to this setting.
+			'description'       => '',
+			//A callback function that sanitizes the option's value.
+			'sanitize_callback' => array( $this->sanitize, 'boolean' ),
+			'default'           => true
+		) );
+		register_setting( 'leira_letter_avatar_settings', 'leira_letter_avatar_letters', array(
+			'type'              => 'integer',
+			'description'       => '',
+			'sanitize_callback' => array( $this->sanitize, 'letters' ),
+			'default'           => 2
+		) );
+		register_setting( 'leira_letter_avatar_settings', 'leira_letter_avatar_bold', array(
+			'type'              => 'boolean',
+			'description'       => '',
+			'sanitize_callback' => array( $this->sanitize, 'boolean' ),
+			'default'           => false
+		) );
+		register_setting( 'leira_letter_avatar_settings', 'leira_letter_avatar_uppercase', array(
+			'type'              => 'boolean',
+			'description'       => '',
+			'sanitize_callback' => array( $this->sanitize, 'boolean' ),
+			'default'           => true
+		) );
+		register_setting( 'leira_letter_avatar_settings', 'leira_letter_avatar_method', array(
+			'type'              => 'string',
+			'description'       => '',
+			'sanitize_callback' => array( $this->sanitize, 'method' ),
+			'default'           => 'auto'
+		) );
+		register_setting( 'leira_letter_avatar_settings', 'leira_letter_avatar_bg', array(
+			'type'              => 'string',
+			'description'       => '',
+			'sanitize_callback' => array( $this->sanitize, 'background' ),
+			'default'           => 'fc91ad'
+		) );
+		register_setting( 'leira_letter_avatar_settings', 'leira_letter_avatar_bgs', array(
+			'type'              => 'string',
+			'description'       => '',
+			'sanitize_callback' => array( $this->sanitize, 'backgrounds' ),
+			'default'           => ''
+		) );
 		/**
 		 * Register sections
 		 */
@@ -324,6 +373,7 @@ class Leira_Letter_Avatar_Admin{
 	function render_active_settings() {
 
 		$option = get_option( 'avatar_default', 'mystery' );
+		$option = $this->sanitize->avatar_default( $option );
 		?>
         <label for="settings_avatar_default">
             <input type='checkbox' name='avatar_default' id="settings_avatar_default"
@@ -341,7 +391,7 @@ class Leira_Letter_Avatar_Admin{
 	 */
 	function render_shape_settings() {
 		$rounded = get_option( 'leira_letter_avatar_rounded', true );
-		$rounded = filter_var( $rounded, FILTER_VALIDATE_BOOLEAN );
+		$rounded = $this->sanitize->boolean( $rounded );
 		?>
         <fieldset>
             <legend class="screen-reader-text">
@@ -369,15 +419,13 @@ class Leira_Letter_Avatar_Admin{
 	 */
 	function render_letters_settings() {
 		$letters = get_option( 'leira_letter_avatar_letters', 2 );
-		$letters = filter_var( $letters, FILTER_VALIDATE_INT );
-		$letters = $letters < 1 ? 1 : $letters;
-		$letters = $letters > 2 ? 2 : $letters;
+		$letters = $this->sanitize->letters( $letters );
 
 		$bold = get_option( 'leira_letter_avatar_bold', false );
-		$bold = filter_var( $bold, FILTER_VALIDATE_BOOLEAN );
+		$bold = $this->sanitize->boolean( $bold );
 
 		$uppercase = get_option( 'leira_letter_avatar_uppercase', true );
-		$uppercase = filter_var( $uppercase, FILTER_VALIDATE_BOOLEAN );
+		$uppercase = $this->sanitize->boolean( $uppercase );
 		?>
         <fieldset>
             <legend class="screen-reader-text">
@@ -424,12 +472,14 @@ class Leira_Letter_Avatar_Admin{
 	 * @since 1.0.0
 	 */
 	function render_background_settings() {
-		$method  = get_option( 'leira_letter_avatar_method' );
-		$methods = array( 'auto', 'fixed', 'random' );
-		$method  = in_array( $method, $methods ) ? $method : 'auto';
+		$method = get_option( 'leira_letter_avatar_method' );
+		$method = $this->sanitize->method( $method );
 
-		$bg  = get_option( 'leira_letter_avatar_bg', 'fc91ad' );
-		$bgs = get_option( 'leira_letter_avatar_bgs' );
+		$bg = get_option( 'leira_letter_avatar_bg', 'fc91ad' );
+		$bg = $this->sanitize->background( $bg );
+
+		$bgs = get_option( 'leira_letter_avatar_bgs', '' );
+		$bgs = $this->sanitize->backgrounds( $bgs );
 		?>
         <fieldset>
             <legend class="screen-reader-text">
@@ -473,64 +523,6 @@ class Leira_Letter_Avatar_Admin{
             </div>
         </fieldset>
 		<?php
-	}
-
-	/**
-	 * Sanitize settings before save
-	 *
-	 * @param mixed  $value     The new, unserialized option value.
-	 * @param string $option    Name of the option.
-	 * @param mixed  $old_value The old option value.
-	 *
-	 * @return mixed Sanitized value
-	 * @since 1.0.0
-	 */
-	public function pre_update_option( $value, $option, $old_value ) {
-
-		switch ( $option ) {
-			case 'avatar_default':
-				$avatar_defaults = array(
-					'mystery',
-					'blank',
-					'gravatar_default',
-					'identicon',
-					'wavatar',
-					'monsterid',
-					'retro',
-				);
-				$avatar_defaults = array_fill_keys( $avatar_defaults, '' );
-				$avatar_defaults = apply_filters( 'avatar_defaults', $avatar_defaults );
-				$value           = isset( $avatar_defaults[ $value ] ) ? $value : 'mystery';
-				break;
-			case 'leira_letter_avatar_rounded':
-			case 'leira_letter_avatar_bold':
-			case 'leira_letter_avatar_uppercase':
-				$value = filter_var( $value, FILTER_VALIDATE_BOOLEAN );
-				break;
-			case 'leira_letter_avatar_letters':
-				$value = filter_var( $value, FILTER_VALIDATE_INT );
-				$value = $value > 2 ? 2 : $value;
-				$value = $value < 1 ? 1 : $value;
-				break;
-			case 'leira_letter_avatar_method':
-				$value   = sanitize_text_field( $value );
-				$methods = array( 'auto', 'fixed', 'random' );
-				$value   = in_array( $value, $methods ) ? $value : 'auto';
-				break;
-			case 'leira_letter_avatar_bg':
-				$value = trim( $value, '#' );
-				$value = ctype_xdigit( $value ) ? $value : $old_value;
-				break;
-			case 'leira_letter_avatar_bgs':
-				$value  = sanitize_text_field( $value );
-				$values = explode( ',', $value );
-				$values = array_map( 'trim', $values );
-				$values = array_filter( $values, 'ctype_xdigit' );
-				$value  = implode( $values, ',' );
-				break;
-		}
-
-		return $value;
 	}
 
 }

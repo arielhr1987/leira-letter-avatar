@@ -41,6 +41,13 @@ class Leira_Letter_Avatar_Public{
 	private $version;
 
 	/**
+	 * Helper class
+	 *
+	 * @var Leira_Letter_Avatar_Sanitizer
+	 */
+	protected $sanitize = null;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @param string $plugin_name The name of the plugin.
@@ -52,6 +59,7 @@ class Leira_Letter_Avatar_Public{
 
 		$this->plugin_name = $plugin_name;
 		$this->version     = $version;
+		$this->sanitize    = leira_letter_avatar()->sanitizer;
 	}
 
 	/**
@@ -190,19 +198,15 @@ class Leira_Letter_Avatar_Public{
 		 */
 
 		$current_option = get_option( 'leira_letter_avatar_method', 'auto' );
-		$options        = array(
-			'auto',
-			'fixed',
-			'random'
-		);
-		$current_option = in_array( $current_option, $options ) ? $current_option : 'auto';
+		$current_option = $this->sanitize->method( $current_option );
 
 		/**
 		 * Determine background
 		 */
 		switch ( $current_option ) {
 			case  'fixed':
-				$bg = get_option( 'leira_letter_avatar_bg', 'fc91ad' );
+				$bg = get_option( 'leira_letter_avatar_bg' );
+				$bg = $this->sanitize->background( $bg );
 				break;
 			case 'random':
 
@@ -210,10 +214,9 @@ class Leira_Letter_Avatar_Public{
 
 				if ( empty( $bg ) || ! ctype_xdigit( $bg ) ) {
 					//calculate and save
-					$backgrounds = get_option( 'leira_letter_avatar_method', 'fc91ad' );
+					$backgrounds = get_option( 'leira_letter_avatar_bgs', 'fc91ad' );
+					$backgrounds = $this->sanitize->backgrounds( $backgrounds );
 					$backgrounds = explode( ',', $backgrounds );
-					$backgrounds = array_map( 'trim', $backgrounds );
-					$backgrounds = array_filter( $backgrounds, 'ctype_xdigit' );
 					if ( empty( $backgrounds ) ) {
 						$backgrounds = array( 'fc91ad' ); // 'fc91ad', '37c5ab','fd9a00', '794fcf', '19C976'
 						//$backgrounds[] = sprintf( '%06X', mt_rand( 0, 0xFFFFFF ) ); //random background
@@ -227,8 +230,6 @@ class Leira_Letter_Avatar_Public{
 						update_comment_meta( $id_or_email->comment_ID, '_leira_letter_avatar_bg', $bg );
 					}
 
-				} else {
-					$bg = 'fc91ad';
 				}
 				break;
 			case 'auto':
@@ -236,7 +237,7 @@ class Leira_Letter_Avatar_Public{
 				$bg = substr( $email_hash, 0, 6 );
 		}
 		$bg = trim( trim( $bg ), '#' );
-		$bg = ctype_xdigit( $bg ) ? $bg : 'fc91ad';
+		$bg = $this->sanitize->background( $bg );
 
 		/**
 		 * Determine letters to show in the avatar
@@ -261,9 +262,7 @@ class Leira_Letter_Avatar_Public{
 
 		$regex         = '/([^\pL]*(\pL)\pL*)/';// \pL => matches any kind of letter from any language
 		$letters_count = get_option( 'leira_letter_avatar_letters', 2 );
-		$letters_count = filter_var( $letters_count, FILTER_VALIDATE_INT );
-		$letters_count = $letters_count > 2 ? 2 : $letters_count;
-		$letters_count = $letters_count < 1 ? 1 : $letters_count;
+		$letters_count = $this->sanitize->letters( $letters_count );
 		$letters       = preg_replace( $regex, "$2", $letters );//get all initials in the string
 		$letters       = substr( $letters, 0, $letters_count );//reduce to 2 or less initials
 

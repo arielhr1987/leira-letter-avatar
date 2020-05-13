@@ -22,6 +22,10 @@
  * Also maintains the unique identifier of this plugin as well as the current
  * version of the plugin.
  *
+ * @property Leira_Letter_Avatar_Admin     admin
+ * @property Leira_Letter_Avatar_Public    public
+ * @property Leira_Letter_Avatar_Sanitizer sanitizer
+ *
  * @since      1.0.0
  * @package    Leira_Letter_Avatar
  * @subpackage Leira_Letter_Avatar/includes
@@ -130,6 +134,11 @@ class Leira_Letter_Avatar{
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-leira-letter-avatar-i18n.php';
 
+		/**
+		 * Helper class with sanitation methods.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-leira-letter-avatar-sanitizer.php';
+
 		if ( is_admin() ) {
 			/**
 			 * The class responsible for defining all actions that occur in the admin area.
@@ -173,6 +182,9 @@ class Leira_Letter_Avatar{
 	 */
 	private function define_admin_hooks() {
 
+		$plugin_sanitizer = new Leira_Letter_Avatar_Sanitizer();
+		$this->loader->set( 'sanitizer', $plugin_sanitizer );
+
 		if ( is_admin() ) {
 			$plugin_admin = new Leira_Letter_Avatar_Admin( $this->get_plugin_name(), $this->get_version() );
 			$this->loader->set( 'admin', $plugin_admin );
@@ -182,8 +194,6 @@ class Leira_Letter_Avatar{
 			$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_settings_admin_menu' );
 
 			$this->loader->add_action( 'admin_init', $plugin_admin, 'init_settings' );
-
-			$this->loader->add_filter( 'pre_update_option', $plugin_admin, 'pre_update_option', 10, 3 );
 
 			$this->loader->add_filter( 'plugin_action_links', $plugin_admin, 'plugin_action_links', 10, 2 );
 
