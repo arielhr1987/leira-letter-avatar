@@ -271,29 +271,30 @@ class Leira_Letter_Avatar_Public{
 		}
 
 		/** Parameters:
-		 *  s    => size [16 , 512] default 64
-		 *  f    => font_size default
-		 *  l    => characters length [1|2] default 2
-		 *  t    => text to show
-		 *  r    => make a circle or square icon
-		 *  b    => text bold
-		 *  u    => text uppercase
-		 *  bg   => background color
-		 *  c    => text color
+		 *  size        => size [16 , 512] default 64
+		 *  font-size   => font_size default
+		 *  length      => characters length [1|2] default 2
+		 *  name        => text to show
+		 *  round       => make a circle or square icon
+		 *  bold        => text bold
+		 *  uppercase   => text uppercase
+		 *  background  => background color
+		 *  color       => text color
 		 */
 		$url_args = array(
-			's'  => $args['size'],
-			'bg' => $bg,
-			't'  => $letters,
-			'r'  => get_option( 'leira_letter_avatar_rounded', true ) ? '1' : 'no',
-			'c'  => $this->get_contrast_color( $bg ),
-			'b'  => get_option( 'leira_letter_avatar_bold', false ) ? '1' : 'no'
+			'size'       => $args['size'],
+			'background' => $bg,
+			'name'       => $letters,
+			'round'      => get_option( 'leira_letter_avatar_rounded', true ) ? '1' : 'no',
+			'color'      => $this->get_contrast_color( $bg ),
+			'bold'       => get_option( 'leira_letter_avatar_bold', false ) ? '1' : 'no'
 		);
 
 		/**
 		 * Base url for avatar
 		 */
-		$url = plugin_dir_url( dirname( plugin_basename( __FILE__ ) ) ) . 'public/';
+		//$url = plugin_dir_url( dirname( plugin_basename( __FILE__ ) ) ) . 'public/';
+		$url = 'https://us-central1-leira-letter-avatar.cloudfunctions.net/generate';
 
 		/**
 		 * Add parameters to base url
