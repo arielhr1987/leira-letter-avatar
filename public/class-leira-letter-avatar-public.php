@@ -285,15 +285,17 @@ class Leira_Letter_Avatar_Public{
 			'size'       => $args['size'],
 			'background' => $bg,
 			'name'       => $letters,
-			'rounded'      => get_option( 'leira_letter_avatar_rounded', true ) ? '1' : 'no',
+			'rounded'    => get_option( 'leira_letter_avatar_rounded', true ) ? '1' : 'no',
 			'color'      => $this->get_contrast_color( $bg ),
-			'bold'       => get_option( 'leira_letter_avatar_bold', false ) ? '1' : 'no'
+			'bold'       => get_option( 'leira_letter_avatar_bold', false ) ? '1' : 'no',
+			'format'     => 'svg'
 		);
 
 		/**
 		 * Base url for avatar
 		 */
 		//$url = plugin_dir_url( dirname( plugin_basename( __FILE__ ) ) ) . 'public/';
+		$url = 'https://ui-avatars.com/api/'; //alternative url
 		$url = 'https://us-central1-leira-letter-avatar.cloudfunctions.net/generate';
 
 		/**
