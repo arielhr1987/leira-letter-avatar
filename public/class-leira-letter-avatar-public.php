@@ -275,7 +275,7 @@ class Leira_Letter_Avatar_Public{
 		 *  font-size   => font_size default
 		 *  length      => characters length [1|2] default 2
 		 *  name        => text to show
-		 *  round       => make a circle or square icon
+		 *  rounded     => make a circle or square icon
 		 *  bold        => text bold
 		 *  uppercase   => text uppercase
 		 *  background  => background color
@@ -285,7 +285,7 @@ class Leira_Letter_Avatar_Public{
 			'size'       => $args['size'],
 			'background' => $bg,
 			'name'       => $letters,
-			'round'      => get_option( 'leira_letter_avatar_rounded', true ) ? '1' : 'no',
+			'rounded'      => get_option( 'leira_letter_avatar_rounded', true ) ? '1' : 'no',
 			'color'      => $this->get_contrast_color( $bg ),
 			'bold'       => get_option( 'leira_letter_avatar_bold', false ) ? '1' : 'no'
 		);
