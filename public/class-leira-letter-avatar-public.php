@@ -132,6 +132,14 @@ class Leira_Letter_Avatar_Public{
 			}
 		}
 
+		if ( is_admin() && wp_doing_ajax() ) {
+			// do something
+			$current_action = isset( $_REQUEST['action'] ) ? sanitize_text_field( $_REQUEST['action'] ) : false;
+			if ( $current_action == 'edit-comment' ) {
+				$args['default'] = 'leira_letter_avatar';
+			}
+		}
+
 		if ( ! isset( $args['default'] ) || $args['default'] !== 'leira_letter_avatar' ) {
 			/**
 			 * User didn't activate "Letters" options
@@ -282,29 +290,25 @@ class Leira_Letter_Avatar_Public{
 		 *  color       => text color
 		 */
 		$url_args = array(
+			'cache'      => 1, //change this number to force regenerate images
 			'size'       => $args['size'],
-			'background' => $bg,
+			'font-size'  => $args['size'] / 2,
+			//'length'     => '', //image text length already set
 			'name'       => $letters,
-			'rounded'    => get_option( 'leira_letter_avatar_rounded', true ) ? '1' : 'no',
+			'rounded'    => get_option( 'leira_letter_avatar_rounded', true ),
+			'background' => $bg,
+			'bold'       => get_option( 'leira_letter_avatar_bold', false ),
+			//'uppercase'  => '', //already set
 			'color'      => $this->get_contrast_color( $bg ),
-			'bold'       => get_option( 'leira_letter_avatar_bold', false ) ? '1' : 'no',
 			'format'     => 'svg'
 		);
 
-		/**
-		 * Base url for avatar
-		 */
-		//$url = plugin_dir_url( dirname( plugin_basename( __FILE__ ) ) ) . 'public/';
-		$url = 'https://ui-avatars.com/api/'; //alternative url
-		$url = 'https://us-central1-leira-letter-avatar.cloudfunctions.net/generate';
+		$url_args = apply_filters( 'leira_letter_avatar_url_args', $url_args, $id_or_email );
 
 		/**
-		 * Add parameters to base url
+		 * Generate Avatar Url
 		 */
-		$url = add_query_arg(
-			rawurlencode_deep( array_filter( $url_args ) ),
-			set_url_scheme( $url, $args['scheme'] )
-		);
+		$url = $this->generate_avatar_url( $url_args );
 
 		return $url;
 	}
@@ -323,5 +327,86 @@ class Leira_Letter_Avatar_Public{
 		$yiq = ( ( $r * 299 ) + ( $g * 587 ) + ( $b * 114 ) ) / 1000;
 
 		return ( $yiq >= ( 256 * 0.75 ) ) ? '000' : 'fff';
+	}
+
+	/**
+	 * Generate if it doesn't exist an image file from parameters.
+	 * If system is unable to create the image an image service is used instead
+	 *
+	 * @param array $data
+	 *
+	 * @return string
+	 * @since 1.0.0
+	 */
+	public function generate_avatar_url( array $data ) {
+
+		$url = 'https://ui-avatars.com/api/'; //alternative url
+		$url = 'https://us-central1-leira-letter-avatar.cloudfunctions.net/generate';
+
+		$params            = $data;//clone array
+		$params['rounded'] = ( isset( $params['rounded'] ) && $params['rounded'] ) ? '1' : 'no';
+		$params['bold']    = ( isset( $params['bold'] ) && $params['bold'] ) ? '1' : 'no';
+
+		$url = add_query_arg( rawurlencode_deep( array_filter( $params ) ), set_url_scheme( $url ) );
+
+		$save_to_uploads = true;
+		if ( $save_to_uploads ) {
+
+			//WP folders
+			$wp_uploads_dir      = wp_upload_dir();
+			$wp_uploads_dir_base = trailingslashit( $wp_uploads_dir['basedir'] ); //path to uploads
+			$wp_uploads_url_base = trailingslashit( $wp_uploads_dir['baseurl'] ); //url to uploads
+
+			//Avatar folder
+			$avatar_folder = apply_filters( 'leira_letter_avatar_upload_folder', 'letter-avatar' );
+			$avatar_folder = trailingslashit( $avatar_folder );
+
+			//Avatar folder path
+			$avatar_folder_path = $wp_uploads_dir_base . $avatar_folder;
+
+			//Avatar filename
+			$avatar_filename = md5( json_encode( $data ) ) . '.' . $data['format'];
+
+			//Avatar path
+			$avatar_path = $avatar_folder_path . $avatar_filename;
+
+			$avatar_exist = file_exists( $avatar_path );
+			if ( ! $avatar_exist ) {
+
+				$size       = isset( $data['size'] ) ? $data['size'] : 2;
+				$font_size  = isset( $data['font-size'] ) ? $data['font-size'] : abs( $size ) / 2;
+				$text       = isset( $data['name'] ) ? $data['name'] : true;
+				$background = isset( $data['background'] ) ? $data['background'] : true;
+				$color      = isset( $data['color'] ) ? $data['color'] : true;
+				$rounded    = isset( $data['rounded'] ) ? $data['rounded'] : true;
+				$bold       = isset( $data['bold'] ) ? $data['bold'] : true;
+
+				$avatar = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="' . $size . 'px" height="' . $size . 'px" viewBox="0 0 ' . $size . ' ' . $size . '" style="user-select: none;" version="1.1"><' . ( $rounded ? 'circle' : 'rect' ) . ' fill="#' . trim( $background, '#' ) . '" cx="' . ( $size / 2 ) . '" width="' . $size . '" height="' . $size . '" cy="' . ( $size / 2 ) . '" r="' . ( $size / 2 ) . '"/><text x="50%" y="50%" style="color: #' . trim( $color, '#' ) . '; line-height: 1;font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', \'Roboto\', \'Oxygen\', \'Ubuntu\', \'Fira Sans\', \'Droid Sans\', \'Helvetica Neue\', sans-serif;" alignment-baseline="middle" text-anchor="middle" font-size="' . $font_size . '" font-weight="' . ( $bold ? 600 : 400 ) . '" dy=".1em" dominant-baseline="middle" fill="#' . trim( $color, '#' ) . '">' . $text . '</text></svg>';
+
+				if ( ! file_exists( $avatar_folder_path ) ) {
+					@mkdir( $avatar_folder_path, ( fileperms( ABSPATH ) & 0777 | 0755 ), true );
+				}
+				//$avatar_exist = $wp_filesystem->put_contents( $avatar_path, $avatar, FS_CHMOD_FILE );
+				$fp = @fopen( $avatar_path, 'wb' );
+				if ( $fp ) {
+					mbstring_binary_safe_encoding();
+					$data_length   = strlen( $avatar );
+					$bytes_written = fwrite( $fp, $avatar );
+					reset_mbstring_encoding();
+					fclose( $fp );
+					if ( $data_length !== $bytes_written ) {
+						$avatar_exist = false;
+					} else {
+						$avatar_exist = true;
+					}
+					chmod( $avatar_path, ( fileperms( ABSPATH . 'index.php' ) & 0777 | 0644 ) );
+				}
+			}
+			if ( $avatar_exist ) {
+				$url = $wp_uploads_url_base . $avatar_folder . $avatar_filename;
+			}
+		}
+
+		return $url;
 	}
 }

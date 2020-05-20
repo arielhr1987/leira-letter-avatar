@@ -30,6 +30,16 @@ class Leira_Letter_Avatar_Sanitizer{
 	protected $default_bg = 'fc91ad';
 
 	/**
+	 * Get default background color
+	 *
+	 * @return string
+	 * @since 1.0.0
+	 */
+	public function getDefaultBackground() {
+		return $this->default_bg;
+	}
+
+	/**
 	 * Sanitize defaults
 	 *
 	 * @param $value
