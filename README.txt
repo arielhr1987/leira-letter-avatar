@@ -1,7 +1,7 @@
 === Leira Letter Avatar ===
 Contributors: arielhr1987, jlcd0894
 Donate link: https://github.com/arielhr1987
-Tags: user, avatar, image, admin, frontend
+Tags: user, avatar, image, admin, frontend, letter, initial
 Requires at least: 4.7
 Tested up to: 5.4.1
 Stable tag: 1.0.0
@@ -41,10 +41,10 @@ No. The plugin automatically generate the image with the initial letters of you 
 == Screenshots ==
 1. You will find a new menu item "Letter Avatar" under "Settings" menu.
 2. A new option "Letter" will be available for "Default Avatar".
-3. Comments list with generated user avatar.
-4. Users list with generated user avatar.
-5. Comments in Dashboard.
-6. Comments in frontend.
+3. Comments list with generated user letter avatar.
+4. Users list with generated user letter avatar.
+5. Comments in Dashboard with letter avatar.
+6. Comments in frontend with letter avatar.
 
 == Changelog ==
 
