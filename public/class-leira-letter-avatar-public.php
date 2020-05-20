@@ -140,6 +140,8 @@ class Leira_Letter_Avatar_Public{
 			}
 		}
 
+		//$args = apply_filters( 'leira_letter_avatar_args', $args, $id_or_email );
+
 		if ( ! isset( $args['default'] ) || $args['default'] !== 'leira_letter_avatar' ) {
 			/**
 			 * User didn't activate "Letters" options
