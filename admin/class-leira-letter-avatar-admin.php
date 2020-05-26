@@ -77,7 +77,7 @@ class Leira_Letter_Avatar_Admin{
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_styles() {
+	public function enqueue_styles( $page ) {
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -91,7 +91,7 @@ class Leira_Letter_Avatar_Admin{
 		 * class.
 		 */
 
-		if ( get_option( 'avatar_default', 'mystery' ) === 'leira_letter_avatar' ) {
+		if ( leira_letter_avatar()->is_active() ) {
 			/**
 			 * Style to fix admin bar icon border
 			 */
@@ -119,7 +119,7 @@ class Leira_Letter_Avatar_Admin{
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-		if ( get_option( 'avatar_default', 'mystery' ) === 'leira_letter_avatar' && $page === 'settings_page_leira_letter_avatar' ) {
+		if ( $page === 'settings_page_leira_letter_avatar' ) {
 
 			wp_enqueue_style( 'wp-color-picker' );
 			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/leira-letter-avatar-admin.js', array( 'wp-color-picker' ), $this->version, false );

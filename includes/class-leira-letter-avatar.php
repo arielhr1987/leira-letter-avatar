@@ -215,7 +215,16 @@ class Leira_Letter_Avatar{
 		$plugin_public = new Leira_Letter_Avatar_Public( $this->get_plugin_name(), $this->get_version() );
 		$this->loader->set( 'public', $plugin_public );
 
-		$this->loader->add_filter( 'get_avatar_url', $plugin_public, 'get_avatar_url', 10, 3 );
+		/**
+		 * BuddyPress hooks get_avatar_url with priority 10, we need to hook earlier
+		 */
+		$this->loader->add_filter( 'get_avatar_url', $plugin_public, 'get_avatar_url', 5, 3 );
+
+		$this->loader->add_filter( 'bp_core_fetch_avatar_no_grav', $plugin_public, 'bp_core_fetch_avatar_no_grav', 10, 2 );
+
+		$this->loader->add_filter( 'bp_core_default_avatar_user', $plugin_public, 'bp_core_default_avatar', 10, 2 );
+
+		//$this->loader->add_filter( 'bp_core_default_avatar_group', $plugin_public, 'bp_core_default_avatar', 10, 2 );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 
