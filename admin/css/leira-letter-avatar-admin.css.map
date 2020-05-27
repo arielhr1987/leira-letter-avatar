@@ -1,9 +1,7 @@
 {
-  "version": 3,
-  "mappings": "AAAA;;;GAGG;AAGD,sCAAoC;EAClC;;KAEG;EACH,2DAAqB;IACnB,WAAW,EAAE,CAAC;IAEd,mFAAwB;MACtB,MAAM,EAAE,WAAW;IAGrB,6EAAkB;MAChB,QAAQ,EAAE,QAAQ;AAed,uEAAI;EACF,UAAU,EAAE,WAAW;EACvB,MAAM,EAAE,IAAI",
-  "sources": [
-    "leira-letter-avatar-admin.scss"
-  ],
-  "names": [],
-  "file": "leira-letter-avatar-admin.css"
+"version": 3,
+"mappings": "AAAA;;;GAGG;AAGD,0DAAwD;EACtD;;KAEG;EACH,+EAAqB;IACnB,WAAW,EAAE,CAAC;IAEd,uGAAwB;MACtB,MAAM,EAAE,WAAW;IAGrB,iGAAkB;MAChB,QAAQ,EAAE,QAAQ;AAed,mGAAI;EACF,UAAU,EAAE,WAAW;EACvB,MAAM,EAAE,IAAI",
+"sources": ["leira-letter-avatar-admin.scss"],
+"names": [],
+"file": "leira-letter-avatar-admin.css"
 }

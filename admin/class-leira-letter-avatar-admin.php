@@ -75,28 +75,15 @@ class Leira_Letter_Avatar_Admin{
 	/**
 	 * Register the stylesheets for the admin area.
 	 *
-	 * @since    1.0.0
+	 * @since 1.0.0
 	 */
 	public function enqueue_styles( $page ) {
 
 		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Leira_Letter_Avatar_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Leira_Letter_Avatar_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
+		 * Hide admin bar avatar icon border if letter avatar is rounded.
 		 */
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/leira-letter-avatar-admin.css', array(), $this->version, 'all' );
 
-		if ( leira_letter_avatar()->is_active() ) {
-			/**
-			 * Style to fix admin bar icon border
-			 */
-			wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/leira-letter-avatar-admin.css', array(), $this->version, 'all' );
-		}
 	}
 
 	/**
@@ -104,20 +91,12 @@ class Leira_Letter_Avatar_Admin{
 	 *
 	 * @param string $page The name of the page being loaded
 	 *
-	 * @since    1.0.0
+	 * @since 1.0.0
 	 */
 	public function enqueue_scripts( $page ) {
 
 		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Leira_Letter_Avatar_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Leira_Letter_Avatar_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
+		 * Add js files if we are in our settings page
 		 */
 		if ( $page === 'settings_page_leira_letter_avatar' ) {
 
@@ -125,6 +104,26 @@ class Leira_Letter_Avatar_Admin{
 			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/leira-letter-avatar-admin.js', array( 'wp-color-picker' ), $this->version, false );
 		}
 
+	}
+
+	/**
+	 * Add letter avatar classes to admin body if is enabled
+	 * New classes will help to fix css errors.
+	 *
+	 * @param string $classes
+	 *
+	 * @return string
+	 * @since 1.1.0
+	 */
+	public function admin_body_class( $classes ) {
+		if ( leira_letter_avatar()->is_active() ) {
+			$classes .= ' leira_letter_avatar';
+			if ( get_option( 'leira_letter_avatar_rounded', true ) ) {
+				$classes .= ' leira_letter_avatar_rounded';
+			}
+		}
+
+		return $classes;
 	}
 
 	/**
@@ -220,7 +219,7 @@ class Leira_Letter_Avatar_Admin{
 
 		get_current_screen()->set_help_sidebar(
 			'<p><strong>' . __( 'For more information:', 'leira-letter-avatar' ) . '</strong></p>' .
-			'<p>' . __( '<a href="https://wordpress.org/support/">Support</a>', 'leira-letter-avatar' ) . '</p>' . //TODO: Change to github plugin page
+			'<p>' . __( '<a href="https://wordpress.org/support/plugin/leira-letter-avatar/">Support</a>', 'leira-letter-avatar' ) . '</p>' .
 			'<p>' . __( '<a href="https://github.com/arielhr1987/leira-letter-avatar/issues">Report an issue</a>', 'leira-letter-avatar' ) . '</p>'
 		);
 	}

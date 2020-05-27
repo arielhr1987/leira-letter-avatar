@@ -4,7 +4,7 @@
  */
 
 body {
-  &.settings_page_leira_letter_avatar {
+  &.leira_letter_avatar.settings_page_leira_letter_avatar {
     /**
      * Fix color control issue
      */
@@ -21,7 +21,7 @@ body {
     }
   }
 
-  &.admin-bar {
+  &.leira_letter_avatar_rounded.admin-bar {
 
     #wpadminbar {
 

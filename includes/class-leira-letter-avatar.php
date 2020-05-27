@@ -200,6 +200,8 @@ class Leira_Letter_Avatar{
 			$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 
 			$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+
+			$this->loader->add_filter( 'admin_body_class', $plugin_admin, 'admin_body_class' );
 		}
 	}
 
@@ -220,11 +222,11 @@ class Leira_Letter_Avatar{
 		 */
 		$this->loader->add_filter( 'get_avatar_url', $plugin_public, 'get_avatar_url', 5, 3 );
 
-		$this->loader->add_filter( 'bp_core_fetch_avatar_no_grav', $plugin_public, 'bp_core_fetch_avatar_no_grav', 10, 2 );
+		$this->loader->add_filter( 'bp_core_fetch_avatar_no_grav', $plugin_public, 'bp_core_fetch_avatar_no_grav', 10, 2 );//BuddyPress integration
 
-		$this->loader->add_filter( 'bp_core_default_avatar_user', $plugin_public, 'bp_core_default_avatar', 10, 2 );
+		$this->loader->add_filter( 'bp_core_default_avatar_user', $plugin_public, 'bp_core_default_avatar', 10, 2 );//BuddyPress integration
 
-		//$this->loader->add_filter( 'bp_core_default_avatar_group', $plugin_public, 'bp_core_default_avatar', 10, 2 );
+		//$this->loader->add_filter( 'bp_core_default_avatar_group', $plugin_public, 'bp_core_default_avatar', 10, 2 );//BuddyPress integration
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 

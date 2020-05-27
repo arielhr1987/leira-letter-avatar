@@ -185,7 +185,7 @@ class Leira_Letter_Avatar_Public{
 		 * $args should contain size
 		 */
 		$size       = isset( $args['size'] ) ? $args['size'] : 64;
-		$avatar_url = $this->generate_letter_avatar( $id_or_email, $size );
+		$avatar_url = $this->generate_letter_avatar_url( $id_or_email, $size );
 		if ( $avatar_url ) {
 			/**
 			 * If it was generated correctly se this avatar url
@@ -214,13 +214,16 @@ class Leira_Letter_Avatar_Public{
 	}
 
 	/**
-	 * @param mixed $id_or_email
-	 * @param int   $size
+	 * Generates image url for a User, Comment etc.
+	 * This method will determine background color, letters, shape etc to build the image
+	 *
+	 * @param mixed $id_or_email The object to generate the avatar for
+	 * @param int   $size        Size of the avatar
 	 *
 	 * @return string
 	 * @since 1.1.0
 	 */
-	protected function generate_letter_avatar( $id_or_email, $size = 300 ) {
+	protected function generate_letter_avatar_url( $id_or_email, $size = 300 ) {
 
 		$email_hash = '';
 		$user       = false;
@@ -373,9 +376,9 @@ class Leira_Letter_Avatar_Public{
 		$url_args = apply_filters( 'leira_letter_avatar_url_args', $url_args, $id_or_email );
 
 		/**
-		 * Generate Avatar Url
+		 * Generate Avatar image
 		 */
-		$url = $this->generate_avatar_url( $url_args );
+		$url = $this->generate_image( $url_args );
 
 		return $url;
 	}
@@ -387,9 +390,9 @@ class Leira_Letter_Avatar_Public{
 	 * @param array $data Array containing all parameters to generate image
 	 *
 	 * @return string
-	 * @since 1.0.0
+	 * @since 1.1.0
 	 */
-	public function generate_avatar_url( array $data ) {
+	public function generate_image( array $data ) {
 
 		$url = 'https://ui-avatars.com/api/'; //alternative url
 		$url = 'https://us-central1-leira-letter-avatar.cloudfunctions.net/generate';
@@ -423,7 +426,9 @@ class Leira_Letter_Avatar_Public{
 
 			$avatar_exist = file_exists( $avatar_path );
 			if ( ! $avatar_exist ) {
-
+				/**
+				 * Lets generate the image and save it to uploads folder
+				 */
 				$size       = isset( $data['size'] ) ? $data['size'] : 2;
 				$font_size  = isset( $data['font-size'] ) ? $data['font-size'] : abs( $size ) / 2;
 				$text       = isset( $data['name'] ) ? $data['name'] : true;
@@ -462,7 +467,8 @@ class Leira_Letter_Avatar_Public{
 	}
 
 	/**
-	 * Determine if buddy press should use gravatar if user didnt upload profile picture
+	 * Determine if buddy press should use gravatar as default image or letter avatar.
+	 * If user didnt upload profile picture this method is executed
 	 *
 	 * @param bool  $no_gravatar Do not use Gravatar
 	 * @param array $params      Parameters
@@ -495,7 +501,7 @@ class Leira_Letter_Avatar_Public{
 	}
 
 	/**
-	 * Generate image avatar for buddy press
+	 * Generate image avatar for buddy press.
 	 *
 	 * @param string $avatar_default
 	 * @param array  $params
@@ -504,109 +510,8 @@ class Leira_Letter_Avatar_Public{
 	 * @since 1.1.0
 	 */
 	public function bp_core_default_avatar( $avatar_default, $params ) {
-		/**
-		 * System forces to generate avatar with specific format.
-		 * This fix discussion settings repeated images
-		 */
-		$default       = isset( $params['default'] ) ? $params['default'] : false;
-		$force_default = isset( $params['force_default'] ) ? $params['force_default'] : false;
-		if ( $force_default && $default !== 'leira_letter_avatar' ) {
-			/**
-			 * We are in discussion settings
-			 */
-			$bp = buddypress();
-			// Set gravatar type.
-			if ( empty( $bp->grav_default->{$params['object']} ) ) {
-				$default_grav = 'wavatar';
-			} elseif ( 'mystery' == $bp->grav_default->{$params['object']} ) {
 
-				/**
-				 * Filters the Mystery person avatar src value.
-				 *
-				 * @param string $value Avatar value.
-				 * @param string $value Width to display avatar at.
-				 *
-				 * @since 1.2.0
-				 *
-				 */
-				$default_grav = apply_filters( 'bp_core_mysteryman_src', 'mm', $params['width'] );
-			} else {
-				$default_grav = $bp->grav_default->{$params['object']};
-			}
-
-			// Set gravatar object.
-			if ( empty( $params['email'] ) ) {
-				if ( 'user' == $params['object'] ) {
-					$params['email'] = bp_core_get_user_email( $params['item_id'] );
-				} elseif ( 'group' == $params['object'] || 'blog' == $params['object'] ) {
-					$params['email'] = $params['item_id'] . '-' . $params['object'] . '@' . bp_get_root_domain();
-				}
-			}
-
-			/**
-			 * Filters the Gravatar email to use.
-			 *
-			 * @param string $value Email to use in Gravatar request.
-			 * @param string $value ID of the item being requested.
-			 * @param string $value Object type being requested.
-			 *
-			 * @since 1.1.0
-			 *
-			 */
-			$params['email'] = apply_filters( 'bp_core_gravatar_email', $params['email'], $params['item_id'], $params['object'] );
-
-			/**
-			 * Filters the Gravatar URL host.
-			 *
-			 * @param string $value Gravatar URL host.
-			 *
-			 * @since 1.0.2
-			 *
-			 */
-			$gravatar = apply_filters( 'bp_gravatar_url', '//www.gravatar.com/avatar/' );
-
-			// Append email hash to Gravatar.
-			$gravatar .= md5( strtolower( $params['email'] ) );
-
-			// Main Gravatar URL args.
-			$url_args = array(
-				's' => $params['width']
-			);
-
-			// Custom Gravatar URL args.
-			if ( ! empty( $params['force_default'] ) ) {
-				$url_args['f'] = 'y';
-				$url_args['d'] = $params['default'];
-			}
-			if ( ! empty( $params['rating'] ) ) {
-				$url_args['r'] = strtolower( $params['rating'] );
-			}
-
-			/**
-			 * Filters the Gravatar "d" parameter.
-			 *
-			 * @param string $default_grav The avatar default.
-			 * @param array  $params       The avatar's data.
-			 *
-			 * @since 2.6.0
-			 *
-			 */
-			$default_grav = apply_filters( 'bp_core_avatar_default', $default_grav, $params );
-
-			// Only set default image if 'Gravatar Logo' is not requested.
-			if ( ! $params['force_default'] && 'gravatar_default' !== $default_grav ) {
-				$url_args['d'] = $default_grav;
-			}
-
-			// Set up the Gravatar URL.
-			$avatar_default = esc_url( add_query_arg(
-				rawurlencode_deep( array_filter( $url_args ) ),
-				$gravatar
-			) );
-
-			return $avatar_default;
-		}
-
+		$default = isset( $params['default'] ) ? $params['default'] : false;
 		/**
 		 * Generate letter avatar for specific user, group or site
 		 */
@@ -618,10 +523,10 @@ class Leira_Letter_Avatar_Public{
 			if ( $object == 'user' ) {
 				if ( isset( $params['item_id'] ) ) {
 					$user = get_user_by( 'id', $params['item_id'] );
-					$url  = $this->generate_letter_avatar( $user, $params['width'] );
+					$url  = $this->generate_letter_avatar_url( $user, $params['width'] );
 					if ( $url ) {
 						/**
-						 * If it was generated correctly se this avatar url
+						 * If it was generated correctly use this avatar url
 						 */
 						$avatar_default = $url;
 					}
