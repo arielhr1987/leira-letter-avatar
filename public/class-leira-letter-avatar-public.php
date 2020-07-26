@@ -182,13 +182,37 @@ class Leira_Letter_Avatar_Public{
 		}
 
 		/**
+		 * Use Gravatar if exist
+		 */
+		if ( $use_gravatar_if_exist = true ) {
+
+			if ( mb_strpos( $url, '.gravatar.com/avatar' ) !== false ) {
+				/**
+				 * We have a gravatar, lets get the email hash from the url
+				 */
+				$regex = '/(.*\.gravatar\.com\/avatar\/([0-9a-zA-Z]+)(\.|\/|\?|$).*)/';//email hash value
+				$hash  = preg_replace( $regex, "$2", $url );
+
+				if ( $this->gravatar_exist( $hash ) ) {
+					return $url;
+				}
+			} else {
+				/**
+				 * No gravatar means that other plugin is hooking early and setting its how avatar url
+				 * What should we do? return that plugin url? or continue with our url?
+				 */
+				//return $url;
+			}
+		}
+
+		/**
 		 * $args should contain size
 		 */
 		$size       = isset( $args['size'] ) ? $args['size'] : 64;
 		$avatar_url = $this->generate_letter_avatar_url( $id_or_email, $size );
 		if ( $avatar_url ) {
 			/**
-			 * If it was generated correctly se this avatar url
+			 * If it was generated correctly use this avatar url
 			 */
 			$url = $avatar_url;
 		}
@@ -223,7 +247,7 @@ class Leira_Letter_Avatar_Public{
 	 * @return string
 	 * @since 1.1.0
 	 */
-	protected function generate_letter_avatar_url( $id_or_email, $size = 300 ) {
+	protected function generate_letter_avatar_url( $id_or_email, $size = 300, $args = array() ) {
 
 		$email_hash = '';
 		$user       = false;
@@ -337,11 +361,11 @@ class Leira_Letter_Avatar_Public{
 			$letters = ! empty( trim( $id_or_email->comment_author ) ) ? trim( $id_or_email->comment_author ) : trim( $id_or_email->comment_author_email );
 		}
 
-		$regex         = '/([^\pL]*(\pL)\pL*)/';// \pL => matches any kind of letter from any language
+		$regex         = '/([^\pL]*(\pL)\pL*)/u';// \pL => matches any kind of letter from any language
 		$letters_count = get_option( 'leira_letter_avatar_letters', 2 );
 		$letters_count = $this->sanitize->letters( $letters_count );
 		$letters       = preg_replace( $regex, "$2", $letters );//get all initials in the string
-		$letters       = substr( $letters, 0, $letters_count );//reduce to 2 or less initials
+		$letters       = mb_substr( $letters, 0, $letters_count, 'UTF-8' );//reduce to 2 or less initials
 
 		if ( get_option( 'leira_letter_avatar_uppercase', true ) ) {
 			$letters = strtoupper( $letters );//uppercase initials
@@ -394,7 +418,6 @@ class Leira_Letter_Avatar_Public{
 	 */
 	public function generate_image( array $data ) {
 
-		$url = 'https://ui-avatars.com/api/'; //alternative url
 		$url = 'https://us-central1-leira-letter-avatar.cloudfunctions.net/generate';
 
 		$params            = $data;//clone array
@@ -523,7 +546,74 @@ class Leira_Letter_Avatar_Public{
 			if ( $object == 'user' ) {
 				if ( isset( $params['item_id'] ) ) {
 					$user = get_user_by( 'id', $params['item_id'] );
-					$url  = $this->generate_letter_avatar_url( $user, $params['width'] );
+
+					if ( $use_gravatar_if_exist = true ) {
+
+						$email = bp_core_get_user_email( $params['item_id'] );
+
+						if ( $this->gravatar_exist( $email ) ) {
+							/**
+							 * This block is documented in
+							 * /buddypress/bp-core/bp-core-avatars.php
+							 */
+
+							/**
+							 * Filters the Gravatar email to use.
+							 *
+							 * @param string $value Email to use in Gravatar request.
+							 * @param string $value ID of the item being requested.
+							 * @param string $value Object type being requested.
+							 *
+							 * @since 1.1.0
+							 *
+							 */
+							$email = apply_filters( 'bp_core_gravatar_email', $email, $params['item_id'], $params['object'] );
+
+							$email_hash = md5( strtolower( trim( $email ) ) );
+
+							/**
+							 * Determine gravatar server
+							 * Documented in wp-includes/link-template.php
+							 */
+							if ( is_ssl() ) {
+								$gravatar = 'https://secure.gravatar.com/avatar/';
+							} else {
+								$gravatar = sprintf( 'http://%d.gravatar.com/avatar/', rand( 0, 2 ) );
+							}
+
+							/**
+							 * Filters the Gravatar URL host.
+							 *
+							 * @param string $value Gravatar URL host.
+							 *
+							 * @since 1.0.2
+							 *
+							 */
+							$gravatar = apply_filters( 'bp_gravatar_url', $gravatar );
+
+							// Append email hash to Gravatar.
+							$gravatar .= $email_hash;
+
+							// Main Gravatar URL args.
+							$url_args = array(
+								's' => $params['width']
+							);
+
+							if ( ! empty( $params['rating'] ) ) {
+								$url_args['r'] = strtolower( $params['rating'] );
+							}
+
+							// Set up the Gravatar URL.
+							$gravatar = esc_url( add_query_arg(
+								rawurlencode_deep( array_filter( $url_args ) ),
+								$gravatar
+							) );
+
+							return $gravatar;
+						}
+					}
+
+					$url = $this->generate_letter_avatar_url( $user, $params['width'] );
 					if ( $url ) {
 						/**
 						 * If it was generated correctly use this avatar url
@@ -541,5 +631,57 @@ class Leira_Letter_Avatar_Public{
 		}
 
 		return $avatar_default;
+	}
+
+	/**
+	 * Determine default avatar tu use if user did not uploaded his own avatar
+	 *
+	 * @param string $url     Current avatar url
+	 * @param int    $user_id User id of the associated avatar
+	 * @param array  $data    Array of setting to build the avatar
+	 *
+	 * @return string
+	 */
+	public function um_user_avatar_url_filter( $url, $user_id, $data ) {
+		if ( empty( $user_id ) ) {
+			$user_id = um_user( 'ID' );
+		} else {
+			um_fetch_user( $user_id );
+		}
+
+		if ( ! um_profile( 'profile_photo' ) && ! um_user( 'synced_profile_photo' ) && ! UM()->options()->get( 'use_gravatars' ) ) {
+
+			$avatar = $this->generate_letter_avatar_url( $user_id, $data['size'] );
+			if ( $avatar ) {
+				$url = $avatar;
+			}
+		}
+
+		return $url;
+	}
+
+	/**
+	 * Check if a gravatar exists given an email hash value
+	 * https://codex.wordpress.org/Using_Gravatars#Checking_for_the_Existence_of_a_Gravatar
+	 *
+	 * @param $email
+	 *
+	 * @return bool
+	 */
+	public function gravatar_exist( $email ) {
+		// Craft a potential url and test its headers
+		$hash = mb_strpos( $email, '@' ) !== false ? md5( strtolower( trim( $email ) ) ) : trim( $email );
+		if ( empty( $email ) ) {
+			return false;
+		}
+		$uri     = 'http://www.gravatar.com/avatar/' . $hash . '?d=404';
+		$headers = @get_headers( $uri );
+		if ( ! preg_match( "|200|", $headers[0] ) ) {
+			$has_valid_avatar = false;
+		} else {
+			$has_valid_avatar = true;
+		}
+
+		return $has_valid_avatar;
 	}
 }

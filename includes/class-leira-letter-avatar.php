@@ -228,6 +228,8 @@ class Leira_Letter_Avatar{
 
 		//$this->loader->add_filter( 'bp_core_default_avatar_group', $plugin_public, 'bp_core_default_avatar', 10, 2 );//BuddyPress integration
 
+		$this->loader->add_filter( 'um_user_avatar_url_filter', $plugin_public, 'um_user_avatar_url_filter', 10, 3 );//Ultimate Membership integration
+
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 
 		//$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
