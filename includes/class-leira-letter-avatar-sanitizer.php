@@ -142,7 +142,7 @@ class Leira_Letter_Avatar_Sanitizer{
 			return trim( trim( $value ), '#' );
 		}, $values );
 		$values = array_filter( $values, 'sanitize_hex_color_no_hash' );
-		$value  = implode( $values, ',' );
+		$value  = implode( ',', $values );
 
 		return $value;
 	}

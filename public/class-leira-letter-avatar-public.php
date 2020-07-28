@@ -185,7 +185,7 @@ class Leira_Letter_Avatar_Public{
 		 * $args should contain size
 		 */
 		$size       = isset( $args['size'] ) ? $args['size'] : 64;
-		$avatar_url = $this->generate_letter_avatar_url( $id_or_email, compact( $size ) );
+		$avatar_url = $this->generate_letter_avatar_url( $id_or_email, array( 'size' => $size ) );
 		if ( $avatar_url ) {
 			/**
 			 * If it was generated correctly use this avatar url
@@ -224,7 +224,7 @@ class Leira_Letter_Avatar_Public{
 	 * @return string
 	 * @since 1.1.0
 	 */
-	protected function generate_letter_avatar_url( $id_or_email, $args = array() ) {
+	public function generate_letter_avatar_url( $id_or_email, $args = array() ) {
 
 		/**
 		 * backward compatibility
@@ -338,7 +338,13 @@ class Leira_Letter_Avatar_Public{
 				break;
 			case 'random':
 
-				$bg = $user instanceof WP_User ? $user->get( '_leira_letter_avatar_bg' ) : get_comment_meta( $id_or_email->comment_ID, '_leira_letter_avatar_bg' );
+				$bg = '';
+				if ( $user instanceof WP_User ) {
+					$bg = $user->get( '_leira_letter_avatar_bg' );
+				} else if ( $id_or_email instanceof WP_Comment ) {
+					$bg = get_comment_meta( $id_or_email->comment_ID, '_leira_letter_avatar_bg' );
+				}
+				//$bg = $user instanceof WP_User ? $user->get( '_leira_letter_avatar_bg' ) : get_comment_meta( $id_or_email->comment_ID, '_leira_letter_avatar_bg' );
 
 				if ( empty( $bg ) || ! ctype_xdigit( $bg ) ) {
 					//calculate and save
@@ -354,10 +360,9 @@ class Leira_Letter_Avatar_Public{
 
 					if ( $user instanceof WP_User ) {
 						update_user_meta( $user->ID, '_leira_letter_avatar_bg', $bg );
-					} else {
+					} else if ( $id_or_email instanceof WP_Comment ) {
 						update_comment_meta( $id_or_email->comment_ID, '_leira_letter_avatar_bg', $bg );
 					}
-
 				}
 				break;
 			case 'auto':
@@ -384,7 +389,7 @@ class Leira_Letter_Avatar_Public{
 					break;
 				}
 			}
-		} else {
+		} else if ( $id_or_email instanceof WP_Comment ) {
 			$letters = ! empty( trim( $id_or_email->comment_author ) ) ? trim( $id_or_email->comment_author ) : trim( $id_or_email->comment_author_email );
 		}
 
@@ -517,126 +522,16 @@ class Leira_Letter_Avatar_Public{
 	}
 
 	/**
-	 * Determine if buddy press should use gravatar as default image or letter avatar.
-	 * If user didnt upload profile picture this method is executed
-	 *
-	 * @param bool  $no_gravatar Do not use Gravatar
-	 * @param array $params      Parameters
-	 *
-	 * @return bool
-	 * @since 1.1.0
-	 */
-	public function bp_core_fetch_avatar_no_grav( $no_gravatar, $params ) {
-		/**
-		 * System forces to generate avatar with specific format.
-		 * This fix discussion settings repeated images
-		 */
-		$default       = isset( $params['default'] ) ? $params['default'] : false;
-		$force_default = isset( $params['force_default'] ) ? $params['force_default'] : false;
-		if ( $force_default && $default !== 'leira_letter_avatar' ) {
-			return $no_gravatar;
-		}
-
-		/**
-		 * Do not use gravatar in favor of letter avatar
-		 */
-		if ( $default == 'leira_letter_avatar' || leira_letter_avatar()->is_active() ) {
-			$object = $params['object'];
-			if ( in_array( $object, array( 'user' ) ) ) { //, 'group' , 'site'
-				$no_gravatar = true;
-			}
-		}
-
-		return $no_gravatar;
-	}
-
-	/**
-	 * Generate image avatar for buddy press.
-	 *
-	 * @param string $avatar_default
-	 * @param array  $params
-	 *
-	 * @return string
-	 * @since 1.1.0
-	 */
-	public function bp_core_default_avatar( $avatar_default, $params ) {
-
-		$default = isset( $params['default'] ) ? $params['default'] : false;
-		/**
-		 * Generate letter avatar for specific user, group or site
-		 */
-		if ( $default == 'leira_letter_avatar' || leira_letter_avatar()->is_active() ) {
-			/**
-			 * Our avatar method is enable
-			 */
-			$object = $params['object'];
-			if ( $object == 'user' ) {
-				if ( isset( $params['item_id'] ) ) {
-					$user = get_user_by( 'id', $params['item_id'] );
-
-					$args = array(
-						'size' => $params['width']
-					);
-					$url  = $this->generate_letter_avatar_url( $user, $args );
-					if ( $url ) {
-						/**
-						 * If it was generated correctly use this avatar url
-						 */
-						$avatar_default = $url;
-					}
-				}
-			} elseif ( $object == 'group' ) {
-				if ( isset( $params['item_id'] ) ) {
-					/**
-					 * do nothing. we do not generate avatars for groups
-					 */
-				}
-			}
-		}
-
-		return $avatar_default;
-	}
-
-	/**
-	 * Determine default avatar tu use if user did not uploaded his own avatar
-	 *
-	 * @param string $url     Current avatar url
-	 * @param int    $user_id User id of the associated avatar
-	 * @param array  $data    Array of setting to build the avatar
-	 *
-	 * @return string
-	 */
-	public function um_user_avatar_url_filter( $url, $user_id, $data ) {
-		if ( empty( $user_id ) ) {
-			$user_id = um_user( 'ID' );
-		} else {
-			um_fetch_user( $user_id );
-		}
-
-		if ( ! um_profile( 'profile_photo' ) && ! um_user( 'synced_profile_photo' ) && ! UM()->options()->get( 'use_gravatars' ) ) {
-
-			$args   = array(
-				'size' => $data['size']
-			);
-			$avatar = $this->generate_letter_avatar_url( $user_id, $args );
-			if ( $avatar ) {
-				$url = $avatar;
-			}
-		}
-
-		return $url;
-	}
-
-	/**
 	 * Check if a gravatar exists given an email hash value
 	 * https://codex.wordpress.org/Using_Gravatars#Checking_for_the_Existence_of_a_Gravatar
 	 * This method uses default wordpress cache system. Additional plugin is required for better performance.
 	 * https://codex.wordpress.org/Class_Reference/WP_Object_Cache#Persistent_Caching
 	 * https://codex.wordpress.org/Class_Reference/WP_Object_Cache
 	 *
-	 * @param $email
+	 * @param string $email Email or Hash value to check against gravatar
 	 *
 	 * @return bool
+	 * @since 1.2.0
 	 */
 	public function gravatar_exist( $email ) {
 

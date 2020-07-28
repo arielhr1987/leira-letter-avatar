@@ -152,6 +152,11 @@ class Leira_Letter_Avatar{
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-leira-letter-avatar-public.php';
 
+		/**
+		 * The class responsible for defining all actions to ensure compatibility with third party plugins.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-leira-letter-avatar-compatibility.php';
+
 		$this->loader = new Leira_Letter_Avatar_Loader();
 
 	}
@@ -222,17 +227,23 @@ class Leira_Letter_Avatar{
 		 */
 		$this->loader->add_filter( 'get_avatar_url', $plugin_public, 'get_avatar_url', 5, 3 );
 
-		$this->loader->add_filter( 'bp_core_fetch_avatar_no_grav', $plugin_public, 'bp_core_fetch_avatar_no_grav', 10, 2 );//BuddyPress integration
-
-		$this->loader->add_filter( 'bp_core_default_avatar_user', $plugin_public, 'bp_core_default_avatar', 10, 2 );//BuddyPress integration
-
-		//$this->loader->add_filter( 'bp_core_default_avatar_group', $plugin_public, 'bp_core_default_avatar', 10, 2 );//BuddyPress integration
-
-		$this->loader->add_filter( 'um_user_avatar_url_filter', $plugin_public, 'um_user_avatar_url_filter', 10, 3 );//Ultimate Membership integration
-
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 
 		//$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+
+		/**
+		 * Handle third party plugins compatibility
+		 */
+		$plugin_compatibility = new Leira_Letter_Avatar_Compatibility();
+		$this->loader->set( 'compatibility', $plugin_compatibility );
+
+		$this->loader->add_filter( 'bp_core_fetch_avatar_no_grav', $plugin_compatibility, 'bp_core_fetch_avatar_no_grav', 10, 2 );//BuddyPress integration
+
+		$this->loader->add_filter( 'bp_core_default_avatar_user', $plugin_compatibility, 'bp_core_default_avatar', 10, 2 );//BuddyPress integration
+
+		$this->loader->add_filter( 'um_user_avatar_url_filter', $plugin_compatibility, 'um_user_avatar_url_filter', 10, 3 );//Ultimate Membership integration
+
+		$this->loader->add_filter( 'get_avatar_url', $plugin_compatibility, 'wpdiscuz_get_avatar_url', 10, 3 );//wpdiscuz integration
 
 	}
 
