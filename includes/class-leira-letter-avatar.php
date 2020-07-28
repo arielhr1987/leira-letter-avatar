@@ -207,6 +207,10 @@ class Leira_Letter_Avatar{
 			$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
 			$this->loader->add_filter( 'admin_body_class', $plugin_admin, 'admin_body_class' );
+
+			$this->loader->add_filter( 'admin_footer_text', $plugin_admin, 'admin_footer_text', 1000 );
+
+			$this->loader->add_action( 'wp_ajax_leira_letter_avatar_footer_rated', $plugin_admin, 'footer_rated' );
 		}
 	}
 

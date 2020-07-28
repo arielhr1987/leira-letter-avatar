@@ -237,7 +237,7 @@ class Leira_Letter_Avatar_Public{
 		}
 		$args = array_merge( $args, array(
 			'size'     => 300,
-			'gravatar' => get_option( 'leira_letter_avatar_use_gravatar', true ),
+			'gravatar' => get_option( 'leira_letter_avatar_gravatar', false ),
 			'rating'   => get_option( 'avatar_rating', 'G' )
 		) );
 
@@ -541,7 +541,7 @@ class Leira_Letter_Avatar_Public{
 			return false;
 		}
 
-		$cache = wp_cache_get( $hash, 'leira_letter_gravatar', false, $found );
+		$cache = wp_cache_get( $hash, 'leira_letter_avatar_gravatar', false, $found );
 		if ( $found ) {
 			return $cache;
 		}
@@ -555,7 +555,7 @@ class Leira_Letter_Avatar_Public{
 		}
 
 		$expire = 60 * 60 * 3;//3 hours
-		wp_cache_set( $hash, $has_valid_avatar, 'leira_letter_gravatar', $expire );
+		wp_cache_set( $hash, $has_valid_avatar, 'leira_letter_avatar_gravatar', $expire );
 
 		return $has_valid_avatar;
 	}

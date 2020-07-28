@@ -57,6 +57,14 @@ class Leira_Letter_Avatar_Admin{
 	protected $sanitize = null;
 
 	/**
+	 * Action to generate nonce
+	 *
+	 * @var string
+	 * @since 1.2.0
+	 */
+	protected $nonce_action = 'leira-letter-avatar';
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @param string $plugin_name The name of this plugin.
@@ -101,7 +109,11 @@ class Leira_Letter_Avatar_Admin{
 		if ( $page === 'settings_page_leira_letter_avatar' ) {
 
 			wp_enqueue_style( 'wp-color-picker' );
-			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/leira-letter-avatar-admin.js', array( 'wp-color-picker' ), $this->version, false );
+			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/leira-letter-avatar-admin.js', array(
+				'jquery',
+				'wp-util',
+				'wp-color-picker'
+			), $this->version, false );
 		}
 
 	}
@@ -241,6 +253,11 @@ class Leira_Letter_Avatar_Admin{
 			'sanitize_callback' => array( $this->sanitize, 'avatar_default' ),
 			'default'           => 'mystery'
 		) );
+		register_setting( 'leira_letter_avatar_settings', 'leira_letter_avatar_gravatar', array(
+			'type'              => 'boolean',
+			'sanitize_callback' => array( $this->sanitize, 'boolean' ),
+			'default'           => false
+		) );
 		register_setting( 'leira_letter_avatar_settings', 'leira_letter_avatar_rounded', array(
 			//Valid values: 'string', 'boolean', 'integer', 'number', 'array', and 'object'.
 			'type'              => 'boolean',
@@ -303,6 +320,14 @@ class Leira_Letter_Avatar_Admin{
 			'leira_letter_avatar_checkbox_field_0',
 			__( 'Active', 'leira-letter-avatar' ),
 			array( $this, 'render_active_settings' ),
+			'leira_letter_avatar_settings',
+			'general'
+		);
+
+		add_settings_field(
+			'leira_letter_avatar_checkbox_field_4',
+			__( 'Gravatar', 'leira-letter-avatar' ),
+			array( $this, 'render_gravatar_settings' ),
 			'leira_letter_avatar_settings',
 			'general'
 		);
@@ -378,6 +403,25 @@ class Leira_Letter_Avatar_Admin{
             <input type='checkbox' name='avatar_default' id="settings_avatar_default"
                    value='leira_letter_avatar' <?php checked( $option, 'leira_letter_avatar' ); ?>>
 			<?php _e( 'Enable use of letter avatar', 'leira-letter-avatar' ); ?>
+        </label>
+
+		<?php
+	}
+
+	/**
+	 * Render Gravatar settings field
+	 *
+	 * @since 1.2.0
+	 */
+	function render_gravatar_settings() {
+
+		$gravatar = get_option( 'leira_letter_avatar_gravatar', false );
+		$gravatar = $this->sanitize->boolean( $gravatar );
+		?>
+        <label for="settings_gravatar">
+            <input type='checkbox' name='leira_letter_avatar_gravatar' id="settings_gravatar"
+                   value='1' <?php checked( true, $gravatar ); ?>>
+			<?php _e( 'Use Gravatar profile picture if available', 'leira-letter-avatar' ); ?>
         </label>
 
 		<?php
@@ -522,6 +566,66 @@ class Leira_Letter_Avatar_Admin{
             </div>
         </fieldset>
 		<?php
+	}
+
+
+	/**
+	 * Change the admin footer text on Settings page
+	 * Give us a rate
+	 *
+	 * @param $footer_text
+	 *
+	 * @return string
+	 * @since 1.2.0
+	 */
+	public function admin_footer_text( $footer_text ) {
+		$current_screen = get_current_screen();
+
+		// Add the dashboard pages
+		$pages[] = 'settings_page_leira_letter_avatar';
+
+		if ( isset( $current_screen->id ) && in_array( $current_screen->id, $pages ) ) {
+			// Change the footer text
+			if ( ! get_option( 'leira_letter_avatar_footer_rated' ) ) {
+
+				ob_start(); ?>
+                <a href="https://wordpress.org/support/plugin/leira-letter-avatar/reviews/?filter=5" target="_blank"
+                   class="leira-letter-avatar-admin-rating-link"
+                   data-rated="<?php esc_attr_e( 'Thanks :)', 'leira-letter-avatar' ) ?>"
+                   data-nonce="<?php echo wp_create_nonce( $this->nonce_action ) ?>">
+                    &#9733;&#9733;&#9733;&#9733;&#9733;
+                </a>
+				<?php $link = ob_get_clean();
+
+				ob_start();
+
+				printf( __( 'If you like Letter Avatar please consider leaving a %s review. It will help us to grow the plugin and make it more popular. Thank you.', 'leira-letter-avatar' ), $link ) ?>
+
+				<?php $footer_text = ob_get_clean();
+			}
+		}
+
+		return $footer_text;
+	}
+
+	/**
+	 * When user clicks the review link in backend
+	 *
+	 * @since 1.2.0
+	 */
+	function footer_rated() {
+		$nonce = isset( $_REQUEST['nonce'] ) ? sanitize_text_field( $_REQUEST['nonce'] ) : '';
+
+		if ( ! wp_verify_nonce( $nonce, $this->nonce_action ) ) {
+			wp_send_json_error( esc_js( __( 'Wrong Nonce', 'leira-letter-avatar' ) ) );
+		}
+
+		if ( ! is_user_logged_in() || ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( __( 'Please login as administrator', 'leira-letter-avatar' ) );
+		}
+
+		update_option( 'leira_letter_avatar_footer_rated', 1 );
+		wp_send_json_success();
 	}
 
 }

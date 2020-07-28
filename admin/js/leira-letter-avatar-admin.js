@@ -48,6 +48,25 @@
             // or, supply an array of colors to customize further
             palettes: ['#fc91ad', '#37c5ab', '#fd9a00', '#794fcf', '#19C976']
         });
+
+
+        /**
+         * Handle footer rate us link
+         */
+        $('a.leira-letter-avatar-admin-rating-link').click(function () {
+            $.ajax({
+                url: wp.ajax.settings.url,
+                type: 'post',
+                data: {
+                    action: 'leira_letter_avatar_footer_rated',
+                    nonce: $(this).data('nonce')
+                },
+                success: function () {
+
+                }
+            });
+            $(this).parent().text($(this).data('rated'));
+        });
     });
 
 })(jQuery);

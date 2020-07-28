@@ -1,10 +1,10 @@
 === Leira Letter Avatar ===
-Contributors: arielhr1987, jlcd0894
+Contributors: arielhr1987, jlcd0894, ivankuraev
 Donate link: https://github.com/arielhr1987
 Tags: user, avatar, image, admin, frontend, letter, initial
 Requires at least: 4.7
-Tested up to: 5.4.1
-Stable tag: 1.1.0
+Tested up to: 5.4.2
+Stable tag: 1.2.0
 Requires PHP: 5.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -16,6 +16,20 @@ Automatically generate beautiful user avatars using their initial letters.
 Letters Avatar allows you to generate automatically user avatar base on their initial letters.
 
 Fully customizable from admin area. You will be able edit avatar settings like shape, background color, etc.
+
+= Compatibility =
+
+This plugin is compatible with any properly coded theme. However, some plugins may cause conflicts with this one. If you find an issue with your theme please create a post in the community forum.
+So far this plugin is compatible with:
+* [BuddyPress](https://wordpress.org/plugins/buddypress/)
+* [Ultimate Member](https://wordpress.org/plugins/ultimate-member/)
+* [wpDiscuz](https://wordpress.org/plugins/wpdiscuz/)
+
+= Contributors =
+
+This plugins has been possible thanks to:
+* [Jose Luis Chavez](https://profiles.wordpress.org/jlcd0894/) - Icons, banners and designs
+* [ivankuraev](https://profiles.wordpress.org/ivankuraev/) - Support for russian characters
 
 == Installation ==
 
@@ -41,11 +55,11 @@ Avatars are stored in your uploads folder.
 
 = Will I be able to select my own letters? =
 
-No. The plugin automatically generate the image with the initial letters of you First name and Last name.
+No. The plugin automatically generates the image with the initial letters of you First name and Last name.
 
-= Is it compatible with BuddyPress? =
+= Can I use gravatar if the user has one? =
 
-Yes. All users in BuddyPress without their own avatar will have by default a letter avatar.
+Yes. There is an option in plugins settings that allows you to show user gravatar if available instead of letter avatar.
 
 == Screenshots ==
 1. You will find a new menu item "Letter Avatar" under "Settings" menu.
@@ -56,6 +70,15 @@ Yes. All users in BuddyPress without their own avatar will have by default a let
 6. Comments in frontend with letter avatar.
 
 == Changelog ==
+
+= 1.2.0 =
+* Ultimate Member compatibility
+* wpDiscuz compatibility
+* Support for russian characters
+* New option to use gravatar if available
+* Rate us link in admin area footer
+* Some code refactored
+* Bug fixes
 
 = 1.1.0 =
 * BuddyPress integration
