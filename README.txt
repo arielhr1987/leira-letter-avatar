@@ -4,7 +4,7 @@ Donate link: https://github.com/arielhr1987
 Tags: user, avatar, image, admin, frontend, letter, initial
 Requires at least: 4.7
 Tested up to: 5.4.2
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 Requires PHP: 5.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -24,6 +24,7 @@ So far this plugin is compatible with:
 * [BuddyPress](https://wordpress.org/plugins/buddypress/)
 * [Ultimate Member](https://wordpress.org/plugins/ultimate-member/)
 * [wpDiscuz](https://wordpress.org/plugins/wpdiscuz/)
+* [BuddyPress Profile Completion](https://wordpress.org/plugins/buddypress-profile-completion/)
 
 = Contributors =
 
@@ -70,6 +71,10 @@ Yes. There is an option in plugins settings that allows you to show user gravata
 6. Comments in frontend with letter avatar.
 
 == Changelog ==
+
+= 1.2.1 =
+* Bug fix incorrect avatar size
+* BuddyPress compatibility improved
 
 = 1.2.0 =
 * Ultimate Member compatibility

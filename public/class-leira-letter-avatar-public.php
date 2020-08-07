@@ -235,11 +235,11 @@ class Leira_Letter_Avatar_Public{
 		if ( ! is_array( $args ) ) {
 			return false;//Just in case
 		}
-		$args = array_merge( $args, array(
+		$args = array_merge( array(
 			'size'     => 300,
 			'gravatar' => get_option( 'leira_letter_avatar_gravatar', false ),
 			'rating'   => get_option( 'avatar_rating', 'G' )
-		) );
+		), $args );
 
 		$size       = $args['size'];
 		$email_hash = '';

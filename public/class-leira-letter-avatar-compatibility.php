@@ -66,13 +66,32 @@ class Leira_Letter_Avatar_Compatibility{
 			/**
 			 * Our avatar method is enable
 			 */
-			$object = $params['object'];
+			if ( isset( $params['object'] ) ) {
+				$object = $params['object'];
+			} else {
+				$object            = 'user';
+				$params['item_id'] = bp_displayed_user_id();//bp_loggedin_user_id()
+				/**
+				 * We use "bp_displayed_user_id()" as in "bp_get_user_has_avatar" method in file bp-core-avatars.php
+				 */
+			}
 			if ( $object == 'user' ) {
 				if ( isset( $params['item_id'] ) ) {
 					$user = get_user_by( 'id', $params['item_id'] );
 
+					if ( isset( $params['width'] ) ) {
+						$size = $params['width'];
+					} else {
+						if ( isset( $params['type'] ) && 'thumb' === $params['type'] ) {
+							$size = bp_core_avatar_thumb_width();
+						} else {
+							$size = bp_core_avatar_full_width();
+						}
+					}
+
+
 					$args = array(
-						'size' => $params['width']
+						'size' => $size
 					);
 					$url  = leira_letter_avatar()->public->generate_letter_avatar_url( $user, $args );
 					if ( $url ) {
@@ -92,6 +111,20 @@ class Leira_Letter_Avatar_Compatibility{
 		}
 
 		return $avatar_default;
+	}
+
+	/**
+	 * This method is different from "bp_core_default_avatar".
+	 * With this filter we make sure that any call to "bp_core_avatar_default" return our letter avatar
+	 *
+	 * @param $avatar_default
+	 * @param $params
+	 *
+	 * @return string
+	 * @since 1.2.1
+	 */
+	public function bp_core_avatar_default( $avatar_default, $params ) {
+		return $this->bp_core_default_avatar( $avatar_default, $params );
 	}
 
 	/**
