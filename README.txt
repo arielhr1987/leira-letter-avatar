@@ -73,6 +73,9 @@ Yes. There is an option in plugins settings that allows you to show user gravata
 
 == Changelog ==
 
+= 1.2.4 =
+* Match plugin version with readme.txt version
+
 = 1.2.3 =
 * Adding Github Actions automatic deploy
 * Adding Github Actions automatic update assets and readme file
