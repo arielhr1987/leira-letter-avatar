@@ -73,6 +73,10 @@ Yes. There is an option in plugins settings that allows you to show user gravata
 
 == Changelog ==
 
+= 1.2.3 =
+* Adding Github Actions automatic deploy
+* Adding Github Actions automatic update assets and readme file
+
 = 1.2.2 =
 * Adding support for letters color
 * YITH WooCommerce Advanced Reviews compatibility
