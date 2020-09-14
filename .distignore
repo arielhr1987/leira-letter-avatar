@@ -9,4 +9,5 @@
 .gitignore
 Makefile
 readme.md
+README.md
 deploy.sh
