@@ -171,7 +171,7 @@ class Leira_Letter_Avatar_Admin{
 	 * @return array
 	 * @since 1.0.0
 	 */
-	function plugin_action_links( $plugin_actions, $plugin_file ) {
+	public function plugin_action_links( $plugin_actions, $plugin_file ) {
 
 		if ( 'leira-letter-avatar/leira-letter-avatar.php' === $plugin_file ) {
 			$url = esc_url( add_query_arg(
@@ -285,6 +285,18 @@ class Leira_Letter_Avatar_Admin{
 			'sanitize_callback' => array( $this->sanitize, 'boolean' ),
 			'default'           => true
 		) );
+		register_setting( 'leira_letter_avatar_settings', 'leira_letter_avatar_color_method', array(
+			'type'              => 'string',
+			'description'       => '',
+			'sanitize_callback' => array( $this->sanitize, 'color_method' ),
+			'default'           => 'auto'
+		) );
+		register_setting( 'leira_letter_avatar_settings', 'leira_letter_avatar_color', array(
+			'type'              => 'string',
+			'description'       => '',
+			'sanitize_callback' => array( $this->sanitize, 'background' ),
+			'default'           => 'ffffff'
+		) );
 		register_setting( 'leira_letter_avatar_settings', 'leira_letter_avatar_method', array(
 			'type'              => 'string',
 			'description'       => '',
@@ -349,6 +361,14 @@ class Leira_Letter_Avatar_Admin{
 		);
 
 		add_settings_field(
+			'leira_letter_avatar_checkbox_field_5',
+			__( 'Color', 'leira-letter-avatar' ),
+			array( $this, 'render_color_settings' ),
+			'leira_letter_avatar_settings',
+			'general'
+		);
+
+		add_settings_field(
 			'leira_letter_avatar_select_field_2',
 			__( 'Background', 'leira-letter-avatar' ),
 			array( $this, 'render_background_settings' ),
@@ -394,7 +414,7 @@ class Leira_Letter_Avatar_Admin{
 	 *
 	 * @since 1.0.0
 	 */
-	function render_active_settings() {
+	public function render_active_settings() {
 
 		$option = get_option( 'avatar_default', 'mystery' );
 		$option = $this->sanitize->avatar_default( $option );
@@ -413,7 +433,7 @@ class Leira_Letter_Avatar_Admin{
 	 *
 	 * @since 1.2.0
 	 */
-	function render_gravatar_settings() {
+	public function render_gravatar_settings() {
 
 		$gravatar = get_option( 'leira_letter_avatar_gravatar', false );
 		$gravatar = $this->sanitize->boolean( $gravatar );
@@ -432,7 +452,7 @@ class Leira_Letter_Avatar_Admin{
 	 *
 	 * @since 1.0.0
 	 */
-	function render_shape_settings() {
+	public function render_shape_settings() {
 		$rounded = get_option( 'leira_letter_avatar_rounded', true );
 		$rounded = $this->sanitize->boolean( $rounded );
 		?>
@@ -460,7 +480,7 @@ class Leira_Letter_Avatar_Admin{
 	 *
 	 * @since 1.0.0
 	 */
-	function render_letters_settings() {
+	public function render_letters_settings() {
 		$letters = get_option( 'leira_letter_avatar_letters', 2 );
 		$letters = $this->sanitize->letters( $letters );
 
@@ -502,9 +522,53 @@ class Leira_Letter_Avatar_Admin{
                        value='1'>
 				<?php _e( 'Make letters uppercase', 'leira-letter-avatar' ) ?>
             </label>
-            <p class="description">
-				<?php _e( 'The color of the letters is determined automatically to ensure best contrast.', 'leira-letter-avatar' ) ?>
-            </p>
+        </fieldset>
+		<?php
+	}
+
+	/**
+	 * Render color settings
+	 *
+	 * @since 1.2.2
+	 */
+	public function render_color_settings() {
+		$color_method = get_option( 'leira_letter_avatar_color_method', 'auto' );
+		$color_method = $this->sanitize->color_method( $color_method );
+
+		$color = get_option( 'leira_letter_avatar_color', 'ffffff' );
+		$color = $this->sanitize->background( $color );
+		?>
+        <fieldset>
+            <legend class="screen-reader-text">
+                <span><?php _e( 'Color settings', 'leira-letter-avatar' ) ?></span>
+            </legend>
+            <div>
+                <div>
+                    <label for="leira_letter_avatar_color_method_auto">
+                        <input type="radio"
+                               id="leira_letter_avatar_color_method_auto"
+                               name="leira_letter_avatar_color_method"
+                               value="auto"
+							<?php checked( 'auto', $color_method ); ?>>
+						<?php _e( 'Automatically determine letters color based on background color (Recommended)', 'leira-letter-avatar' ) ?>
+                    </label>
+                </div>
+                <div>
+                    <label for="leira_letter_avatar_color_method_fixed">
+                        <input type="radio"
+                               id="leira_letter_avatar_color_method_fixed"
+                               name="leira_letter_avatar_color_method"
+                               value="fixed"
+							<?php checked( 'fixed', $color_method ); ?>>
+						<?php _e( 'Use this color for the letters', 'leira-letter-avatar' ) ?>
+                    </label>
+                    <input type="text"
+                           name="leira_letter_avatar_color"
+                           data-picker_default="#ffffff"
+                           value="#<?php echo esc_attr( $color ); ?>"
+                           class="leira-letter-avatar-color-field">
+                </div>
+            </div>
         </fieldset>
 		<?php
 	}
@@ -514,7 +578,7 @@ class Leira_Letter_Avatar_Admin{
 	 *
 	 * @since 1.0.0
 	 */
-	function render_background_settings() {
+	public function render_background_settings() {
 		$method = get_option( 'leira_letter_avatar_method' );
 		$method = $this->sanitize->method( $method );
 
@@ -544,7 +608,8 @@ class Leira_Letter_Avatar_Admin{
                     </label>
                     <input type="text"
                            name="leira_letter_avatar_bg"
-                           data-default="#<?php echo esc_attr( $bg ); ?>"
+                           data-picker_default="#fc91ad"
+                           data-picker_palettes="#fc91ad,#37c5ab,#fd9a00,#794fcf,#19C976"
                            value="#<?php echo esc_attr( $bg ); ?>"
                            class="leira-letter-avatar-color-field">
                 </div>
@@ -613,7 +678,7 @@ class Leira_Letter_Avatar_Admin{
 	 *
 	 * @since 1.2.0
 	 */
-	function footer_rated() {
+	public function footer_rated() {
 		$nonce = isset( $_REQUEST['nonce'] ) ? sanitize_text_field( $_REQUEST['nonce'] ) : '';
 
 		if ( ! wp_verify_nonce( $nonce, $this->nonce_action ) ) {

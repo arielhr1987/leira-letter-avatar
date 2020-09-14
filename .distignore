@@ -1,0 +1,12 @@
+/.git
+/.github
+/node_modules
+/src
+/assets
+
+.distignore
+.gitattributes
+.gitignore
+Makefile
+readme.md
+deploy.sh

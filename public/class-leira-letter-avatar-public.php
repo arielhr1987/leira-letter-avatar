@@ -322,6 +322,7 @@ class Leira_Letter_Avatar_Public{
 			return $gravatar;
 		}
 
+
 		/**
 		 * Determine avatar url parameters base on user and email hash
 		 */
@@ -373,6 +374,19 @@ class Leira_Letter_Avatar_Public{
 		$bg = $this->sanitize->background( $bg );
 
 		/**
+		 * Determine the letters color now that we have background color
+		 */
+		$color_method = get_option( 'leira_letter_avatar_color_method', 'auto' );
+		$color_method = $this->sanitize->color_method( $color_method );
+		//By default find the best contrast color for the background
+		$color = $this->get_contrast_color( $bg );
+		if ( $color_method == 'fixed' ) {
+			$color = get_option( 'leira_letter_avatar_color', 'ffffff' );
+		}
+		$color = trim( trim( $color ), '#' );
+		$color = $this->sanitize->background( $color );
+
+		/**
 		 * Determine letters to show in the avatar
 		 */
 		$letters = '';
@@ -391,6 +405,8 @@ class Leira_Letter_Avatar_Public{
 			}
 		} else if ( $id_or_email instanceof WP_Comment ) {
 			$letters = ! empty( trim( $id_or_email->comment_author ) ) ? trim( $id_or_email->comment_author ) : trim( $id_or_email->comment_author_email );
+		} else if ( ! empty( $email ) ) {
+			$letters = $email;
 		}
 
 		$regex         = '/([^\pL]*(\pL)\pL*)/u';// \pL => matches any kind of letter from any language
@@ -400,7 +416,10 @@ class Leira_Letter_Avatar_Public{
 		$letters       = mb_substr( $letters, 0, $letters_count, 'UTF-8' );//reduce to 2 or less initials
 
 		if ( get_option( 'leira_letter_avatar_uppercase', true ) ) {
-			$letters = strtoupper( $letters );//uppercase initials
+			/**
+			 * Use mb_strtoupper in case initials contains letters with accents
+			 */
+			$letters = mb_strtoupper( $letters );//uppercase initials
 		}
 
 		/**
@@ -425,7 +444,7 @@ class Leira_Letter_Avatar_Public{
 			'background' => $bg,
 			'bold'       => get_option( 'leira_letter_avatar_bold', false ),
 			//'uppercase'  => '', //already set
-			'color'      => $this->get_contrast_color( $bg ),
+			'color'      => $color,
 			'format'     => 'svg'
 		);
 

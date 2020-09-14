@@ -96,6 +96,22 @@ class Leira_Letter_Avatar_Sanitizer{
 	}
 
 	/**
+	 * Sanitize color method
+	 *
+	 * @param $value
+	 *
+	 * @return string
+	 * @since 1.2.2
+	 */
+	public function color_method( $value ) {
+		$value   = sanitize_text_field( $value );
+		$methods = array( 'auto', 'fixed' );
+		$value   = in_array( $value, $methods ) ? $value : 'auto';
+
+		return $value;
+	}
+
+	/**
 	 * Sanitize method
 	 *
 	 * @param $value

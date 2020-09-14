@@ -3,8 +3,8 @@ Contributors: arielhr1987, jlcd0894, ivankuraev
 Donate link: https://github.com/arielhr1987
 Tags: user, avatar, image, admin, frontend, letter, initial
 Requires at least: 4.7
-Tested up to: 5.4.2
-Stable tag: 1.2.1
+Tested up to: 5.5.1
+Stable tag: 1.2.2
 Requires PHP: 5.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -25,6 +25,7 @@ So far this plugin is compatible with:
 * [Ultimate Member](https://wordpress.org/plugins/ultimate-member/)
 * [wpDiscuz](https://wordpress.org/plugins/wpdiscuz/)
 * [BuddyPress Profile Completion](https://wordpress.org/plugins/buddypress-profile-completion/)
+* [YITH WooCommerce Advanced Reviews](https://wordpress.org/plugins/yith-woocommerce-advanced-reviews/)
 
 = Contributors =
 
@@ -71,6 +72,10 @@ Yes. There is an option in plugins settings that allows you to show user gravata
 6. Comments in frontend with letter avatar.
 
 == Changelog ==
+
+= 1.2.2 =
+* Adding support for letters color
+* YITH WooCommerce Advanced Reviews compatibility
 
 = 1.2.1 =
 * Bug fix incorrect avatar size

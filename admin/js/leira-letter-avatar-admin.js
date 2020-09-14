@@ -30,23 +30,28 @@
      */
 
     $(function () {
-        $('.leira-letter-avatar-color-field').wpColorPicker({
-            // you can declare a default color here,
-            // or in the data-default-color attribute on the input
-            defaultColor: '#fc91ad',
-            // a callback to fire whenever the color changes to a valid color
-            change: function (event, ui) {
-            },
-            // a callback to fire when the input is emptied or an invalid color
-            clear: function () {
-            },
-            // hide the color picker controls on load
-            //hide: true,
-            // set  total width
-            //width: 200,
-            // show a group of common colors beneath the square
-            // or, supply an array of colors to customize further
-            palettes: ['#fc91ad', '#37c5ab', '#fd9a00', '#794fcf', '#19C976']
+        $('.leira-letter-avatar-color-field').each(function (i, item) {
+            item = $(item);
+            var palettes = item.data('picker_palettes');
+            item.wpColorPicker({
+                // you can declare a default color here,
+                // or in the data-default-color attribute on the input
+                defaultColor: item.data('picker_default'),
+                // a callback to fire whenever the color changes to a valid color
+                change: function (event, ui) {
+                },
+                // a callback to fire when the input is emptied or an invalid color
+                clear: function () {
+                },
+                // hide the color picker controls on load
+                //hide: true,
+                // set  total width
+                //width: 200,
+                // show a group of common colors beneath the square
+                // or, supply an array of colors to customize further
+                //palettes:  ['#fc91ad', '#37c5ab', '#fd9a00', '#794fcf', '#19C976']
+                palettes: (typeof palettes === 'string' && palettes) ? palettes.split(',') : true
+            });
         });
 
 
