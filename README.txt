@@ -3,8 +3,8 @@ Contributors: arielhr1987, jlcd0894, ivankuraev
 Donate link: https://github.com/arielhr1987
 Tags: user, avatar, image, admin, frontend, letter, initial
 Requires at least: 4.7
-Tested up to: 5.5.1
-Stable tag: 1.2.4
+Tested up to: 5.5.3
+Stable tag: 1.2.5
 Requires PHP: 5.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -72,6 +72,9 @@ Yes. There is an option in plugins settings that allows you to show user gravata
 6. Comments in frontend with letter avatar.
 
 == Changelog ==
+
+= 1.2.5 =
+* Fix random background color generation issue
 
 = 1.2.4 =
 * Match plugin version with readme.txt version

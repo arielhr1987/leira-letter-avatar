@@ -345,17 +345,17 @@ class Leira_Letter_Avatar_Public{
 				} else if ( $id_or_email instanceof WP_Comment ) {
 					$bg = get_comment_meta( $id_or_email->comment_ID, '_leira_letter_avatar_bg' );
 				}
-				//$bg = $user instanceof WP_User ? $user->get( '_leira_letter_avatar_bg' ) : get_comment_meta( $id_or_email->comment_ID, '_leira_letter_avatar_bg' );
 
-				if ( empty( $bg ) || ! ctype_xdigit( $bg ) ) {
+				$backgrounds = get_option( 'leira_letter_avatar_bgs', 'fc91ad' );
+				$backgrounds = $this->sanitize->backgrounds( $backgrounds );
+				$backgrounds = explode( ',', $backgrounds );
+				if ( empty( $backgrounds ) ) {
+					$backgrounds = array( 'fc91ad' ); // 'fc91ad', '37c5ab','fd9a00', '794fcf', '19C976'
+					//$backgrounds[] = sprintf( '%06X', mt_rand( 0, 0xFFFFFF ) ); //random background
+				}
+
+				if ( empty( $bg ) || ! in_array( $bg, $backgrounds ) || ! ctype_xdigit( $bg ) ) {
 					//calculate and save
-					$backgrounds = get_option( 'leira_letter_avatar_bgs', 'fc91ad' );
-					$backgrounds = $this->sanitize->backgrounds( $backgrounds );
-					$backgrounds = explode( ',', $backgrounds );
-					if ( empty( $backgrounds ) ) {
-						$backgrounds = array( 'fc91ad' ); // 'fc91ad', '37c5ab','fd9a00', '794fcf', '19C976'
-						//$backgrounds[] = sprintf( '%06X', mt_rand( 0, 0xFFFFFF ) ); //random background
-					}
 					$bg = rand( 0, count( $backgrounds ) - 1 );
 					$bg = $backgrounds[ $bg ]; //random background from array
 
