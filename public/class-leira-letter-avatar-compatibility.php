@@ -133,12 +133,13 @@ class Leira_Letter_Avatar_Compatibility{
 	 *
 	 * @param string $url     Current avatar url
 	 * @param int    $user_id User id of the associated avatar
-	 * @param array  $data    Array of setting to build the avatar
+	 * @param array  $data    Array of setting to build the avatar.
+	 *                        Some plugins does not send this parameter that's why we set a default value
 	 *
 	 * @return string
 	 * @since 1.2.0
 	 */
-	public function um_user_avatar_url_filter( $url, $user_id, $data ) {
+	public function um_user_avatar_url_filter( $url, $user_id, $data = array( 'size' => 96 ) ) {
 		if ( empty( $user_id ) ) {
 			$user_id = um_user( 'ID' );
 		} else {
@@ -148,7 +149,7 @@ class Leira_Letter_Avatar_Compatibility{
 		if ( ! um_profile( 'profile_photo' ) && ! um_user( 'synced_profile_photo' ) && ! UM()->options()->get( 'use_gravatars' ) ) {
 
 			$args   = array(
-				'size' => $data['size']
+				'size' => isset( $data['size'] ) ? $data['size'] : 96 //default Ultimate Membership value
 			);
 			$avatar = leira_letter_avatar()->public->generate_letter_avatar_url( $user_id, $args );
 			if ( $avatar ) {
