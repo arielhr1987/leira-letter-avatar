@@ -30,6 +30,22 @@ class Leira_Letter_Avatar_Sanitizer{
 	protected $default_bg = 'fc91ad';
 
 	/**
+	 * @var string[]
+	 * @since 1.3.0
+	 */
+	protected $formats = array( 'svg', 'png', 'jpg' );
+
+	/**
+	 * Get all available formats
+	 *
+	 * @return string[]
+	 * @since 1.3.0
+	 */
+	public function get_formats() {
+		return $this->formats;
+	}
+
+	/**
 	 * Get default background color
 	 *
 	 * @return string
@@ -159,6 +175,22 @@ class Leira_Letter_Avatar_Sanitizer{
 		}, $values );
 		$values = array_filter( $values, 'sanitize_hex_color_no_hash' );
 		$value  = implode( ',', $values );
+
+		return $value;
+	}
+
+	/**
+	 * Sanitize avatar format
+	 *
+	 * @param $value
+	 *
+	 * @return mixed|string
+	 *
+	 * @since 1.3.0
+	 */
+	public function format( $value ) {
+		$value = sanitize_text_field( $value );
+		$value = in_array( $value, $this->get_formats() ) ? $value : 'svg';
 
 		return $value;
 	}

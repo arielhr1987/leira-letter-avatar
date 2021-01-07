@@ -258,6 +258,11 @@ class Leira_Letter_Avatar_Admin{
 			'sanitize_callback' => array( $this->sanitize, 'boolean' ),
 			'default'           => false
 		) );
+		register_setting( 'leira_letter_avatar_settings', 'leira_letter_avatar_format', array(
+			'type'              => 'string',
+			'sanitize_callback' => array( $this->sanitize, 'format' ),
+			'default'           => 'svg'
+		) );
 		register_setting( 'leira_letter_avatar_settings', 'leira_letter_avatar_rounded', array(
 			//Valid values: 'string', 'boolean', 'integer', 'number', 'array', and 'object'.
 			'type'              => 'boolean',
@@ -340,6 +345,14 @@ class Leira_Letter_Avatar_Admin{
 			'leira_letter_avatar_checkbox_field_4',
 			__( 'Gravatar', 'leira-letter-avatar' ),
 			array( $this, 'render_gravatar_settings' ),
+			'leira_letter_avatar_settings',
+			'general'
+		);
+
+		add_settings_field(
+			'leira_letter_avatar_checkbox_field_6',
+			__( 'Format', 'leira-letter-avatar' ),
+			array( $this, 'render_format_settings' ),
 			'leira_letter_avatar_settings',
 			'general'
 		);
@@ -442,6 +455,27 @@ class Leira_Letter_Avatar_Admin{
             <input type='checkbox' name='leira_letter_avatar_gravatar' id="settings_gravatar"
                    value='1' <?php checked( true, $gravatar ); ?>>
 			<?php _e( 'Use Gravatar profile picture if available', 'leira-letter-avatar' ); ?>
+        </label>
+
+		<?php
+	}
+
+	/**
+	 * Render Format settings field
+	 *
+	 * @since 1.2.0
+	 */
+	public function render_format_settings() {
+
+		$format = get_option( 'leira_letter_avatar_format', 'svg' );
+		$format = $this->sanitize->format( $format );
+		?>
+        <label for="settings_format">
+            <select name="leira_letter_avatar_format" id="settings_format">
+                <option value="svg" <?php selected( 'svg', $format ) ?>><?php _e( '.svg', 'leira-letter-avatar' ) ?></option>
+                <option value="png" <?php selected( 'png', $format ) ?>><?php _e( '.png', 'leira-letter-avatar' ) ?></option>
+                <option value="jpg" <?php selected( 'jpg', $format ) ?>><?php _e( '.jpg', 'leira-letter-avatar' ) ?></option>
+            </select>
         </label>
 
 		<?php

@@ -205,9 +205,7 @@ class Leira_Letter_Avatar_Public{
 	 * @since 1.0.0
 	 */
 	public function get_contrast_color( $hexcolor ) {
-		$r   = hexdec( substr( $hexcolor, 1, 2 ) );
-		$g   = hexdec( substr( $hexcolor, 3, 2 ) );
-		$b   = hexdec( substr( $hexcolor, 5, 2 ) );
+		list( $r, $g, $b ) = $this->rgb_from_hex( $hexcolor );
 		$yiq = ( ( $r * 299 ) + ( $g * 587 ) + ( $b * 114 ) ) / 1000;
 
 		return ( $yiq >= ( 256 * 0.75 ) ) ? '000' : 'fff';
@@ -445,7 +443,7 @@ class Leira_Letter_Avatar_Public{
 			'bold'       => get_option( 'leira_letter_avatar_bold', false ),
 			//'uppercase'  => '', //already set
 			'color'      => $color,
-			'format'     => 'svg'
+			'format'     => get_option( 'leira_letter_avatar_format', 'svg' )
 		);
 
 		$url_args = apply_filters( 'leira_letter_avatar_url_args', $url_args, $id_or_email );
@@ -455,11 +453,11 @@ class Leira_Letter_Avatar_Public{
 		 */
 		$url = $this->generate_image( $url_args );
 
-		return $url;
+		return set_url_scheme( $url );
 	}
 
 	/**
-	 * Generate if it doesn't exist an image file from parameters.
+	 * Generate, if it doesn't exist, an image file from parameters.
 	 * If system is unable to create the image, an image service is used instead
 	 *
 	 * @param array $data Array containing all parameters to generate image
@@ -467,7 +465,7 @@ class Leira_Letter_Avatar_Public{
 	 * @return string
 	 * @since 1.1.0
 	 */
-	public function generate_image( array $data ) {
+	public function generate_image( $data ) {
 
 		$url = 'https://us-central1-leira-letter-avatar.cloudfunctions.net/generate';
 
@@ -476,6 +474,16 @@ class Leira_Letter_Avatar_Public{
 		$params['bold']    = ( isset( $params['bold'] ) && $params['bold'] ) ? '1' : 'no';
 
 		$url = add_query_arg( rawurlencode_deep( array_filter( $params ) ), set_url_scheme( $url ) );
+
+		$format = mb_strtolower( $data['format'] );
+		$format = in_array( $format, leira_letter_avatar()->sanitizer->get_formats() ) ? $format : 'svg';
+		if ( $format != 'svg' ) {
+			//Check if system is able to handle image
+			if ( ! extension_loaded( 'gd' ) ) {
+				//Fallback to svg format
+				$format = 'svg';
+			}
+		}
 
 		$save_to_uploads = true;
 		if ( $save_to_uploads ) {
@@ -493,7 +501,7 @@ class Leira_Letter_Avatar_Public{
 			$avatar_folder_path = $wp_uploads_dir_base . $avatar_folder;
 
 			//Avatar filename
-			$avatar_filename = md5( json_encode( $data ) ) . '.' . $data['format'];
+			$avatar_filename = md5( json_encode( $data ) ) . '.' . $format;
 
 			//Avatar path
 			$avatar_path = $avatar_folder_path . $avatar_filename;
@@ -503,16 +511,11 @@ class Leira_Letter_Avatar_Public{
 				/**
 				 * Lets generate the image and save it to uploads folder
 				 */
-				$size       = isset( $data['size'] ) ? $data['size'] : 2;
-				$font_size  = isset( $data['font-size'] ) ? $data['font-size'] : abs( $size ) / 2;
-				$text       = isset( $data['name'] ) ? $data['name'] : true;
-				$background = isset( $data['background'] ) ? $data['background'] : true;
-				$color      = isset( $data['color'] ) ? $data['color'] : true;
-				$rounded    = isset( $data['rounded'] ) ? $data['rounded'] : true;
-				$bold       = isset( $data['bold'] ) ? $data['bold'] : true;
+				$avatar = $this->image_content( $data );
 
-				$avatar = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="' . $size . 'px" height="' . $size . 'px" viewBox="0 0 ' . $size . ' ' . $size . '" style="user-select: none;" version="1.1"><' . ( $rounded ? 'circle' : 'rect' ) . ' fill="#' . trim( $background, '#' ) . '" cx="' . ( $size / 2 ) . '" width="' . $size . '" height="' . $size . '" cy="' . ( $size / 2 ) . '" r="' . ( $size / 2 ) . '"/><text x="50%" y="50%" style="color: #' . trim( $color, '#' ) . '; line-height: 1;font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', \'Roboto\', \'Oxygen\', \'Ubuntu\', \'Fira Sans\', \'Droid Sans\', \'Helvetica Neue\', sans-serif;" alignment-baseline="middle" text-anchor="middle" font-size="' . $font_size . '" font-weight="' . ( $bold ? 600 : 400 ) . '" dy=".1em" dominant-baseline="middle" fill="#' . trim( $color, '#' ) . '">' . $text . '</text></svg>';
-
+				/**
+				 * Save image content to file
+				 */
 				if ( ! file_exists( $avatar_folder_path ) ) {
 					@mkdir( $avatar_folder_path, ( fileperms( ABSPATH ) & 0777 | 0755 ), true );
 				}
@@ -537,7 +540,104 @@ class Leira_Letter_Avatar_Public{
 			}
 		}
 
-		return $url;
+		return set_url_scheme( $url );
+	}
+
+	/**
+	 * Generate image content
+	 *
+	 * @param array $data Configuration array
+	 *
+	 * @return false|string
+	 * @since 1.3.0
+	 */
+	protected function image_content( $data ) {
+		/**
+		 * Lets generate the image and save it to uploads folder
+		 */
+		$format     = isset( $data['format'] ) ? mb_strtolower( $data['format'] ) : 'svg';
+		$size       = isset( $data['size'] ) ? $data['size'] : 2;
+		$font_size  = isset( $data['font-size'] ) ? $data['font-size'] : abs( $size ) / 2;
+		$text       = isset( $data['name'] ) ? $data['name'] : true;
+		$background = isset( $data['background'] ) ? $data['background'] : true;
+		$color      = isset( $data['color'] ) ? $data['color'] : true;
+		$rounded    = isset( $data['rounded'] ) ? $data['rounded'] : true;
+		$bold       = isset( $data['bold'] ) ? $data['bold'] : true;
+
+		$avatar = false;
+
+		if ( $format != 'svg' ) {
+			/**
+			 * We are going to create an image 5 times the size requested and at the end
+			 * resize it to the fit the size.
+			 * This in order to have an image with a bit better quality
+			 */
+			$big_size = $size * 5;
+			$image    = @imagecreatetruecolor( $big_size, $big_size );
+			imagealphablending( $image, true );
+			imagesavealpha( $image, true );
+			imagefill( $image, 0, 0, imagecolorallocatealpha( $image, 0, 0, 0, 127 ) );
+			list( $r, $g, $b ) = $this->rgb_from_hex( $background );
+			if ( $rounded ) {
+				$circle_size  = $big_size;
+				$circle_color = imagecolorallocate( $image, $r, $g, $b );
+				imagefilledellipse( $image, $circle_size / 2, $circle_size / 2, $circle_size - 2, $circle_size - 2, $circle_color );
+			} else {
+				imagefill( $image, 0, 0, imagecolorallocate( $image, $r, $g, $b ) );
+			}
+
+			list( $r, $g, $b ) = $this->rgb_from_hex( $color );
+			$text_color = imagecolorallocate( $image, $r, $g, $b );
+			//Determine font to use base on text
+			$font      = __DIR__ . ( $bold ? '/fonts/NotoSans-Bold.ttf' : '/fonts/NotoSans-Regular.ttf' );
+			$fonts_arr = array(
+				'/\p{Arabic}/u'    => 'Arabic',
+				'/\p{Armenian}/u'  => 'Armenian',
+				'/\p{Bengali}/u'   => 'Bengali',
+				'/\p{Georgian}/u'  => 'Georgian',
+				'/\p{Hebrew}/u'    => 'Hebrew',
+				'/\p{Mongolian}/u' => 'Mongolian',
+				'/\p{Thai}/u'      => 'Thai',
+				'/\p{Tibetan}/u'   => 'Tibetan',
+				'/\p{Han}/u'       => 'CJKjp', //Chinese
+				'/\p{Hiragana}/u'  => 'CJKjp', //Japanese
+				'/\p{Katakana}/u'  => 'CJKjp', //Japanese
+			);
+			foreach ( $fonts_arr as $regex => $font_name ) {
+				if ( preg_match( $regex, $text ) > 0 ) {
+					$font = __DIR__ . '/fonts/NotoSans' . $font_name . '-';
+					$font .= ( $bold || $font_name == 'Mongolian' ) ? 'Regular' : 'Bold';
+					$font .= '.' . ( ( $font_name == 'CJKjp' ) ? 'otf' : 'ttf' );
+					break;
+				}
+			}
+
+			$font_size  = abs( $big_size / 3 );
+			$text_width = imagettfbbox( $font_size, 0, $font, $text );
+			$text_width = isset( $text_width[2] ) ? $text_width[2] : 0;
+			imagettftext( $image, $font_size, 0, ( $big_size - $text_width ) / 2, $font_size + ( ( $big_size - $font_size ) / 2 ), $text_color, $font, $text );
+
+			//resize
+			$final = @imagecreatetruecolor( $size, $size );
+			imagealphablending( $final, true );
+			imagesavealpha( $final, true );
+			imagefill( $final, 0, 0, imagecolorallocatealpha( $image, 0, 0, 0, 127 ) );
+			imagecopyresampled( $final, $image, 0, 0, 0, 0, $size, $size, $big_size, $big_size );
+			$image = $final;
+
+			//Capture generated image
+			ob_start();
+			$format == 'png' ? imagepng( $image, null, 0 ) : imagejpeg( $image, null, 100 );
+			$avatar = ob_get_contents();
+			imagedestroy( $image );
+			ob_end_clean();
+		}
+
+		if ( empty( $avatar ) ) {
+			$avatar = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="' . $size . 'px" height="' . $size . 'px" viewBox="0 0 ' . $size . ' ' . $size . '" style="user-select: none;" version="1.1"><' . ( $rounded ? 'circle' : 'rect' ) . ' fill="#' . trim( $background, '#' ) . '" cx="' . ( $size / 2 ) . '" width="' . $size . '" height="' . $size . '" cy="' . ( $size / 2 ) . '" r="' . ( $size / 2 ) . '"/><text x="50%" y="50%" style="color: #' . trim( $color, '#' ) . '; line-height: 1;font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', \'Roboto\', \'Oxygen\', \'Ubuntu\', \'Fira Sans\', \'Droid Sans\', \'Helvetica Neue\', sans-serif;" alignment-baseline="middle" text-anchor="middle" font-size="' . $font_size . '" font-weight="' . ( $bold ? 600 : 400 ) . '" dy=".1em" dominant-baseline="middle" fill="#' . trim( $color, '#' ) . '">' . $text . '</text></svg>';
+		}
+
+		return $avatar;
 	}
 
 	/**
@@ -577,5 +677,19 @@ class Leira_Letter_Avatar_Public{
 		wp_cache_set( $hash, $has_valid_avatar, 'leira_letter_avatar_gravatar', $expire );
 
 		return $has_valid_avatar;
+	}
+
+	/**
+	 * Return the RGB components from Hex color
+	 *
+	 * @param string $hex Color in hex format
+	 *
+	 * @return array|int[]
+	 * @since 1.3.0
+	 */
+	protected function rgb_from_hex( $hex ) {
+		return array_map( function( $c ) {
+			return hexdec( str_pad( $c, 2, $c ) );
+		}, str_split( ltrim( $hex, '#' ), strlen( $hex ) > 4 ? 2 : 1 ) );
 	}
 }
