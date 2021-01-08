@@ -31,7 +31,9 @@ class Leira_Letter_Avatar_Deactivator{
 	 */
 	public static function deactivate() {
 		/**
-		 * Restore default avatar
+		 * Restore default avatar.
+		 * We dont need to do the same thing on uninstallation as you can delete an active plugin.
+		 * You need deactivate the plugin first in order to delete it.
 		 *
 		 * @since 1.3.1
 		 */
