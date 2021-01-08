@@ -259,7 +259,7 @@ class Leira_Letter_Avatar_Public{
 				// Email address.
 				$email = $id_or_email;
 			}
-			$user = get_user_by_email( $id_or_email );
+			$user = get_user_by( 'email', $id_or_email );
 		} elseif ( $id_or_email instanceof WP_User ) {
 			// User object.
 			$user = $id_or_email;

@@ -30,7 +30,14 @@ class Leira_Letter_Avatar_Deactivator{
 	 * @since    1.0.0
 	 */
 	public static function deactivate() {
-
+		/**
+		 * Restore default avatar
+		 *
+		 * @since 1.3.1
+		 */
+		if ( get_option( 'avatar_default' ) == 'leira_letter_avatar' ) {
+			update_option( 'avatar_default', 'mystery' );
+		}
 	}
 
 }
