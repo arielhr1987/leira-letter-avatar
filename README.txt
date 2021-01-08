@@ -4,7 +4,7 @@ Donate link: https://github.com/arielhr1987
 Tags: user, avatar, image, admin, frontend, letter, initial
 Requires at least: 4.7
 Tested up to: 5.6
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 Requires PHP: 5.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -87,9 +87,13 @@ Use .png format instead.
 
 == Changelog ==
 
+= 1.3.1 =
+* Change deprecated method get_user_by_email in favor of get_user_by
+* Bug fix. Upon deactivation set avatar_default option back to mystery
+
 = 1.3.0 =
 * Adding support for .png and .jpg image formats
-* Fix https avatar url support
+* Fix https avatar url issue
 
 = 1.2.6 =
 * Wordpress 5.6 compatibility check
