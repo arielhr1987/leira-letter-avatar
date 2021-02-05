@@ -171,7 +171,23 @@ class Leira_Letter_Avatar_Public{
 			/**
 			 * Check if this comment type allow avatars to be retrieved.
 			 */
-			if ( ! is_avatar_comment_type( get_comment_type( $id_or_email ) ) ) {
+			$comment_type = get_comment_type( $id_or_email );
+			if ( function_exists( 'is_avatar_comment_type' ) ) {
+				$is_avatar_comment_type = is_avatar_comment_type( $comment_type );
+			} else {
+				/**
+				 * Filters the list of allowed comment types for retrieving avatars.
+				 *
+				 * @param array $types An array of content types. Default only contains 'comment'.
+				 *
+				 * @since 3.0.0
+				 *
+				 */
+				$allowed_comment_types = apply_filters( 'get_avatar_comment_types', array( 'comment' ) );
+
+				$is_avatar_comment_type = in_array( $comment_type, (array) $allowed_comment_types, true );
+			}
+			if ( ! $is_avatar_comment_type ) {
 				$args['url'] = false;
 
 				/**
