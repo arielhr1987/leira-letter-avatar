@@ -151,7 +151,7 @@ class Leira_Letter_Avatar_Public{
 		 * System forces to generate avatar with specific format.
 		 * This fix discussion settings repeated images
 		 */
-		$force_default = isset( $params['force_default'] ) ? $params['force_default'] : false;
+		$force_default = isset( $args['force_default'] ) ? $args['force_default'] : false;
 		if ( $force_default && isset( $args['default'] ) && $args['default'] !== 'leira_letter_avatar' ) {
 			/**
 			 * WP request an specific avatar type
