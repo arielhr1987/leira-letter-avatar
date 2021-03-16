@@ -628,6 +628,13 @@ class Leira_Letter_Avatar_Public{
 				}
 			}
 
+			/**
+			 * Filter font to use to write the text
+			 *
+			 * @since 1.3.4
+			 */
+			$font = apply_filters( 'leira_letter_avatar_image_font', $font, $data );
+
 			$font_size  = abs( $big_size / 3 );
 			$text_width = imagettfbbox( $font_size, 0, $font, $text );
 			$text_width = isset( $text_width[2] ) ? $text_width[2] : 0;
