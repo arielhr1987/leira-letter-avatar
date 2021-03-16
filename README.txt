@@ -3,8 +3,8 @@ Contributors: arielhr1987, jlcd0894, ivankuraev
 Donate link: https://github.com/arielhr1987
 Tags: user, avatar, image, admin, frontend, letter, initial
 Requires at least: 4.7
-Tested up to: 5.6.1
-Stable tag: 1.3.4.3
+Tested up to: 5.7
+Stable tag: 1.3.5
 Requires PHP: 5.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -86,6 +86,9 @@ Use .png format instead.
 6. Comments in frontend with letter avatar.
 
 == Changelog ==
+
+= 1.3.5 =
+* Fix wpDiscuz issue with social avatars
 
 = 1.3.4 =
 * Wordpress 5.7 compatibility check

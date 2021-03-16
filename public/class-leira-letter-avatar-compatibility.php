@@ -174,6 +174,44 @@ class Leira_Letter_Avatar_Compatibility{
 	 */
 	public function wpdiscuz_get_avatar_url( $url, $id_or_email, $args ) {
 
+		/**
+		 * Capture social avatars
+		 * wp-content/plugins/wpdiscuz/forms/wpdFormAttr/Login/SocialLogin.php#1576
+		 */
+		if ( interface_exists( 'wpdFormAttr\FormConst\wpdFormConst' ) ) {
+			/**
+			 * We make sure wpDiscuz is installed
+			 */
+			$userID = false;
+			if ( isset( $args["wpdiscuz_current_user"] ) ) {
+				if ( $args["wpdiscuz_current_user"] ) {
+					$userID = $args["wpdiscuz_current_user"]->ID;
+				}
+			} else {
+				if ( is_numeric( $id_or_email ) ) {
+					$userID = (int) $id_or_email;
+				} elseif ( $id_or_email instanceof WP_User ) {
+					$userID = $id_or_email->ID;
+				} elseif ( $id_or_email instanceof WP_Post ) {
+					$userID = (int) $id_or_email->post_author;
+				} elseif ( $id_or_email instanceof WP_Comment ) {
+					if ( ! empty( $id_or_email->user_id ) ) {
+						$userID = (int) $id_or_email->user_id;
+					}
+				} else {
+					$user   = get_user_by( "email", $id_or_email );
+					$userID = isset( $user->ID ) ? $user->ID : 0;
+				}
+			}
+
+			if ( $userID && $avatar_url = get_user_meta( $userID, wpdFormAttr\FormConst\wpdFormConst::WPDISCUZ_SOCIAL_AVATAR_KEY, true ) ) {
+				return $avatar_url;
+			}
+		}
+
+		/**
+		 * Default logic for incorrectly avatar requests
+		 */
 		if ( isset( $args['wpdiscuz_current_user'] ) ) {
 			$current_user = $args['wpdiscuz_current_user'];
 			$email        = isset( $args['wpdiscuz_gravatar_user_email'] ) ? $args['wpdiscuz_gravatar_user_email'] : 'unknown@example.com';
