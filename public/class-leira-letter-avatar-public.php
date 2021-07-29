@@ -695,13 +695,11 @@ class Leira_Letter_Avatar_Public{
 			return $cache;
 		}
 
-		$uri     = 'http://www.gravatar.com/avatar/' . $hash . '?d=404';
-		$headers = @get_headers( $uri );
-		if ( ! preg_match( "|200|", $headers[0] ) ) {
-			$has_valid_avatar = false;
-		} else {
-			$has_valid_avatar = true;
-		}
+		$uri     = sprintf( 'http://%d.gravatar.com/avatar/%s?d=404', rand( 0, 2 ), $hash );
+		$context = stream_context_create();
+		stream_context_set_option( $context, 'http', 'timeout', 2 ); //timeout in seconds
+		$headers          = @get_headers( $uri, false, $context );
+		$has_valid_avatar = isset( $headers[0] ) && preg_match( "|200|", $headers[0] );
 
 		$expire = 60 * 60 * 3;//3 hours
 		wp_cache_set( $hash, $has_valid_avatar, 'leira_letter_avatar_gravatar', $expire );
