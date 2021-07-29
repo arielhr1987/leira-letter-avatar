@@ -35,6 +35,10 @@ This plugins has been possible thanks to:
 * [Jose Luis Chavez](https://profiles.wordpress.org/jlcd0894/) - Icons, banners and designs
 * [ivankuraev](https://profiles.wordpress.org/ivankuraev/) - Support for russian characters
 
+= Development =
+
+You can contribute to this plugin development on [Github](https://github.com/arielhr1987/leira-letter-avatar)
+
 == Installation ==
 
 1. Upload the plugin files to the `/wp-content/plugins/leira-letter-avatar` directory, or install the plugin through the WordPress plugins screen directly.
@@ -90,6 +94,7 @@ Use .png format instead.
 = 1.3.6 =
 * Wordpress 5.7 compatibility check
 * Fix BuddyPress deprecated filter bp_core_avatar_default
+* Improve Gravatar image check method
 
 = 1.3.5 =
 * Fix wpDiscuz issue with social avatars
