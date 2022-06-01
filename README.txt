@@ -3,7 +3,7 @@ Contributors: arielhr1987, jlcd0894, ivankuraev
 Donate link: https://github.com/arielhr1987
 Tags: user, avatar, image, admin, frontend, letter, initial
 Requires at least: 4.7
-Tested up to: 5.9.3
+Tested up to: 6.0
 Stable tag: 1.3.6
 Requires PHP: 5.4
 License: GPLv2 or later
