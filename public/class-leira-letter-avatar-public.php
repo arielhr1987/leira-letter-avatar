@@ -572,7 +572,7 @@ class Leira_Letter_Avatar_Public{
 		 * Lets generate the image and save it to uploads folder
 		 */
 		$format     = isset( $data['format'] ) ? mb_strtolower( $data['format'] ) : 'svg';
-		$size       = isset( $data['size'] ) ? $data['size'] : 2;
+		$size       = isset( $data['size'] ) ? intval($data['size']) : 2;
 		$font_size  = isset( $data['font-size'] ) ? $data['font-size'] : abs( $size ) / 2;
 		$text       = isset( $data['name'] ) ? $data['name'] : true;
 		$background = isset( $data['background'] ) ? $data['background'] : true;
