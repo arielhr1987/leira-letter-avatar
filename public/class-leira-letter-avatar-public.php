@@ -695,7 +695,7 @@ class Leira_Letter_Avatar_Public{
 			return $cache;
 		}
 
-		$uri     = sprintf( 'http://%d.gravatar.com/avatar/%s?d=404', rand( 0, 2 ), $hash );
+		$uri     = sprintf( 'https://%d.gravatar.com/avatar/%s?d=404', rand( 0, 2 ), $hash );
 		$context = stream_context_create();
 		stream_context_set_option( $context, 'http', 'timeout', 2 ); //timeout in seconds
 		$headers          = @get_headers( $uri, false, $context );
