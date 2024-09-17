@@ -104,7 +104,7 @@ class Leira_Letter_Avatar_Admin{
 	public function enqueue_scripts( $page ) {
 
 		/**
-		 * Add js files if we are in our settings page
+		 * Add js files if we're in our settings page
 		 */
 		if ( $page === 'settings_page_leira_letter_avatar' ) {
 
@@ -213,7 +213,7 @@ class Leira_Letter_Avatar_Admin{
 	 */
 	public function settings_page_load() {
 		if ( ! current_user_can( $this->capability ) ) {
-			wp_die( __( 'You do not have sufficient permissions to access this page.', 'leira-letter-avatar' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'leira-letter-avatar' ) );
 		}
 		/**
 		 * Add screen help
@@ -397,11 +397,11 @@ class Leira_Letter_Avatar_Admin{
 	 */
 	public function render_settings_page() {
 		if ( ! current_user_can( $this->capability ) ) {
-			wp_die( __( 'You do not have sufficient permissions to access this page.', 'leira-letter-avatar' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'leira-letter-avatar' ) );
 		}
 		?>
         <div class="wrap">
-            <h1><?php _e( 'Letter Avatar Settings', 'leira-letter-avatar' ) ?></h1>
+            <h1><?php esc_html_e( 'Letter Avatar Settings', 'leira-letter-avatar' ) ?></h1>
             <form action='options.php' method='post'>
 				<?php
 				settings_fields( 'leira_letter_avatar_settings' );
@@ -435,7 +435,7 @@ class Leira_Letter_Avatar_Admin{
         <label for="settings_avatar_default">
             <input type='checkbox' name='avatar_default' id="settings_avatar_default"
                    value='leira_letter_avatar' <?php checked( $option, 'leira_letter_avatar' ); ?>>
-			<?php _e( 'Enable use of letter avatar', 'leira-letter-avatar' ); ?>
+			<?php esc_html_e( 'Enable use of letter avatar', 'leira-letter-avatar' ); ?>
         </label>
 
 		<?php
@@ -454,7 +454,7 @@ class Leira_Letter_Avatar_Admin{
         <label for="settings_gravatar">
             <input type='checkbox' name='leira_letter_avatar_gravatar' id="settings_gravatar"
                    value='1' <?php checked( true, $gravatar ); ?>>
-			<?php _e( 'Use Gravatar profile picture if available', 'leira-letter-avatar' ); ?>
+			<?php esc_html_e( 'Use Gravatar profile picture if available', 'leira-letter-avatar' ); ?>
         </label>
 
 		<?php
@@ -472,9 +472,9 @@ class Leira_Letter_Avatar_Admin{
 		?>
         <label for="settings_format">
             <select name="leira_letter_avatar_format" id="settings_format">
-                <option value="svg" <?php selected( 'svg', $format ) ?>><?php _e( '.svg', 'leira-letter-avatar' ) ?></option>
-                <option value="png" <?php selected( 'png', $format ) ?>><?php _e( '.png', 'leira-letter-avatar' ) ?></option>
-                <option value="jpg" <?php selected( 'jpg', $format ) ?>><?php _e( '.jpg', 'leira-letter-avatar' ) ?></option>
+                <option value="svg" <?php selected( 'svg', $format ) ?>><?php esc_html_e( '.svg', 'leira-letter-avatar' ) ?></option>
+                <option value="png" <?php selected( 'png', $format ) ?>><?php esc_html_e( '.png', 'leira-letter-avatar' ) ?></option>
+                <option value="jpg" <?php selected( 'jpg', $format ) ?>><?php esc_html_e( '.jpg', 'leira-letter-avatar' ) ?></option>
             </select>
         </label>
 
@@ -492,18 +492,18 @@ class Leira_Letter_Avatar_Admin{
 		?>
         <fieldset>
             <legend class="screen-reader-text">
-                <span><?php _e( 'Shape settings', 'leira-letter-avatar' ) ?></span>
+                <span><?php esc_html_e( 'Shape settings', 'leira-letter-avatar' ) ?></span>
             </legend>
             <label for="settings_shape_circle">
                 <input type="radio" name="leira_letter_avatar_rounded" value="1"
                        id="settings_shape_circle" <?php checked( true, $rounded ) ?>>
-				<?php _e( 'Circle', 'leira-letter-avatar' ) ?>
+				<?php esc_html_e( 'Circle', 'leira-letter-avatar' ) ?>
             </label>
             <br>
             <label for="settings_shape_rectangle">
                 <input type="radio" name="leira_letter_avatar_rounded" value="0"
                        id="settings_shape_rectangle" <?php checked( false, $rounded ) ?>>
-				<?php _e( 'Square', 'leira-letter-avatar' ) ?>
+				<?php esc_html_e( 'Square', 'leira-letter-avatar' ) ?>
             </label>
         </fieldset>
 		<?php
@@ -526,17 +526,17 @@ class Leira_Letter_Avatar_Admin{
 		?>
         <fieldset>
             <legend class="screen-reader-text">
-                <span><?php _e( 'Letters settings', 'leira-letter-avatar' ) ?></span>
+                <span><?php esc_html_e( 'Letters settings', 'leira-letter-avatar' ) ?></span>
             </legend>
             <label for="settings_letter">
-				<?php _e( 'Fill avatar image with at most', 'leira-letter-avatar' ) ?>
+				<?php esc_html_e( 'Fill avatar image with at most', 'leira-letter-avatar' ) ?>
                 <select name="leira_letter_avatar_letters" id="settings_letter">
-                    <option value="1" <?php selected( 1, $letters ) ?>><?php _e( '1 letter', 'leira-letter-avatar' ) ?></option>
-                    <option value="2" <?php selected( 2, $letters ) ?>><?php _e( '2 letters', 'leira-letter-avatar' ) ?></option>
+                    <option value="1" <?php selected( 1, $letters ) ?>><?php esc_html_e( '1 letter', 'leira-letter-avatar' ) ?></option>
+                    <option value="2" <?php selected( 2, $letters ) ?>><?php esc_html_e( '2 letters', 'leira-letter-avatar' ) ?></option>
                 </select>
             </label>
             <p class="description">
-				<?php _e( 'The letters are the initials of the user taken from first name and last name. If those fields are not set, the plugin will try to determine letters base on Nickname, Display Name, username or email, in that order.', 'leira-letter-avatar' ) ?>
+				<?php esc_html_e( 'The letters are the initials of the user taken from first name and last name. If those fields are not set, the plugin will try to determine letters base on Nickname, Display Name, username or email, in that order.', 'leira-letter-avatar' ) ?>
             </p>
             <br>
             <label for="settings_bold">
@@ -545,7 +545,7 @@ class Leira_Letter_Avatar_Admin{
                        name='leira_letter_avatar_bold'
 					<?php checked( true, $bold ); ?>
                        value='1'>
-				<?php _e( 'Make letters <b>bold</b>', 'leira-letter-avatar' ) ?>
+				<?php echo wp_kses_post( __( 'Make letters <b>bold</b>', 'leira-letter-avatar' ) ) ?>
             </label>
             <br>
             <label for="settings_uppercase">
@@ -554,7 +554,7 @@ class Leira_Letter_Avatar_Admin{
                        name='leira_letter_avatar_uppercase'
 					<?php checked( true, $uppercase ); ?>
                        value='1'>
-				<?php _e( 'Make letters uppercase', 'leira-letter-avatar' ) ?>
+				<?php esc_html_e( 'Make letters uppercase', 'leira-letter-avatar' ) ?>
             </label>
         </fieldset>
 		<?php
@@ -574,7 +574,7 @@ class Leira_Letter_Avatar_Admin{
 		?>
         <fieldset>
             <legend class="screen-reader-text">
-                <span><?php _e( 'Color settings', 'leira-letter-avatar' ) ?></span>
+                <span><?php esc_html_e( 'Color settings', 'leira-letter-avatar' ) ?></span>
             </legend>
             <div>
                 <div>
@@ -584,7 +584,7 @@ class Leira_Letter_Avatar_Admin{
                                name="leira_letter_avatar_color_method"
                                value="auto"
 							<?php checked( 'auto', $color_method ); ?>>
-						<?php _e( 'Automatically determine letters color based on background color (Recommended)', 'leira-letter-avatar' ) ?>
+						<?php esc_html_e( 'Automatically determine letters color based on background color (Recommended)', 'leira-letter-avatar' ) ?>
                     </label>
                 </div>
                 <div>
@@ -594,7 +594,7 @@ class Leira_Letter_Avatar_Admin{
                                name="leira_letter_avatar_color_method"
                                value="fixed"
 							<?php checked( 'fixed', $color_method ); ?>>
-						<?php _e( 'Use this color for the letters', 'leira-letter-avatar' ) ?>
+						<?php esc_html_e( 'Use this color for the letters', 'leira-letter-avatar' ) ?>
                     </label>
                     <input type="text"
                            name="leira_letter_avatar_color"
@@ -624,21 +624,21 @@ class Leira_Letter_Avatar_Admin{
 		?>
         <fieldset>
             <legend class="screen-reader-text">
-                <span><?php _e( 'Background settings', 'leira-letter-avatar' ) ?></span>
+                <span><?php esc_html_e( 'Background settings', 'leira-letter-avatar' ) ?></span>
             </legend>
             <div>
                 <div>
                     <label for="leira_letter_avatar_method_auto">
                         <input type="radio" name="leira_letter_avatar_method" value="auto"
                                id="leira_letter_avatar_method_auto" <?php checked( 'auto', $method ); ?>>
-						<?php _e( 'Automatically determine background color for each user (Recommended)', 'leira-letter-avatar' ) ?>
+						<?php esc_html_e( 'Automatically determine background color for each user (Recommended)', 'leira-letter-avatar' ) ?>
                     </label>
                 </div>
                 <div>
                     <label for="leira_letter_avatar_method_fixed">
                         <input type="radio" name="leira_letter_avatar_method" value="fixed"
                                id="leira_letter_avatar_method_fixed" <?php checked( 'fixed', $method ); ?>>
-						<?php _e( 'Use this background color for all users', 'leira-letter-avatar' ) ?>
+						<?php esc_html_e( 'Use this background color for all users', 'leira-letter-avatar' ) ?>
                     </label>
                     <input type="text"
                            name="leira_letter_avatar_bg"
@@ -652,14 +652,14 @@ class Leira_Letter_Avatar_Admin{
                         <input type="radio" name="leira_letter_avatar_method"
                                id="leira_letter_avatar_method_random"
                                value="random" <?php checked( 'random', $method ); ?>>
-						<?php _e( 'Use a random background color from the list below:', 'leira-letter-avatar' ) ?>
+						<?php esc_html_e( 'Use a random background color from the list below:', 'leira-letter-avatar' ) ?>
                     </label>
                     <p>
                         <textarea name="leira_letter_avatar_bgs" rows="3" cols="50" id=""
                                   class="large-text code"><?php echo esc_textarea( $bgs ) ?></textarea>
                     </p>
                     <p class="description">
-						<?php _e( 'Use comma to separate each color. Colors should be in hex format (i.e. fc91ad).', 'leira-letter-avatar' ) ?>
+						<?php esc_html_e( 'Use comma to separate each color. Colors should be in hex format (i.e. fc91ad).', 'leira-letter-avatar' ) ?>
                     </p>
                 </div>
             </div>
@@ -691,14 +691,14 @@ class Leira_Letter_Avatar_Admin{
                 <a href="https://wordpress.org/support/plugin/leira-letter-avatar/reviews/?filter=5" target="_blank"
                    class="leira-letter-avatar-admin-rating-link"
                    data-rated="<?php esc_attr_e( 'Thanks :)', 'leira-letter-avatar' ) ?>"
-                   data-nonce="<?php echo wp_create_nonce( $this->nonce_action ) ?>">
+                   data-nonce="<?php echo esc_html( wp_create_nonce( $this->nonce_action ) ) ?>">
                     &#9733;&#9733;&#9733;&#9733;&#9733;
                 </a>
 				<?php $link = ob_get_clean();
 
 				ob_start();
-
-				printf( __( 'If you like Letter Avatar please consider leaving a %s review. It will help us to grow the plugin and make it more popular. Thank you.', 'leira-letter-avatar' ), $link ) ?>
+				/* translators: link to rate the plugin */
+				printf( esc_html__( 'If you like Letter Avatar please consider leaving a %s review. It will help us to grow the plugin and make it more popular. Thank you.', 'leira-letter-avatar' ), wp_kses_post( $link ) ) ?>
 
 				<?php $footer_text = ob_get_clean();
 			}
@@ -713,7 +713,7 @@ class Leira_Letter_Avatar_Admin{
 	 * @since 1.2.0
 	 */
 	public function footer_rated() {
-		$nonce = isset( $_REQUEST['nonce'] ) ? sanitize_text_field( $_REQUEST['nonce'] ) : '';
+		$nonce = isset( $_REQUEST['nonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ) : '';
 
 		if ( ! wp_verify_nonce( $nonce, $this->nonce_action ) ) {
 			wp_send_json_error( esc_js( __( 'Wrong Nonce', 'leira-letter-avatar' ) ) );

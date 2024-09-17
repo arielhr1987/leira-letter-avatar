@@ -1,10 +1,10 @@
 === Leira Letter Avatar ===
 Contributors: arielhr1987, jlcd0894, ivankuraev
 Donate link: https://github.com/arielhr1987
-Tags: user, avatar, image, admin, frontend, letter, initial
+Tags: user, avatar, image, letter, initial
 Requires at least: 4.7
-Tested up to: 6.0
-Stable tag: 1.3.8
+Tested up to: 6.6
+Stable tag: 1.3.9
 Requires PHP: 5.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -13,13 +13,13 @@ Automatically generate beautiful user avatars using their initial letters.
 
 == Description ==
 
-Letters Avatar allows you to generate automatically user avatar base on their initial letters.
+Letters Avatar allows you to automatically generate user avatar based on their initial letters.
 
-Fully customizable from admin area. You will be able edit avatar settings like shape, background color, etc.
+Fully customizable from the admin area. You will be able to edit avatar settings like shape, background color, etc.
 
 = Compatibility =
 
-This plugin is compatible with any properly coded theme. However, some plugins may cause conflicts with this one. If you find an issue with your theme please create a post in the community forum.
+This plugin is compatible with any properly coded theme. However, some plugins may cause conflicts with this one. If you find an issue with your theme, please create a post in the community forum.
 So far this plugin is compatible with:
 * [BuddyPress](https://wordpress.org/plugins/buddypress/)
 * [Ultimate Member](https://wordpress.org/plugins/ultimate-member/)
@@ -51,45 +51,51 @@ You can contribute to this plugin development on [Github](https://github.com/ari
 = What is the format of the generated avatars?  =
 
 You can select from .svg (Recommended), .png and .jpg.
-To use .png and .jpg you will need GD image library installed in order to work.
+To use .png and .jpg you will need the GD image library installed to work.
 
 = Which format should I use?  =
 
 The recommended format(.svg) is the best option. This option generates the images with the best quality and the resource required to generate it is very low.
-However there are some cases where you will need to user .png or .jpg, for example if you are sending avatar images in your emails.
-There is a know issue that email clients like gmail uses a proxy to show the images and at this point does not support .svg format.
+However, there are some cases where you will need to user .png or .jpg, for example, if you're sending avatar images in your emails.
+There is a know issue that email clients like gmail use a proxy to show the images and at this point don't support .svg format.
 
-= How avatars are generated?  =
+= How are avatars generated?  =
 
 The plugin generates the avatar automatically using defined config.
-Avatars are generated only once so your site performance wont get affected
+Avatars are generated only once, so your site performance won't get affected
 
-= How avatars are stored?  =
+= How are avatars stored?  =
 
 Avatars are stored in your uploads folder.
 
 = Will I be able to select my own letters? =
 
-No. The plugin automatically generates the image with the initial letters of you First name and Last name.
+No. The plugin automatically generates the image with the initial letters of your First name and Last name.
 
 = Can I use gravatar if the user has one? =
 
-Yes. There is an option in plugins settings that allows you to show user gravatar if available instead of letter avatar.
+Yes. There is an option in plugin settings that allows you to show user gravatar if available instead of letter avatar.
 
-= I see a black background in the avatars  =
+= I see a black background in the avatars =
 
-Probably you are using .jpg format to generate a round avatar. This format does not support image transparency.
+Probably you're using .jpg format to generate a round avatar. This format doesn't support image transparency.
 Use .png format instead.
 
 == Screenshots ==
 1. You will find a new menu item "Letter Avatar" under "Settings" menu.
-2. A new option "Letter" will be available for "Default Avatar".
+2. A new option "Letter" will be available for "Default Avatar."
 3. Comments list with generated user letter avatar.
 4. Users list with generated user letter avatar.
 5. Comments in Dashboard with letter avatar.
 6. Comments in frontend with letter avatar.
 
 == Changelog ==
+
+= 1.3.9 =
+* Wordpress 6.6 compatibility check
+* Improve text escape
+* Use wp_rand over php built-in rand function
+* Improve file handling using related wp functions
 
 = 1.3.8 =
 * Use gravatar https url

@@ -73,7 +73,7 @@ class Leira_Letter_Avatar_Public{
 		 * This function is provided for demonstration purposes only.
 		 *
 		 * An instance of this class should be passed to the run() function
-		 * defined in Leira_Letter_Avatar_Loader as all of the hooks are defined
+		 * defined in Leira_Letter_Avatar_Loader as all the hooks are defined
 		 * in that particular class.
 		 *
 		 * The Leira_Letter_Avatar_Loader will then create the relationship
@@ -97,7 +97,7 @@ class Leira_Letter_Avatar_Public{
 		 * This function is provided for demonstration purposes only.
 		 *
 		 * An instance of this class should be passed to the run() function
-		 * defined in Leira_Letter_Avatar_Loader as all of the hooks are defined
+		 * defined in Leira_Letter_Avatar_Loader as all the hooks are defined
 		 * in that particular class.
 		 *
 		 * The Leira_Letter_Avatar_Loader will then create the relationship
@@ -113,8 +113,8 @@ class Leira_Letter_Avatar_Public{
 	 * Generate custom url for user avatar if "Letters" option is enable
 	 *
 	 * @param string $url         The URL of the avatar.
-	 * @param mixed  $id_or_email The Gravatar to retrieve. Accepts a user ID, Gravatar MD5 hash,
-	 *                            user email, WP_User object, WP_Post object, or WP_Comment object.
+	 * @param mixed  $id_or_email The Gravatar to retrieve. Accepts a user ID, Gravatar MD5 hash, user email, WP_User
+	 *                            object, WP_Post object, or WP_Comment object.
 	 * @param array  $args        Arguments passed to get_avatar_data(), after processing.
 	 *
 	 * @return string
@@ -123,7 +123,7 @@ class Leira_Letter_Avatar_Public{
 	public function get_avatar_url( $url, $id_or_email, $args ) {
 
 		/**
-		 * Fix problem with forced avatar types in dashboard and comments
+		 * Fix the problem with forced avatar types in dashboard and comments
 		 */
 		if ( is_admin() && function_exists( 'get_current_screen' ) && $screen = get_current_screen() ) {
 			$screen = empty( $screen ) ? false : $screen->id;
@@ -139,7 +139,7 @@ class Leira_Letter_Avatar_Public{
 		 */
 		if ( is_admin() && wp_doing_ajax() ) {
 			// do something
-			$current_action = isset( $_REQUEST['action'] ) ? sanitize_text_field( $_REQUEST['action'] ) : false;
+			$current_action = isset( $_REQUEST['action'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['action'] ) ) : false;
 			if ( $current_action == 'edit-comment' ) {
 				$args['default'] = 'leira_letter_avatar';
 			}
@@ -154,8 +154,8 @@ class Leira_Letter_Avatar_Public{
 		$force_default = isset( $args['force_default'] ) ? $args['force_default'] : false;
 		if ( $force_default && isset( $args['default'] ) && $args['default'] !== 'leira_letter_avatar' ) {
 			/**
-			 * WP request an specific avatar type
-			 * We are in Discussion setting page
+			 * WP request a specific avatar type
+			 * We're in Discussion setting page
 			 */
 			return $url;
 		}
@@ -169,7 +169,7 @@ class Leira_Letter_Avatar_Public{
 
 		if ( $id_or_email instanceof WP_Comment ) {
 			/**
-			 * Check if this comment type allow avatars to be retrieved.
+			 * Check if this comment type allows avatars to be retrieved.
 			 */
 			$comment_type = get_comment_type( $id_or_email );
 			if ( function_exists( 'is_avatar_comment_type' ) ) {
@@ -204,7 +204,7 @@ class Leira_Letter_Avatar_Public{
 		$avatar_url = $this->generate_letter_avatar_url( $id_or_email, array( 'size' => $size ) );
 		if ( $avatar_url ) {
 			/**
-			 * If it was generated correctly use this avatar url
+			 * If it was generated correctly, use this avatar url
 			 */
 			$url = $avatar_url;
 		}
@@ -213,7 +213,7 @@ class Leira_Letter_Avatar_Public{
 	}
 
 	/**
-	 * Return best color given a background color
+	 * Return the best color given a background color
 	 *
 	 * @param string $hexcolor Hex color
 	 *
@@ -229,11 +229,11 @@ class Leira_Letter_Avatar_Public{
 
 	/**
 	 * Generates image url for a User, Comment etc.
-	 * This method will determine background color, letters, shape etc to build the image
+	 * This method will determine background color, letters, shape, etc. to build the image
 	 *
 	 * @param mixed $id_or_email The object to generate the avatar for
 	 * @param array $args        Array of arguments to pass to method.
-	 *                           For backward compatibility ff args is numeric its considered the size
+	 *                           For backward compatibility, ff args is numeric its considered the size
 	 *
 	 * @return string
 	 * @since 1.1.0
@@ -312,7 +312,7 @@ class Leira_Letter_Avatar_Public{
 			if ( is_ssl() ) {
 				$gravatar = 'https://secure.gravatar.com/avatar/';
 			} else {
-				$gravatar = sprintf( 'http://%d.gravatar.com/avatar/', rand( 0, 2 ) );
+				$gravatar = sprintf( 'http://%d.gravatar.com/avatar/', wp_rand( 0, 2 ) );
 			}
 
 			// Append email hash to Gravatar.
@@ -370,8 +370,8 @@ class Leira_Letter_Avatar_Public{
 
 				if ( empty( $bg ) || ! in_array( $bg, $backgrounds ) || ! ctype_xdigit( $bg ) ) {
 					//calculate and save
-					$bg = rand( 0, count( $backgrounds ) - 1 );
-					$bg = $backgrounds[ $bg ]; //random background from array
+					$bg = wp_rand( 0, count( $backgrounds ) - 1 );
+					$bg = $backgrounds[ $bg ]; //random background from an array
 
 					if ( $user instanceof WP_User ) {
 						update_user_meta( $user->ID, '_leira_letter_avatar_bg', $bg );
@@ -392,7 +392,7 @@ class Leira_Letter_Avatar_Public{
 		 */
 		$color_method = get_network_option( null, 'leira_letter_avatar_color_method', 'auto' );
 		$color_method = $this->sanitize->color_method( $color_method );
-		//By default find the best contrast color for the background
+		//By default, find the best contrast color for the background
 		$color = $this->get_contrast_color( $bg );
 		if ( $color_method == 'fixed' ) {
 			$color = get_network_option( null, 'leira_letter_avatar_color', 'ffffff' );
@@ -427,7 +427,7 @@ class Leira_Letter_Avatar_Public{
 		$letters_count = get_network_option( null, 'leira_letter_avatar_letters', 2 );
 		$letters_count = $this->sanitize->letters( $letters_count );
 		$letters       = preg_replace( $regex, "$2", $letters );//get all initials in the string
-		$letters       = mb_substr( $letters, 0, $letters_count, 'UTF-8' );//reduce to 2 or less initials
+		$letters       = mb_substr( $letters, 0, $letters_count, 'UTF-8' );//reduce to 2 or fewer initials
 
 		if ( get_network_option( null, 'leira_letter_avatar_uppercase', true ) ) {
 			/**
@@ -474,7 +474,7 @@ class Leira_Letter_Avatar_Public{
 
 	/**
 	 * Generate, if it doesn't exist, an image file from parameters.
-	 * If system is unable to create the image, an image service is used instead
+	 * If the system is unable to create the image, an image service is used instead
 	 *
 	 * @param array $data Array containing all parameters to generate image
 	 *
@@ -483,7 +483,7 @@ class Leira_Letter_Avatar_Public{
 	 */
 	public function generate_image( $data ) {
 
-		$url = 'https://us-central1-leira-letter-avatar.cloudfunctions.net/generate';
+		$url = 'https://www.gravatar.com/avatar/?d=mp';
 
 		$params            = $data;//clone array
 		$params['rounded'] = ( isset( $params['rounded'] ) && $params['rounded'] ) ? '1' : 'no';
@@ -494,7 +494,7 @@ class Leira_Letter_Avatar_Public{
 		$format = mb_strtolower( $data['format'] );
 		$format = in_array( $format, leira_letter_avatar()->sanitizer->get_formats() ) ? $format : 'svg';
 		if ( $format != 'svg' ) {
-			//Check if system is able to handle image
+			//Check if the system is able to handle image
 			if ( ! extension_loaded( 'gd' ) ) {
 				//Fallback to svg format
 				$format = 'svg';
@@ -506,8 +506,8 @@ class Leira_Letter_Avatar_Public{
 
 			//WP folders
 			$wp_uploads_dir      = wp_upload_dir();
-			$wp_uploads_dir_base = trailingslashit( $wp_uploads_dir['basedir'] ); //path to uploads
-			$wp_uploads_url_base = trailingslashit( $wp_uploads_dir['baseurl'] ); //url to uploads
+			$wp_uploads_dir_base = trailingslashit( $wp_uploads_dir['basedir'] ); //path to the uploads folder
+			$wp_uploads_url_base = trailingslashit( $wp_uploads_dir['baseurl'] ); //url to the uploads folder
 
 			//Avatar folder
 			$avatar_folder = apply_filters( 'leira_letter_avatar_upload_folder', 'letter-avatar' );
@@ -517,7 +517,7 @@ class Leira_Letter_Avatar_Public{
 			$avatar_folder_path = $wp_uploads_dir_base . $avatar_folder;
 
 			//Avatar filename
-			$avatar_filename = md5( json_encode( $data ) ) . '.' . $format;
+			$avatar_filename = md5( wp_json_encode( $data ) ) . '.' . $format;
 
 			//Avatar path
 			$avatar_path = $avatar_folder_path . $avatar_filename;
@@ -525,31 +525,41 @@ class Leira_Letter_Avatar_Public{
 			$avatar_exist = file_exists( $avatar_path );
 			if ( ! $avatar_exist ) {
 				/**
-				 * Lets generate the image and save it to uploads folder
+				 * Let's generate the image and save it to the uploads folder
 				 */
 				$avatar = $this->image_content( $data );
+
+				$wp_filesystem = $this->get_filesystem();
 
 				/**
 				 * Save image content to file
 				 */
-				if ( ! file_exists( $avatar_folder_path ) ) {
-					@mkdir( $avatar_folder_path, ( fileperms( ABSPATH ) & 0777 | 0755 ), true );
+				if ( ! $wp_filesystem->exists( $avatar_folder_path ) ) {
+					$wp_filesystem->mkdir( $avatar_folder_path, ( fileperms( ABSPATH ) & 0777 | 0755 ) );
 				}
+
+				$avatar_exist = $wp_filesystem->put_contents( $avatar_path, $avatar, ( fileperms( ABSPATH . 'index.php' ) & 0777 | 0644 ) );
+
+
+//				if ( ! file_exists( $avatar_folder_path ) ) {
+//					@mkdir( $avatar_folder_path, ( fileperms( ABSPATH ) & 0777 | 0755 ), true );
+//				}
+
 				//$avatar_exist = $wp_filesystem->put_contents( $avatar_path, $avatar, FS_CHMOD_FILE );
-				$fp = @fopen( $avatar_path, 'wb' );
-				if ( $fp ) {
-					mbstring_binary_safe_encoding();
-					$data_length   = strlen( $avatar );
-					$bytes_written = fwrite( $fp, $avatar );
-					reset_mbstring_encoding();
-					fclose( $fp );
-					if ( $data_length !== $bytes_written ) {
-						$avatar_exist = false;
-					} else {
-						$avatar_exist = true;
-					}
-					chmod( $avatar_path, ( fileperms( ABSPATH . 'index.php' ) & 0777 | 0644 ) );
-				}
+//				$fp = @fopen( $avatar_path, 'wb' );
+//				if ( $fp ) {
+//					mbstring_binary_safe_encoding();
+//					$data_length   = strlen( $avatar );
+//					$bytes_written = fwrite( $fp, $avatar );
+//					reset_mbstring_encoding();
+//					fclose( $fp );
+//					if ( $data_length !== $bytes_written ) {
+//						$avatar_exist = false;
+//					} else {
+//						$avatar_exist = true;
+//					}
+//					chmod( $avatar_path, ( fileperms( ABSPATH . 'index.php' ) & 0777 | 0644 ) );
+//				}
 			}
 			if ( $avatar_exist ) {
 				$url = $wp_uploads_url_base . $avatar_folder . $avatar_filename;
@@ -569,10 +579,10 @@ class Leira_Letter_Avatar_Public{
 	 */
 	protected function image_content( $data ) {
 		/**
-		 * Lets generate the image and save it to uploads folder
+		 * Let's generate the image and save it to the uploads folder
 		 */
 		$format     = isset( $data['format'] ) ? mb_strtolower( $data['format'] ) : 'svg';
-		$size       = isset( $data['size'] ) ? intval($data['size']) : 2;
+		$size       = isset( $data['size'] ) ? intval( $data['size'] ) : 2;
 		$font_size  = isset( $data['font-size'] ) ? $data['font-size'] : abs( $size ) / 2;
 		$text       = isset( $data['name'] ) ? $data['name'] : true;
 		$background = isset( $data['background'] ) ? $data['background'] : true;
@@ -584,9 +594,9 @@ class Leira_Letter_Avatar_Public{
 
 		if ( $format != 'svg' ) {
 			/**
-			 * We are going to create an image 5 times the size requested and at the end
+			 * We're going to create an image 5 times the size requested and at the end
 			 * resize it to the fit the size.
-			 * This in order to have an image with a bit better quality
+			 * This to have an image with a bit better quality
 			 */
 			$big_size = $size * 5;
 			$image    = @imagecreatetruecolor( $big_size, $big_size );
@@ -604,7 +614,7 @@ class Leira_Letter_Avatar_Public{
 
 			list( $r, $g, $b ) = $this->rgb_from_hex( $color );
 			$text_color = imagecolorallocate( $image, $r, $g, $b );
-			//Determine font to use base on text
+			//Determine font to use base on the text
 			$font      = __DIR__ . ( $bold ? '/fonts/NotoSans-Bold.ttf' : '/fonts/NotoSans-Regular.ttf' );
 			$fonts_arr = array(
 				'/\p{Arabic}/u'    => 'Arabic',
@@ -638,7 +648,7 @@ class Leira_Letter_Avatar_Public{
 			$font_size  = abs( $big_size / 3 );
 			$text_width = imagettfbbox( $font_size, 0, $font, $text );
 			$text_width = isset( $text_width[2] ) ? $text_width[2] : 0;
-			imagettftext( $image, $font_size, 0, ( $big_size - $text_width ) / 2, $font_size + ( ( $big_size - $font_size ) / 2 ), $text_color, $font, $text );
+			imagettftext( $image, $font_size, 0, (int)(( $big_size - $text_width ) / 2), (int)($font_size + ( ( $big_size - $font_size ) / 2 )), $text_color, $font, $text );
 
 			//resize
 			$final = @imagecreatetruecolor( $size, $size );
@@ -661,7 +671,7 @@ class Leira_Letter_Avatar_Public{
 		}
 
 		/**
-		 * This filter was added in order to provide developers a way to handle custom image generation
+		 * This filter was added to provide developers a way to handle custom image generation
 		 *
 		 * @since 1.3.3
 		 */
@@ -673,7 +683,8 @@ class Leira_Letter_Avatar_Public{
 	/**
 	 * Check if a gravatar exists given an email hash value
 	 * https://codex.wordpress.org/Using_Gravatars#Checking_for_the_Existence_of_a_Gravatar
-	 * This method uses default wordpress cache system. Additional plugin is required for better performance.
+	 * This method uses the default Wordpress cache system.
+	 * Additional plugin is required for better performance.
 	 * https://codex.wordpress.org/Class_Reference/WP_Object_Cache#Persistent_Caching
 	 * https://codex.wordpress.org/Class_Reference/WP_Object_Cache
 	 *
@@ -695,7 +706,7 @@ class Leira_Letter_Avatar_Public{
 			return $cache;
 		}
 
-		$uri     = sprintf( 'https://%d.gravatar.com/avatar/%s?d=404', rand( 0, 2 ), $hash );
+		$uri     = sprintf( 'https://%d.gravatar.com/avatar/%s?d=404', wp_rand( 0, 2 ), $hash );
 		$context = stream_context_create();
 		stream_context_set_option( $context, 'http', 'timeout', 2 ); //timeout in seconds
 		$headers          = @get_headers( $uri, false, $context );
@@ -719,5 +730,31 @@ class Leira_Letter_Avatar_Public{
 		return array_map( function( $c ) {
 			return hexdec( str_pad( $c, 2, $c ) );
 		}, str_split( ltrim( $hex, '#' ), strlen( $hex ) > 4 ? 2 : 1 ) );
+	}
+
+	/**
+	 * Return the wp file system manager
+	 *
+	 * @return WP_Filesystem_Base
+	 * @since 1.3.9
+	 */
+	protected function get_filesystem() {
+		// Load the WordPress filesystem.
+		global $wp_filesystem;
+
+		if ( $wp_filesystem ) {
+			return $wp_filesystem;
+		}
+
+		if ( ! function_exists( 'WP_Filesystem' ) ) {
+			require_once ABSPATH . '/wp-admin/includes/file.php';
+		}
+
+		// Initialize the WordPress filesystem.
+		if ( ! WP_Filesystem( request_filesystem_credentials( site_url() ) ) ) {
+			wp_die( esc_html__( 'Filesystem cannot enabled', 'leira-letter-avatar' ) );
+		}
+
+		return $wp_filesystem;
 	}
 }

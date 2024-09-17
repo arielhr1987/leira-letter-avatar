@@ -3,10 +3,10 @@
 /**
  * The plugin bootstrap file
  *
- * This file is read by WordPress to generate the plugin information in the plugin
- * admin area. This file also includes all of the dependencies used by the plugin,
- * registers the activation and deactivation functions, and defines a function
- * that starts the plugin.
+ * WordPress reads this file to generate the plugin information in the plugin
+ * admin area.
+ * This file also includes all the dependencies used by the plugin, registers the activation and deactivation
+ * functions, and defines a function that starts the plugin.
  *
  * @link              https://leira.dev
  * @since             1.0.0
@@ -15,8 +15,8 @@
  * @wordpress-plugin
  * Plugin Name:       Leira Letter Avatar
  * Plugin URI:        https://wordpress.org/plugins/leira-letter-avatar/
- * Description:       Enables custom avatars for users base on its initial letters.
- * Version:           1.3.8
+ * Description:       Enables custom avatars for users based on its initial letters.
+ * Version:           1.3.9
  * Author:            Ariel
  * Author URI:        https://leira.dev
  * License:           GPL-2.0+
@@ -35,7 +35,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'LEIRA_LETTER_AVATAR_VERSION', '1.3.8' );
+define( 'LEIRA_LETTER_AVATAR_VERSION', '1.3.9' );
 
 /**
  * The code that runs during plugin activation.
