@@ -31,7 +31,7 @@ So far this plugin is compatible with:
 
 = Contributors =
 
-This plugins has been possible thanks to:
+This plugin has been possible thanks to:
 * [Jose Luis Chavez](https://profiles.wordpress.org/jlcd0894/) - Icons, banners and designs
 * [ivankuraev](https://profiles.wordpress.org/ivankuraev/) - Support for russian characters
 
@@ -55,8 +55,8 @@ To use .png and .jpg you will need the GD image library installed to work.
 
 = Which format should I use?  =
 
-The recommended format(.svg) is the best option. This option generates the images with the best quality and the resource required to generate it is very low.
-However, there are some cases where you will need to user .png or .jpg, for example, if you're sending avatar images in your emails.
+The recommended format(.svg) is the best option. This option generates the images with the best quality, and the resource required to generate it is very low.
+However, there are some cases where you will need to use .png or .jpg, for example, if you're sending avatar images in your emails.
 There is a know issue that email clients like gmail use a proxy to show the images and at this point don't support .svg format.
 
 = How are avatars generated?  =
@@ -92,7 +92,7 @@ Use .png format instead.
 == Changelog ==
 
 = 1.3.9 =
-* Wordpress 6.6 compatibility check
+* WordPress 6.6 compatibility check
 * Improve text escape
 * Use wp_rand over php built-in rand function
 * Improve file handling using related wp functions
@@ -104,7 +104,7 @@ Use .png format instead.
 * Fix bug with php8 and $size variable (intval)
 
 = 1.3.6 =
-* Wordpress 5.7 compatibility check
+* WordPress 5.7 compatibility check
 * Fix BuddyPress deprecated filter bp_core_avatar_default
 * Improve Gravatar image check method
 
@@ -131,8 +131,8 @@ Use .png format instead.
 * Fix https avatar url issue
 
 = 1.2.6 =
-* Wordpress 5.6 compatibility check
-* Handle other plugins incorrect usage of um_user_avatar_url_filter filter
+* WordPress 5.6 compatibility check
+* Handles other plugins incorrect usage of um_user_avatar_url_filter filter
 
 = 1.2.5 =
 * Fix random background color generation issue
@@ -141,8 +141,8 @@ Use .png format instead.
 * Match plugin version with readme.txt version
 
 = 1.2.3 =
-* Adding Github Actions automatic deploy
-* Adding Github Actions automatic update assets and readme file
+* Adding GitHub Actions automatic deploy
+* Adding GitHub Actions automatic update assets and readme file
 
 = 1.2.2 =
 * Adding support for letters color
