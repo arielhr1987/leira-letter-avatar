@@ -50,12 +50,12 @@ You can contribute to this plugin development on [Github](https://github.com/ari
 
 = What is the format of the generated avatars?  =
 
-You can select from .svg (Recommended), .png and .jpg.
+You can select from .svg, .png and .jpg.
 To use .png and .jpg you will need the GD image library installed to work.
 
 = Which format should I use?  =
 
-The recommended format(.svg) is the best option. This option generates the images with the best quality, and the resource required to generate it is very low.
+The format(.svg) is the best option. This option generates the images with the best quality, and the resource required to generate it is very low.
 However, there are some cases where you will need to use .png or .jpg, for example, if you're sending avatar images in your emails.
 There is a know issue that email clients like gmail use a proxy to show the images and at this point don't support .svg format.
 

@@ -1,0 +1,25 @@
+/*!***************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/admin.scss ***!
+  \***************************************************************************************************************************************************************************************************************************************/
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+body.leira_letter_avatar.settings_page_leira_letter_avatar {
+  /**
+   * Fix color control issue
+   */
+}
+body.leira_letter_avatar.settings_page_leira_letter_avatar .wp-picker-container {
+  line-height: 2;
+}
+body.leira_letter_avatar.settings_page_leira_letter_avatar .wp-picker-container .wp-color-result.button {
+  margin: 0 6px 0 6px;
+}
+body.leira_letter_avatar.settings_page_leira_letter_avatar .wp-picker-container .wp-picker-holder {
+  position: absolute;
+}
+body.leira_letter_avatar_rounded.admin-bar #wpadminbar #wp-admin-bar-my-account.with-avatar > a img {
+  background: transparent;
+  border: none;
+}

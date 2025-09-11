@@ -3,11 +3,20 @@
 /node_modules
 /src
 /assets
+/logs
+/scripts
 
 .distignore
 .gitattributes
 .gitignore
+.editorconfig
+.wp-env.json
 Makefile
 readme.md
 README.md
 deploy.sh
+package.json
+package-lock.json
+composer.json
+composer.lock
+webpack.config.js

@@ -13,7 +13,7 @@
 /**
  * Common sanitizing functionality of the plugin.
  *
- * Defines the plugin name, version, and two examples hooks for how to
+ * Defines the plugin name, version, and two example hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
  *
  * @package    Leira_Letter_Avatar
@@ -46,7 +46,7 @@ class Leira_Letter_Avatar_Sanitizer{
 	}
 
 	/**
-	 * Get default background color
+	 * Get the default background color
 	 *
 	 * @return string
 	 * @since 1.0.0
@@ -184,7 +184,7 @@ class Leira_Letter_Avatar_Sanitizer{
 	 *
 	 * @param $value
 	 *
-	 * @return mixed|string
+	 * @return string
 	 *
 	 * @since 1.3.0
 	 */

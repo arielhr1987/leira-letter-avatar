@@ -1,0 +1,28 @@
+{
+  "name": "leira-letter-avatar",
+  "version": "1.2.11",
+  "description": "A Wordpress plugin to show letter avatars.",
+  "author": "Ariel",
+  "license": "ISC",
+  "homepage": "https://wordpress.org/plugins/leira-cron-jobs/",
+  "bugs": {
+    "url": "https://github.com/arielhr1987/leira-cron-jobs/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arielhr1987/leira-cron-jobs.git"
+  },
+  "scripts": {
+    "build": "wp-scripts build && ./scripts/update-version.sh",
+    "start": "wp-env start --xdebug --debug && ./scripts/sync-wordpress-version.sh && wp-scripts start",
+    "stop": "wp-env stop",
+    "clean": "wp-env clean",
+    "lint:js": "wp-scripts lint-js .",
+    "lint:css": "wp-scripts lint-style .",
+    "lint": "npm run lint:js && npm run lint:css",
+    "make-pot": "wp i18n make-pot . languages/leira-cron-jobs.pot --slug=leira-cron-jobs"
+  },
+  "devDependencies": {
+    "@wordpress/scripts": "^30.19.0"
+  }
+}
