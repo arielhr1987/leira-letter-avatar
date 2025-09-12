@@ -64,7 +64,7 @@ You can contribute to the plugin development on [GitHub](https://github.com/arie
 = What image formats are supported? =
 
 You can choose between **.svg**, **.png**, and **.jpg**.  
-- **.svg** is recommended for best quality and performance.  
+- **.svg** is recommended for the best quality and performance.  
 - **.png** or **.jpg** may be necessary when sending avatars in emails, since some email clients (like Gmail) do not fully support .svg.
 
 = How are avatars generated? =
@@ -152,7 +152,7 @@ This usually happens when using **.jpg** for round avatars, which does not suppo
 * Fixed incorrect usage of `um_user_avatar_url_filter` by other plugins
 
 = 1.2.5 =
-* Fixed random background color generation issue
+* Fixed the random background color generation issue
 
 = 1.2.4 =
 * Synced plugin version with readme.txt version
@@ -166,14 +166,14 @@ This usually happens when using **.jpg** for round avatars, which does not suppo
 * Added YITH WooCommerce Advanced Reviews compatibility
 
 = 1.2.1 =
-* Fixed incorrect avatar size issue
+* Fixed an incorrect avatar size issue 
 * Improved BuddyPress compatibility
 
 = 1.2.0 =
 * Added compatibility with Ultimate Member and wpDiscuz
 * Support for Russian characters
 * Option to use Gravatar if available
-* Added "Rate us" link in admin footer
+* Added "Rate us" link in the admin footer 
 * Code refactoring and bug fixes
 
 = 1.1.0 =
