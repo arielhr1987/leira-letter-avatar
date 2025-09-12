@@ -195,4 +195,18 @@ class Leira_Letter_Avatar_Sanitizer{
 		return $value;
 	}
 
+	/**
+	 * Sanitize numeric values
+	 *
+	 * @param $value
+	 *
+	 * @return false|float|int|string
+	 * @since 1.3.10
+	 */
+	public function numeric( $value ) {
+		$value = filter_var( $value, FILTER_SANITIZE_NUMBER_FLOAT , FILTER_FLAG_ALLOW_FRACTION );
+
+		return $value;
+	}
+
 }

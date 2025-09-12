@@ -458,6 +458,8 @@ class Leira_Letter_Avatar_Public
 			$letters = mb_strtoupper($letters);//uppercase initials
 		}
 
+		$font_ratio = 0.5;
+
 		/**
 		 *  Parameters:
 		 *  size => size [16, 512] default 64
@@ -473,7 +475,7 @@ class Leira_Letter_Avatar_Public
 		$url_args = array(
 			'cache'      => 1, //change this number to force to regenerate images
 			'size'       => $size,
-			'font-size'  => $size / 2,
+			'font-size'  => $size * $font_ratio,
 			//'length'     => '', //image text length already set
 			'name'       => $letters,
 			'rounded'    => get_network_option(null, 'leira_letter_avatar_rounded', true),

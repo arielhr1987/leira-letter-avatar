@@ -318,6 +318,7 @@ class Leira_Letter_Avatar_Admin
 			'sanitize_callback' => array($this->sanitize, 'boolean'),
 			'default'           => true
 		));
+		//Letters settings
 		register_setting('leira_letter_avatar_settings', 'leira_letter_avatar_letters', array(
 			'type'              => 'integer',
 			'description'       => '',
@@ -336,12 +337,14 @@ class Leira_Letter_Avatar_Admin
 			'sanitize_callback' => array($this->sanitize, 'boolean'),
 			'default'           => true
 		));
+		//Color settings
 		register_setting('leira_letter_avatar_settings', 'leira_letter_avatar_color_method', array(
 			'type'              => 'string',
 			'description'       => '',
 			'sanitize_callback' => array($this->sanitize, 'color_method'),
 			'default'           => 'auto'
 		));
+		//Background color settings
 		register_setting('leira_letter_avatar_settings', 'leira_letter_avatar_color', array(
 			'type'              => 'string',
 			'description'       => '',
@@ -587,10 +590,12 @@ class Leira_Letter_Avatar_Admin
 			<label for="settings_letter">
 				<?php esc_html_e('Fill avatar image with at most', 'leira-letter-avatar') ?>
 				<select name="leira_letter_avatar_letters" id="settings_letter">
-					<option value="1" <?php selected(1, $letters) ?>><?php esc_html_e('1 letter',
-							'leira-letter-avatar') ?></option>
-					<option value="2" <?php selected(2, $letters) ?>><?php esc_html_e('2 letters',
-							'leira-letter-avatar') ?></option>
+					<option value="1"
+						<?php selected(1, $letters) ?>><?php esc_html_e('1 letter', 'leira-letter-avatar') ?>
+					</option>
+					<option value="2" <?php selected(2, $letters) ?>>
+						<?php esc_html_e('2 letters', 'leira-letter-avatar') ?>
+					</option>
 				</select>
 			</label>
 			<p class="description">
