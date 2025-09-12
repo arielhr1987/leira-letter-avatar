@@ -48,12 +48,15 @@ else
 	exit 1
 fi
 
-# Update define('LEIRA_LETTER_AVATAR_VERSION', ...) (preserve spacing)
-sed -E -i '' "s/(define\([[:space:]]*'LEIRA_LETTER_AVATAR_VERSION'[[:space:]]*,[[:space:]]*')[^']+(')/\1$NEW_VERSION\2/" "$PLUGIN_FILE"
-if grep -q "define([[:space:]]*'LEIRA_LETTER_AVATAR_VERSION'[[:space:]]*,[[:space:]]*'$NEW_VERSION'" "$PLUGIN_FILE"; then
-	echo "Updated LEIRA_LETTER_AVATAR_VERSION in $PLUGIN_FILE"
+# Update define('PLUGIN_VERSION', ...) (preserve spacing)
+PLUGIN_CONSTANT="${PLUGIN_FILE%.*}"
+PLUGIN_CONSTANT=$(echo "$PLUGIN_CONSTANT" | tr '[:lower:]-' '[:upper:]_')
+PLUGIN_CONSTANT="${PLUGIN_CONSTANT}_VERSION"
+sed -E -i '' "s/(define\([[:space:]]*'$PLUGIN_CONSTANT'[[:space:]]*,[[:space:]]*')[^']+(')/\1$NEW_VERSION\2/" "$PLUGIN_FILE"
+if grep -q "define([[:space:]]*'$PLUGIN_CONSTANT'[[:space:]]*,[[:space:]]*'$NEW_VERSION'" "$PLUGIN_FILE"; then
+	echo "Updated $PLUGIN_CONSTANT in $PLUGIN_FILE"
 else
-	echo "❌ Failed to update LEIRA_LETTER_AVATAR_VERSION in $PLUGIN_FILE"
+	echo "❌ Failed to update $PLUGIN_CONSTANT in $PLUGIN_FILE"
 	exit 1
 fi
 
