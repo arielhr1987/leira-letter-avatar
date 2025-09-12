@@ -48,12 +48,12 @@ else
 	exit 1
 fi
 
-# Update define('LEIRA_CRON_JOBS_VERSION', ...) (preserve spacing)
-sed -E -i '' "s/(define\([[:space:]]*'LEIRA_CRON_JOBS_VERSION'[[:space:]]*,[[:space:]]*')[^']+(')/\1$NEW_VERSION\2/" "$PLUGIN_FILE"
-if grep -q "define([[:space:]]*'LEIRA_CRON_JOBS_VERSION'[[:space:]]*,[[:space:]]*'$NEW_VERSION'" "$PLUGIN_FILE"; then
-	echo "Updated LEIRA_CRON_JOBS_VERSION in $PLUGIN_FILE"
+# Update define('LEIRA_LETTER_AVATAR_VERSION', ...) (preserve spacing)
+sed -E -i '' "s/(define\([[:space:]]*'LEIRA_LETTER_AVATAR_VERSION'[[:space:]]*,[[:space:]]*')[^']+(')/\1$NEW_VERSION\2/" "$PLUGIN_FILE"
+if grep -q "define([[:space:]]*'LEIRA_LETTER_AVATAR_VERSION'[[:space:]]*,[[:space:]]*'$NEW_VERSION'" "$PLUGIN_FILE"; then
+	echo "Updated LEIRA_LETTER_AVATAR_VERSION in $PLUGIN_FILE"
 else
-	echo "❌ Failed to update LEIRA_CRON_JOBS_VERSION in $PLUGIN_FILE"
+	echo "❌ Failed to update LEIRA_LETTER_AVATAR_VERSION in $PLUGIN_FILE"
 	exit 1
 fi
 
