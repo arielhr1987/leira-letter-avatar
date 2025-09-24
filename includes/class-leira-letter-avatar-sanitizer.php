@@ -13,7 +13,7 @@
 /**
  * Common sanitizing functionality of the plugin.
  *
- * Defines the plugin name, version, and two examples hooks for how to
+ * Defines the plugin name, version, and two example hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
  *
  * @package    Leira_Letter_Avatar
@@ -46,7 +46,7 @@ class Leira_Letter_Avatar_Sanitizer{
 	}
 
 	/**
-	 * Get default background color
+	 * Get the default background color
 	 *
 	 * @return string
 	 * @since 1.0.0
@@ -184,13 +184,27 @@ class Leira_Letter_Avatar_Sanitizer{
 	 *
 	 * @param $value
 	 *
-	 * @return mixed|string
+	 * @return string
 	 *
 	 * @since 1.3.0
 	 */
 	public function format( $value ) {
 		$value = sanitize_text_field( $value );
 		$value = in_array( $value, $this->get_formats() ) ? $value : 'svg';
+
+		return $value;
+	}
+
+	/**
+	 * Sanitize numeric values
+	 *
+	 * @param $value
+	 *
+	 * @return false|float|int|string
+	 * @since 1.3.10
+	 */
+	public function numeric( $value ) {
+		$value = filter_var( $value, FILTER_SANITIZE_NUMBER_FLOAT , FILTER_FLAG_ALLOW_FRACTION );
 
 		return $value;
 	}

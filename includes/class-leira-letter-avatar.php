@@ -164,7 +164,7 @@ class Leira_Letter_Avatar{
 	/**
 	 * Define the locale for this plugin for internationalization.
 	 *
-	 * Uses the Leira_Letter_Avatar_i18n class in order to set the domain and to register the hook
+	 * Uses the Leira_Letter_Avatar_i18n class to set the domain and to register the hook
 	 * with WordPress.
 	 *
 	 * @since    1.0.0
@@ -179,7 +179,7 @@ class Leira_Letter_Avatar{
 	}
 
 	/**
-	 * Register all of the hooks related to the admin area functionality
+	 * Register all the hooks related to the admin area functionality
 	 * of the plugin.
 	 *
 	 * @since    1.0.0
@@ -202,8 +202,6 @@ class Leira_Letter_Avatar{
 
 			$this->loader->add_filter( 'plugin_action_links', $plugin_admin, 'plugin_action_links', 10, 2 );
 
-			$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-
 			$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
 			$this->loader->add_filter( 'admin_body_class', $plugin_admin, 'admin_body_class' );
@@ -215,7 +213,7 @@ class Leira_Letter_Avatar{
 	}
 
 	/**
-	 * Register all of the hooks related to the public-facing functionality
+	 * Register all the hooks related to the public-facing functionality
 	 * of the plugin.
 	 *
 	 * @since    1.0.0
@@ -241,7 +239,7 @@ class Leira_Letter_Avatar{
 		$plugin_compatibility = new Leira_Letter_Avatar_Compatibility();
 		$this->loader->set( 'compatibility', $plugin_compatibility );
 
-		$this->loader->add_filter( 'bp_core_fetch_avatar_no_grav', $plugin_compatibility, 'bp_core_fetch_avatar_no_grav', 10, 2 );//BuddyPress integration
+		$this->loader->add_filter( 'bp_core_fetch_avatar_no_grav', $plugin_compatibility, 'bp_core_fetch_avatar_no_grav', 100, 2 );//BuddyPress integration
 
 		//$this->loader->add_filter( 'bp_core_default_avatar_user', $plugin_compatibility, 'bp_core_default_avatar', 10, 2 );//BuddyPress integration
 
@@ -253,6 +251,8 @@ class Leira_Letter_Avatar{
 			}
 		}
 
+        $this->loader->add_filter( 'bb_attachments_get_default_profile_group_avatar_image', $plugin_compatibility, 'bb_attachments_get_default_profile_group_avatar_image', 10, 2 ); // BuddyBoss integration
+
 		$this->loader->add_filter( 'um_user_avatar_url_filter', $plugin_compatibility, 'um_user_avatar_url_filter', 10, 3 );//Ultimate Membership integration
 
 		$this->loader->add_filter( 'get_avatar_url', $plugin_compatibility, 'wpdiscuz_get_avatar_url', 10, 3 );//wpdiscuz integration
@@ -260,7 +260,7 @@ class Leira_Letter_Avatar{
 	}
 
 	/**
-	 * Run the loader to execute all of the hooks with WordPress.
+	 * Run the loader to execute all the hooks with WordPress.
 	 *
 	 * @since     1.0.0
 	 * @access    public

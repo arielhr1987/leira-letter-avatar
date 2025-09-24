@@ -150,7 +150,7 @@ msgid "Background settings"
 msgstr ""
 
 #: admin/class-leira-letter-avatar-admin.php:443
-msgid "Automatically determine background color for each user (Recommended)"
+msgid "Automatically determine background color for each user"
 msgstr ""
 
 #: admin/class-leira-letter-avatar-admin.php:450

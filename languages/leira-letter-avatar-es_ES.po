@@ -175,9 +175,9 @@ msgid "Background settings"
 msgstr "Ajustes de Fondo"
 
 #: admin/class-leira-letter-avatar-admin.php:443
-msgid "Automatically determine background color for each user (Recommended)"
+msgid "Automatically determine background color for each user"
 msgstr ""
-"Determinar automáticamente el color de fondo para cada usuario (recomendado)"
+"Determinar automáticamente el color de fondo para cada usuario"
 
 #: admin/class-leira-letter-avatar-admin.php:450
 msgid "Use this background color for all users"

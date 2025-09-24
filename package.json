@@ -1,0 +1,28 @@
+{
+  "name": "leira-letter-avatar",
+  "version": "1.3.10",
+  "description": "A Wordpress plugin to show letter avatars.",
+  "author": "Ariel",
+  "license": "ISC",
+  "homepage": "https://wordpress.org/plugins/leira-letter-avatar/",
+  "bugs": {
+    "url": "https://github.com/arielhr1987/leira-letter-avatar/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arielhr1987/leira-letter-avatar.git"
+  },
+  "scripts": {
+    "build": "wp-scripts build && ./scripts/update-version.sh",
+    "start": "wp-env start --xdebug --debug && ./scripts/sync-wordpress-version.sh && wp-scripts start",
+    "stop": "wp-env stop",
+    "clean": "wp-env clean",
+    "lint:js": "wp-scripts lint-js .",
+    "lint:css": "wp-scripts lint-style .",
+    "lint": "npm run lint:js && npm run lint:css",
+    "make-pot": "wp i18n make-pot . languages/leira-letter-avatar.pot --slug=leira-letter-avatar"
+  },
+  "devDependencies": {
+    "@wordpress/scripts": "^30.19.0"
+  }
+}

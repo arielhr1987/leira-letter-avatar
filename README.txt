@@ -3,24 +3,28 @@ Contributors: arielhr1987, jlcd0894, ivankuraev
 Donate link: https://github.com/arielhr1987
 Tags: user, avatar, image, letter, initial
 Requires at least: 4.7
-Tested up to: 6.6
-Stable tag: 1.3.9
-Requires PHP: 5.4
+Tested up to: 6.8
+Stable tag: 1.3.10
+Requires PHP: 8.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Automatically generate beautiful user avatars using their initial letters.
+Automatically generate beautiful user avatars based on their initials.
 
 == Description ==
 
-Letters Avatar allows you to automatically generate user avatar based on their initial letters.
+Leira Letter Avatar allows you to automatically generate user avatars using the initial letters of their first and last names.  
 
-Fully customizable from the admin area. You will be able to edit avatar settings like shape, background color, etc.
+The plugin is fully customizable from the admin area. You can configure avatar settings such as shape, background color, font color, and image format (.svg, .png, .jpg).  
 
-= Compatibility =
+---
 
-This plugin is compatible with any properly coded theme. However, some plugins may cause conflicts with this one. If you find an issue with your theme, please create a post in the community forum.
-So far this plugin is compatible with:
+== Compatibility ==
+
+Leira Letter Avatar works with any properly coded WordPress theme. Some plugins may conflict; if you encounter issues, please report them in the community forum.  
+
+Known compatible plugins:
+
 * [BuddyPress](https://wordpress.org/plugins/buddypress/)
 * [Ultimate Member](https://wordpress.org/plugins/ultimate-member/)
 * [wpDiscuz](https://wordpress.org/plugins/wpdiscuz/)
@@ -29,144 +33,155 @@ So far this plugin is compatible with:
 * [Flyzoo Chat](https://wordpress.org/plugins/flyzoo/)
 * [BuddyBoss](https://buddyboss.com/)
 
-= Contributors =
+---
 
-This plugin has been possible thanks to:
-* [Jose Luis Chavez](https://profiles.wordpress.org/jlcd0894/) - Icons, banners and designs
-* [ivankuraev](https://profiles.wordpress.org/ivankuraev/) - Support for russian characters
+== Contributors ==
 
-= Development =
+Special thanks to:
 
-You can contribute to this plugin development on [Github](https://github.com/arielhr1987/leira-letter-avatar)
+* [Jose Luis Chavez](https://profiles.wordpress.org/jlcd0894/) - Icons, banners, and design
+* [ivankuraev](https://profiles.wordpress.org/ivankuraev/) - Support for Russian characters
+
+---
+
+== Development ==
+
+You can contribute to the plugin development on [GitHub](https://github.com/arielhr1987/leira-letter-avatar).
+
+---
 
 == Installation ==
 
-1. Upload the plugin files to the `/wp-content/plugins/leira-letter-avatar` directory, or install the plugin through the WordPress plugins screen directly.
-2. Activate the plugin through the 'Plugins' screen in WordPress
-3. Use the Settings->Letter Avatar screen to configure the plugin
-4. Happy coding :)
+1. Upload the plugin files to `/wp-content/plugins/leira-letter-avatar` or install directly via the WordPress plugin screen.
+2. Activate the plugin through the 'Plugins' menu in WordPress.
+3. Navigate to **Settings → Letter Avatar** to configure your options.
+4. Enjoy automatically generated avatars for your users!
+
+---
 
 == Frequently Asked Questions ==
 
-= What is the format of the generated avatars?  =
+= What image formats are supported? =
 
-You can select from .svg (Recommended), .png and .jpg.
-To use .png and .jpg you will need the GD image library installed to work.
+You can choose between **.svg**, **.png**, and **.jpg**.  
+- **.svg** is recommended for the best quality and performance.  
+- **.png** or **.jpg** may be necessary when sending avatars in emails, since some email clients (like Gmail) do not fully support .svg.
 
-= Which format should I use?  =
+= How are avatars generated? =
 
-The recommended format(.svg) is the best option. This option generates the images with the best quality, and the resource required to generate it is very low.
-However, there are some cases where you will need to use .png or .jpg, for example, if you're sending avatar images in your emails.
-There is a know issue that email clients like gmail use a proxy to show the images and at this point don't support .svg format.
+Avatars are generated automatically based on the user's initials using the defined settings. Each avatar is generated only once to avoid performance issues.
 
-= How are avatars generated?  =
+= Where are avatars stored? =
 
-The plugin generates the avatar automatically using defined config.
-Avatars are generated only once, so your site performance won't get affected
+Avatars are stored in your WordPress uploads directory.
 
-= How are avatars stored?  =
+= Can I select custom letters for the avatar? =
 
-Avatars are stored in your uploads folder.
+No. The plugin automatically uses the initials of the user's first and last name.
 
-= Will I be able to select my own letters? =
+= Can I use Gravatar if the user has one? =
 
-No. The plugin automatically generates the image with the initial letters of your First name and Last name.
+Yes. There is an option in the plugin settings to use the user’s Gravatar if available, instead of generating a letter avatar.
 
-= Can I use gravatar if the user has one? =
+= Why do some avatars have a black background? =
 
-Yes. There is an option in plugin settings that allows you to show user gravatar if available instead of letter avatar.
+This usually happens when using **.jpg** for round avatars, which does not support transparency. Use **.png** for transparent backgrounds.
 
-= I see a black background in the avatars =
-
-Probably you're using .jpg format to generate a round avatar. This format doesn't support image transparency.
-Use .png format instead.
+---
 
 == Screenshots ==
-1. You will find a new menu item "Letter Avatar" under "Settings" menu.
-2. A new option "Letter" will be available for "Default Avatar."
-3. Comments list with generated user letter avatar.
-4. Users list with generated user letter avatar.
-5. Comments in Dashboard with letter avatar.
-6. Comments in frontend with letter avatar.
+
+1. Letter Avatar settings page under **Settings → Letter Avatar**.
+2. Default avatar option set to "Letter".
+3. Comments list displaying generated user letter avatars.
+4. Users list with letter avatars.
+5. Dashboard comments view with letter avatars.
+6. Frontend comments with letter avatars.
+
+---
 
 == Changelog ==
 
+= 1.3.10 =
+* WordPress 6.8 compatibility check
+* Development environment, deployment process, and code quality improvements
+* Updated readme file
+* Added support for BuddyBoss platform
+
 = 1.3.9 =
 * WordPress 6.6 compatibility check
-* Improve text escape
-* Use wp_rand over php built-in rand function
-* Improve file handling using related wp functions
+* Improved text escaping
+* Use `wp_rand()` instead of PHP `rand()`
+* Improved file handling using WordPress functions
 
 = 1.3.8 =
-* Use gravatar https url
+* Use secure Gravatar HTTPS URL
 
 = 1.3.7 =
-* Fix bug with php8 and $size variable (intval)
+* Fixed PHP 8 bug with `$size` variable (intval)
 
 = 1.3.6 =
 * WordPress 5.7 compatibility check
-* Fix BuddyPress deprecated filter bp_core_avatar_default
-* Improve Gravatar image check method
+* Fixed deprecated BuddyPress filter `bp_core_avatar_default`
+* Improved Gravatar image check
 
 = 1.3.5 =
-* Fix wpDiscuz issue with social avatars
+* Fixed wpDiscuz issue with social avatars
 
 = 1.3.4 =
-* Wordpress 5.7 compatibility check
-* New filter leira_letter_avatar_image_content
+* WordPress 5.7 compatibility check
+* Added filter `leira_letter_avatar_image_content`
 
 = 1.3.3 =
-* Fix variable typo
-* Replace screenshot 4
+* Fixed variable typo
+* Updated screenshot 4
 
 = 1.3.2 =
 * Support for WP 4.9
 
 = 1.3.1 =
-* Change deprecated method get_user_by_email in favor of get_user_by
-* Bug fix. Upon deactivation set avatar_default option back to mystery
+* Replaced deprecated `get_user_by_email` with `get_user_by`
+* Fixed avatar default reset on plugin deactivation
 
 = 1.3.0 =
-* Adding support for .png and .jpg image formats
-* Fix https avatar url issue
+* Added support for .png and .jpg formats
+* Fixed HTTPS avatar URL issue
 
 = 1.2.6 =
 * WordPress 5.6 compatibility check
-* Handles other plugins incorrect usage of um_user_avatar_url_filter filter
+* Fixed incorrect usage of `um_user_avatar_url_filter` by other plugins
 
 = 1.2.5 =
-* Fix random background color generation issue
+* Fixed the random background color generation issue
 
 = 1.2.4 =
-* Match plugin version with readme.txt version
+* Synced plugin version with readme.txt version
 
 = 1.2.3 =
-* Adding GitHub Actions automatic deploy
-* Adding GitHub Actions automatic update assets and readme file
+* Added GitHub Actions automatic deployment
+* Automatic updates for assets and readme
 
 = 1.2.2 =
-* Adding support for letters color
-* YITH WooCommerce Advanced Reviews compatibility
+* Added support for custom letter colors
+* Added YITH WooCommerce Advanced Reviews compatibility
 
 = 1.2.1 =
-* Bug fix incorrect avatar size
-* BuddyPress compatibility improved
+* Fixed an incorrect avatar size issue 
+* Improved BuddyPress compatibility
 
 = 1.2.0 =
-* Ultimate Member compatibility
-* wpDiscuz compatibility
-* Support for russian characters
-* New option to use gravatar if available
-* Rate us link in admin area footer
-* Some code refactored
-* Bug fixes
+* Added compatibility with Ultimate Member and wpDiscuz
+* Support for Russian characters
+* Option to use Gravatar if available
+* Added "Rate us" link in the admin footer 
+* Code refactoring and bug fixes
 
 = 1.1.0 =
 * BuddyPress integration
-* CSS fix in admin area
-* Support link updated
-* Source code refactored
-* Screenshots description updated
+* Admin CSS improvements
+* Updated support link
+* Refactored source code
+* Updated screenshot descriptions
 
 = 1.0.0 =
-* The first plugin release
+* Initial plugin release
