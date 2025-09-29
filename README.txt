@@ -4,7 +4,7 @@ Donate link: https://github.com/arielhr1987
 Tags: user, avatar, image, letter, initial
 Requires at least: 4.7
 Tested up to: 6.8
-Stable tag: 1.3.10
+Stable tag: 1.3.11
 Requires PHP: 8.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -69,7 +69,7 @@ You can choose between **.svg**, **.png**, and **.jpg**.
 
 = How are avatars generated? =
 
-Avatars are generated automatically based on the user's initials using the defined settings. Each avatar is generated only once to avoid performance issues.
+Avatars are created automatically from the user’s initials using your settings. Each avatar is generated once, but if a different size is requested by a theme or plugin, a new avatar file is generated to match that size.
 
 = Where are avatars stored? =
 
@@ -101,6 +101,11 @@ This usually happens when using **.jpg** for round avatars, which does not suppo
 ---
 
 == Changelog ==
+
+= 1.3.11 =
+* Fixed admin toolbar avatar menu CSS issue
+* Refactored and improved overall code quality
+* Optimized avatar image generation to reduce server storage usage
 
 = 1.3.10 =
 * WordPress 6.8 compatibility check

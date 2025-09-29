@@ -20,8 +20,7 @@
  * @subpackage Leira_Letter_Avatar/admin
  * @author     Ariel <arielhr1987@gmail.com>
  */
-class Leira_Letter_Avatar_Admin
-{
+class Leira_Letter_Avatar_Admin{
 
 	/**
 	 * The ID of this plugin.
@@ -73,8 +72,7 @@ class Leira_Letter_Avatar_Admin
 	 *
 	 * @since    1.0.0
 	 */
-	public function __construct($plugin_name, $version)
-	{
+	public function __construct( $plugin_name, $version ) {
 
 		$this->plugin_name = $plugin_name;
 		$this->version     = $version;
@@ -89,18 +87,19 @@ class Leira_Letter_Avatar_Admin
 	 *
 	 * @since 1.0.0
 	 */
-	public function enqueue_scripts($page)
-	{
+	public function enqueue_scripts( $page ) {
 
 		/**
 		 * Add js files if we're on our settings page
 		 */
-		if ($page === 'settings_page_leira_letter_avatar') {
+		if ( $page === 'settings_page_leira_letter_avatar' ) {
 
-			wp_enqueue_style('wp-color-picker');
-			$this->enqueue_asset('admin.css');
-			$this->enqueue_asset('admin.js', array('jquery', 'wp-util', 'wp-color-picker'));
+			wp_enqueue_style( 'wp-color-picker' );
+			$this->enqueue_asset( 'admin.js', array( 'jquery', 'wp-util', 'wp-color-picker' ) );
 		}
+
+		//Common CSS for all admin pages
+		$this->enqueue_asset( 'admin.css' );
 
 	}
 
@@ -113,41 +112,40 @@ class Leira_Letter_Avatar_Admin
 	 *
 	 * @return void
 	 */
-	public function enqueue_asset($filename, $dependencies = array())
-	{
-		$extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+	public function enqueue_asset( $filename, $dependencies = array() ) {
+		$extension = strtolower( pathinfo( $filename, PATHINFO_EXTENSION ) );
 
 		// Only allow JS or CSS
-		if (!in_array($extension, ['js', 'css'], true)) {
+		if ( ! in_array( $extension, [ 'js', 'css' ], true ) ) {
 			return;
 		}
 
-		$handle     = $this->plugin_name.pathinfo($filename, PATHINFO_FILENAME);
-		$build_dir  = plugin_dir_path(dirname(__FILE__)).'build/';
-		$build_url  = plugin_dir_url(dirname(__FILE__)).'build/';
-		$asset_path = $build_dir.pathinfo($filename, PATHINFO_FILENAME).'.asset.php';
-		$asset_file = $build_dir.$filename;
+		$handle     = $this->plugin_name . pathinfo( $filename, PATHINFO_FILENAME );
+		$build_dir  = plugin_dir_path( dirname( __FILE__ ) ) . 'build/';
+		$build_url  = plugin_dir_url( dirname( __FILE__ ) ) . 'build/';
+		$asset_path = $build_dir . pathinfo( $filename, PATHINFO_FILENAME ) . '.asset.php';
+		$asset_file = $build_dir . $filename;
 
-		$asset = file_exists($asset_path)
+		$asset = file_exists( $asset_path )
 			? include $asset_path
 			: [
 				'dependencies' => [],
-				'version'      => file_exists($asset_file) ? filemtime($asset_file) : false,
+				'version'      => file_exists( $asset_file ) ? filemtime( $asset_file ) : false,
 			];
 
 		// Choose the appropriate WordPress function
-		if ($extension === 'js') {
+		if ( $extension === 'js' ) {
 			wp_enqueue_script(
 				$handle,
-				$build_url.$filename,
-				array_merge($asset['dependencies'], $dependencies),
+				$build_url . $filename,
+				array_merge( $asset['dependencies'], $dependencies ),
 				$asset['version'],
 				true // Load in footer
 			);
-		}else {
+		} else {
 			wp_enqueue_style(
 				$handle,
-				$build_url.$filename,
+				$build_url . $filename,
 				[], //$asset['dependencies'],
 				$asset['version']
 			);
@@ -163,11 +161,10 @@ class Leira_Letter_Avatar_Admin
 	 * @return string
 	 * @since 1.1.0
 	 */
-	public function admin_body_class($classes)
-	{
-		if (leira_letter_avatar()->is_active()) {
+	public function admin_body_class( $classes ) {
+		if ( leira_letter_avatar()->is_active() ) {
 			$classes .= ' leira_letter_avatar';
-			if (get_network_option(null, 'leira_letter_avatar_rounded', true)) {
+			if ( get_network_option( null, 'leira_letter_avatar_rounded', true ) ) {
 				$classes .= ' leira_letter_avatar_rounded';
 			}
 		}
@@ -184,18 +181,17 @@ class Leira_Letter_Avatar_Admin
 	 * @return array
 	 * @since 1.0.0
 	 */
-	public function avatar_defaults($avatar_defaults)
-	{
-		$url = esc_url(add_query_arg(
+	public function avatar_defaults( $avatar_defaults ) {
+		$url = esc_url( add_query_arg(
 			'page',
 			'leira_letter_avatar',
-			get_admin_url().'admin.php'
-		));
+			get_admin_url() . 'admin.php'
+		) );
 
-		$settings = sprintf('<a href="%s" class="">%s</a>', $url, __('Settings', 'leira-letter-avatar'));
-		$text     = __('Letters (Generated)', 'leira-letter-avatar');
+		$settings = sprintf( '<a href="%s" class="">%s</a>', $url, __( 'Settings', 'leira-letter-avatar' ) );
+		$text     = __( 'Letters (Generated)', 'leira-letter-avatar' );
 
-		$avatar_defaults['leira_letter_avatar'] = $text.' '.$settings;
+		$avatar_defaults['leira_letter_avatar'] = $text . ' ' . $settings;
 
 		return $avatar_defaults;
 	}
@@ -209,17 +205,16 @@ class Leira_Letter_Avatar_Admin
 	 * @return array
 	 * @since 1.0.0
 	 */
-	public function plugin_action_links($plugin_actions, $plugin_file)
-	{
+	public function plugin_action_links( $plugin_actions, $plugin_file ) {
 
-		if ('leira-letter-avatar/leira-letter-avatar.php' === $plugin_file) {
-			$url = esc_url(add_query_arg(
+		if ( 'leira-letter-avatar/leira-letter-avatar.php' === $plugin_file ) {
+			$url = esc_url( add_query_arg(
 				'page',
 				'leira_letter_avatar',
-				get_admin_url().'admin.php'
-			));
+				get_admin_url() . 'admin.php'
+			) );
 
-			$settings = sprintf('<a href="%s" class="">%s</a>', $url, __('Settings', 'leira-letter-avatar'));
+			$settings = sprintf( '<a href="%s" class="">%s</a>', $url, __( 'Settings', 'leira-letter-avatar' ) );
 
 			$plugin_actions['settings'] = $settings;
 		}
@@ -232,29 +227,28 @@ class Leira_Letter_Avatar_Admin
 	 *
 	 * @since 1.0.0
 	 */
-	public function add_settings_admin_menu()
-	{
+	public function add_settings_admin_menu() {
 		$hook = add_options_page(
-			__('Letter Avatar', 'leira-letter-avatar'), //Page Title
-			__('Letter Avatar', 'leira-letter-avatar'), //Menu title
-			$this->capability,                          //Capability
-			'leira_letter_avatar',                      //menu slug
-			array($this, 'render_settings_page'),       //render page
+			__( 'Letter Avatar', 'leira-letter-avatar' ), //Page Title
+			__( 'Letter Avatar', 'leira-letter-avatar' ), //Menu title
+			$this->capability,                            //Capability
+			'leira_letter_avatar',                        //menu slug
+			array( $this, 'render_settings_page' ),       //render page
 			null //position
 		);
 
-		if (!empty($hook)) {
-			add_action("load-$hook", array($this, 'settings_page_load'));
+		if ( ! empty( $hook ) ) {
+			add_action( "load-$hook", array( $this, 'settings_page_load' ) );
 		}
 	}
 
 	/**
 	 * Add a screen help tab
 	 */
-	public function settings_page_load()
-	{
-		if (!current_user_can($this->capability)) {
-			wp_die(esc_html__('You do not have sufficient permissions to access this page.', 'leira-letter-avatar'));
+	public function settings_page_load() {
+		if ( ! current_user_can( $this->capability ) ) {
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.',
+				'leira-letter-avatar' ) );
 		}
 		/**
 		 * Add screen help
@@ -262,22 +256,22 @@ class Leira_Letter_Avatar_Admin
 		get_current_screen()->add_help_tab(
 			array(
 				'id'      => 'overview',
-				'title'   => __('Overview', 'leira-letter-avatar'),
+				'title'   => __( 'Overview', 'leira-letter-avatar' ),
 				'content' =>
-					'<p>'.__('Letter Avatar is a lightweight plugin that helps you to add simple good looking user avatars',
-						'leira-letter-avatar').'</p>'.
-					'<p>'.__('The plugin is highly customizable by using settings page and hooks.',
-						'leira-letter-avatar').'</p>'.
+					'<p>' . __( 'Letter Avatar is a lightweight plugin that helps you to add simple good looking user avatars',
+						'leira-letter-avatar' ) . '</p>' .
+					'<p>' . __( 'The plugin is highly customizable by using settings page and hooks.',
+						'leira-letter-avatar' ) . '</p>' .
 					''
 			)
 		);
 
 		get_current_screen()->set_help_sidebar(
-			'<p><strong>'.__('For more information:', 'leira-letter-avatar').'</strong></p>'.
-			'<p>'.__('<a href="https://wordpress.org/support/plugin/leira-letter-avatar/">Support</a>',
-				'leira-letter-avatar').'</p>'.
-			'<p>'.__('<a href="https://github.com/arielhr1987/leira-letter-avatar/issues">Report an issue</a>',
-				'leira-letter-avatar').'</p>'
+			'<p><strong>' . __( 'For more information:', 'leira-letter-avatar' ) . '</strong></p>' .
+			'<p>' . __( '<a href="https://wordpress.org/support/plugin/leira-letter-avatar/">Support</a>',
+				'leira-letter-avatar' ) . '</p>' .
+			'<p>' . __( '<a href="https://github.com/arielhr1987/leira-letter-avatar/issues">Report an issue</a>',
+				'leira-letter-avatar' ) . '</p>'
 		);
 	}
 
@@ -286,96 +280,95 @@ class Leira_Letter_Avatar_Admin
 	 *
 	 * @since 1.0.0
 	 */
-	public function init_settings()
-	{
-		if (!current_user_can($this->capability)) {
+	public function init_settings() {
+		if ( ! current_user_can( $this->capability ) ) {
 			return;
 		}
 		/**
 		 * Register settings
 		 */
-		register_setting('leira_letter_avatar_settings', 'avatar_default', array(
+		register_setting( 'leira_letter_avatar_settings', 'avatar_default', array(
 			'type'              => 'string',
-			'sanitize_callback' => array($this->sanitize, 'avatar_default'),
+			'sanitize_callback' => array( $this->sanitize, 'avatar_default' ),
 			'default'           => 'mystery'
-		));
-		register_setting('leira_letter_avatar_settings', 'leira_letter_avatar_gravatar', array(
+		) );
+		register_setting( 'leira_letter_avatar_settings', 'leira_letter_avatar_gravatar', array(
 			'type'              => 'boolean',
-			'sanitize_callback' => array($this->sanitize, 'boolean'),
+			'sanitize_callback' => array( $this->sanitize, 'boolean' ),
 			'default'           => false
-		));
-		register_setting('leira_letter_avatar_settings', 'leira_letter_avatar_format', array(
+		) );
+		register_setting( 'leira_letter_avatar_settings', 'leira_letter_avatar_format', array(
 			'type'              => 'string',
-			'sanitize_callback' => array($this->sanitize, 'format'),
+			'sanitize_callback' => array( $this->sanitize, 'format' ),
 			'default'           => 'svg'
-		));
-		register_setting('leira_letter_avatar_settings', 'leira_letter_avatar_rounded', array(
+		) );
+		register_setting( 'leira_letter_avatar_settings', 'leira_letter_avatar_rounded', array(
 			//Valid values: 'string', 'boolean', 'integer', 'number', 'array', and 'object'.
 			'type'              => 'boolean',
 			//A description of the data attached to this setting.
 			'description'       => '',
 			//A callback function that sanitizes the option's value.
-			'sanitize_callback' => array($this->sanitize, 'boolean'),
+			'sanitize_callback' => array( $this->sanitize, 'boolean' ),
 			'default'           => true
-		));
+		) );
 		//Letters settings
-		register_setting('leira_letter_avatar_settings', 'leira_letter_avatar_letters', array(
+		register_setting( 'leira_letter_avatar_settings', 'leira_letter_avatar_letters', array(
 			'type'              => 'integer',
 			'description'       => '',
-			'sanitize_callback' => array($this->sanitize, 'letters'),
+			'sanitize_callback' => array( $this->sanitize, 'letters' ),
 			'default'           => 2
-		));
-		register_setting('leira_letter_avatar_settings', 'leira_letter_avatar_bold', array(
+		) );
+		register_setting( 'leira_letter_avatar_settings', 'leira_letter_avatar_bold', array(
 			'type'              => 'boolean',
 			'description'       => '',
-			'sanitize_callback' => array($this->sanitize, 'boolean'),
+			'sanitize_callback' => array( $this->sanitize, 'boolean' ),
 			'default'           => false
-		));
-		register_setting('leira_letter_avatar_settings', 'leira_letter_avatar_uppercase', array(
+		) );
+		register_setting( 'leira_letter_avatar_settings', 'leira_letter_avatar_uppercase', array(
 			'type'              => 'boolean',
 			'description'       => '',
-			'sanitize_callback' => array($this->sanitize, 'boolean'),
+			'sanitize_callback' => array( $this->sanitize, 'boolean' ),
 			'default'           => true
-		));
+		) );
 		//Color settings
-		register_setting('leira_letter_avatar_settings', 'leira_letter_avatar_color_method', array(
+		register_setting( 'leira_letter_avatar_settings', 'leira_letter_avatar_color_method', array(
 			'type'              => 'string',
 			'description'       => '',
-			'sanitize_callback' => array($this->sanitize, 'color_method'),
+			'sanitize_callback' => array( $this->sanitize, 'color_method' ),
 			'default'           => 'auto'
-		));
+		) );
 		//Background color settings
-		register_setting('leira_letter_avatar_settings', 'leira_letter_avatar_color', array(
+		register_setting( 'leira_letter_avatar_settings', 'leira_letter_avatar_color', array(
 			'type'              => 'string',
 			'description'       => '',
-			'sanitize_callback' => array($this->sanitize, 'background'),
+			'sanitize_callback' => array( $this->sanitize, 'background' ),
 			'default'           => 'ffffff'
-		));
-		register_setting('leira_letter_avatar_settings', 'leira_letter_avatar_method', array(
+		) );
+		register_setting( 'leira_letter_avatar_settings', 'leira_letter_avatar_method', array(
 			'type'              => 'string',
 			'description'       => '',
-			'sanitize_callback' => array($this->sanitize, 'method'),
+			'sanitize_callback' => array( $this->sanitize, 'method' ),
 			'default'           => 'auto'
-		));
-		register_setting('leira_letter_avatar_settings', 'leira_letter_avatar_bg', array(
+		) );
+		register_setting( 'leira_letter_avatar_settings', 'leira_letter_avatar_bg', array(
 			'type'              => 'string',
 			'description'       => '',
-			'sanitize_callback' => array($this->sanitize, 'background'),
+			'sanitize_callback' => array( $this->sanitize, 'background' ),
 			'default'           => 'fc91ad'
-		));
-		register_setting('leira_letter_avatar_settings', 'leira_letter_avatar_bgs', array(
+		) );
+		register_setting( 'leira_letter_avatar_settings', 'leira_letter_avatar_bgs', array(
 			'type'              => 'string',
 			'description'       => '',
-			'sanitize_callback' => array($this->sanitize, 'backgrounds'),
+			'sanitize_callback' => array( $this->sanitize, 'backgrounds' ),
 			'default'           => ''
-		));
+		) );
 		/**
 		 * Register sections
 		 */
 		add_settings_section(
 			'general',
 			'',//__( 'Your section description', 'leira-letter-avatar' ),
-			array($this, 'render_settings_section'),
+			array( $this, 'render_settings_section' ),
 			'leira_letter_avatar_settings'
 		);
 
@@ -384,56 +377,56 @@ class Leira_Letter_Avatar_Admin
 		 */
 		add_settings_field(
 			'leira_letter_avatar_checkbox_field_0',
-			__('Active', 'leira-letter-avatar'),
-			array($this, 'render_active_settings'),
+			__( 'Active', 'leira-letter-avatar' ),
+			array( $this, 'render_active_settings' ),
 			'leira_letter_avatar_settings',
 			'general'
 		);
 
 		add_settings_field(
 			'leira_letter_avatar_checkbox_field_4',
-			__('Gravatar', 'leira-letter-avatar'),
-			array($this, 'render_gravatar_settings'),
+			__( 'Gravatar', 'leira-letter-avatar' ),
+			array( $this, 'render_gravatar_settings' ),
 			'leira_letter_avatar_settings',
 			'general'
 		);
 
 		add_settings_field(
 			'leira_letter_avatar_checkbox_field_6',
-			__('Format', 'leira-letter-avatar'),
-			array($this, 'render_format_settings'),
+			__( 'Format', 'leira-letter-avatar' ),
+			array( $this, 'render_format_settings' ),
 			'leira_letter_avatar_settings',
 			'general'
 		);
 
 		add_settings_field(
 			'leira_letter_avatar_select_field_3',
-			__('Shape', 'leira-letter-avatar'),
-			array($this, 'render_shape_settings'),
+			__( 'Shape', 'leira-letter-avatar' ),
+			array( $this, 'render_shape_settings' ),
 			'leira_letter_avatar_settings',
 			'general'
 		);
 
 		add_settings_field(
 			'leira_letter_avatar_checkbox_field_1',
-			__('Letters', 'leira-letter-avatar'),
-			array($this, 'render_letters_settings'),
+			__( 'Letters', 'leira-letter-avatar' ),
+			array( $this, 'render_letters_settings' ),
 			'leira_letter_avatar_settings',
 			'general'
 		);
 
 		add_settings_field(
 			'leira_letter_avatar_checkbox_field_5',
-			__('Color', 'leira-letter-avatar'),
-			array($this, 'render_color_settings'),
+			__( 'Color', 'leira-letter-avatar' ),
+			array( $this, 'render_color_settings' ),
 			'leira_letter_avatar_settings',
 			'general'
 		);
 
 		add_settings_field(
 			'leira_letter_avatar_select_field_2',
-			__('Background', 'leira-letter-avatar'),
-			array($this, 'render_background_settings'),
+			__( 'Background', 'leira-letter-avatar' ),
+			array( $this, 'render_background_settings' ),
 			'leira_letter_avatar_settings',
 			'general'
 		);
@@ -444,18 +437,18 @@ class Leira_Letter_Avatar_Admin
 	 *
 	 * @since 1.0.0
 	 */
-	public function render_settings_page()
-	{
-		if (!current_user_can($this->capability)) {
-			wp_die(esc_html__('You do not have sufficient permissions to access this page.', 'leira-letter-avatar'));
+	public function render_settings_page() {
+		if ( ! current_user_can( $this->capability ) ) {
+			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.',
+				'leira-letter-avatar' ) );
 		}
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e('Letter Avatar Settings', 'leira-letter-avatar') ?></h1>
+			<h1><?php esc_html_e( 'Letter Avatar Settings', 'leira-letter-avatar' ) ?></h1>
 			<form action='options.php' method='post'>
 				<?php
-				settings_fields('leira_letter_avatar_settings');
-				do_settings_sections('leira_letter_avatar_settings');
+				settings_fields( 'leira_letter_avatar_settings' );
+				do_settings_sections( 'leira_letter_avatar_settings' );
 				submit_button();
 				?>
 			</form>
@@ -468,8 +461,7 @@ class Leira_Letter_Avatar_Admin
 	 *
 	 * @since 1.0.0
 	 */
-	public function render_settings_section()
-	{
+	public function render_settings_section() {
 		//echo '<p>' . __( 'This section description', 'leira-letter-avatar' ) . '</p>';
 	}
 
@@ -478,16 +470,15 @@ class Leira_Letter_Avatar_Admin
 	 *
 	 * @since 1.0.0
 	 */
-	public function render_active_settings()
-	{
+	public function render_active_settings() {
 
-		$option = get_network_option(null, 'avatar_default', 'mystery');
-		$option = $this->sanitize->avatar_default($option);
+		$option = get_network_option( null, 'avatar_default', 'mystery' );
+		$option = $this->sanitize->avatar_default( $option );
 		?>
 		<label for="settings_avatar_default">
 			<input type='checkbox' name='avatar_default' id="settings_avatar_default"
-				   value='leira_letter_avatar' <?php checked($option, 'leira_letter_avatar'); ?>>
-			<?php esc_html_e('Enable use of letter avatar', 'leira-letter-avatar'); ?>
+				   value='leira_letter_avatar' <?php checked( $option, 'leira_letter_avatar' ); ?>>
+			<?php esc_html_e( 'Enable use of letter avatar', 'leira-letter-avatar' ); ?>
 		</label>
 
 		<?php
@@ -498,16 +489,15 @@ class Leira_Letter_Avatar_Admin
 	 *
 	 * @since 1.2.0
 	 */
-	public function render_gravatar_settings()
-	{
+	public function render_gravatar_settings() {
 
-		$gravatar = get_network_option(null, 'leira_letter_avatar_gravatar', false);
-		$gravatar = $this->sanitize->boolean($gravatar);
+		$gravatar = get_network_option( null, 'leira_letter_avatar_gravatar', false );
+		$gravatar = $this->sanitize->boolean( $gravatar );
 		?>
 		<label for="settings_gravatar">
 			<input type='checkbox' name='leira_letter_avatar_gravatar' id="settings_gravatar"
-				   value='1' <?php checked(true, $gravatar); ?>>
-			<?php esc_html_e('Use Gravatar profile picture if available', 'leira-letter-avatar'); ?>
+				   value='1' <?php checked( true, $gravatar ); ?>>
+			<?php esc_html_e( 'Use Gravatar profile picture if available', 'leira-letter-avatar' ); ?>
 		</label>
 
 		<?php
@@ -518,20 +508,19 @@ class Leira_Letter_Avatar_Admin
 	 *
 	 * @since 1.2.0
 	 */
-	public function render_format_settings()
-	{
+	public function render_format_settings() {
 
-		$format = get_network_option(null, 'leira_letter_avatar_format', 'svg');
-		$format = $this->sanitize->format($format);
+		$format = get_network_option( null, 'leira_letter_avatar_format', 'svg' );
+		$format = $this->sanitize->format( $format );
 		?>
 		<label for="settings_format">
 			<select name="leira_letter_avatar_format" id="settings_format">
-				<option value="svg" <?php selected('svg', $format) ?>><?php esc_html_e('.svg',
-						'leira-letter-avatar') ?></option>
-				<option value="png" <?php selected('png', $format) ?>><?php esc_html_e('.png',
-						'leira-letter-avatar') ?></option>
-				<option value="jpg" <?php selected('jpg', $format) ?>><?php esc_html_e('.jpg',
-						'leira-letter-avatar') ?></option>
+				<option value="svg" <?php selected( 'svg', $format ) ?>><?php esc_html_e( '.svg',
+						'leira-letter-avatar' ) ?></option>
+				<option value="png" <?php selected( 'png', $format ) ?>><?php esc_html_e( '.png',
+						'leira-letter-avatar' ) ?></option>
+				<option value="jpg" <?php selected( 'jpg', $format ) ?>><?php esc_html_e( '.jpg',
+						'leira-letter-avatar' ) ?></option>
 			</select>
 		</label>
 
@@ -543,25 +532,24 @@ class Leira_Letter_Avatar_Admin
 	 *
 	 * @since 1.0.0
 	 */
-	public function render_shape_settings()
-	{
-		$rounded = get_network_option(null, 'leira_letter_avatar_rounded', true);
-		$rounded = $this->sanitize->boolean($rounded);
+	public function render_shape_settings() {
+		$rounded = get_network_option( null, 'leira_letter_avatar_rounded', true );
+		$rounded = $this->sanitize->boolean( $rounded );
 		?>
 		<fieldset>
 			<legend class="screen-reader-text">
-				<span><?php esc_html_e('Shape settings', 'leira-letter-avatar') ?></span>
+				<span><?php esc_html_e( 'Shape settings', 'leira-letter-avatar' ) ?></span>
 			</legend>
 			<label for="settings_shape_circle">
 				<input type="radio" name="leira_letter_avatar_rounded" value="1"
-					   id="settings_shape_circle" <?php checked(true, $rounded) ?>>
-				<?php esc_html_e('Circle', 'leira-letter-avatar') ?>
+					   id="settings_shape_circle" <?php checked( true, $rounded ) ?>>
+				<?php esc_html_e( 'Circle', 'leira-letter-avatar' ) ?>
 			</label>
 			<br>
 			<label for="settings_shape_rectangle">
 				<input type="radio" name="leira_letter_avatar_rounded" value="0"
-					   id="settings_shape_rectangle" <?php checked(false, $rounded) ?>>
-				<?php esc_html_e('Square', 'leira-letter-avatar') ?>
+					   id="settings_shape_rectangle" <?php checked( false, $rounded ) ?>>
+				<?php esc_html_e( 'Square', 'leira-letter-avatar' ) ?>
 			</label>
 		</fieldset>
 		<?php
@@ -572,53 +560,52 @@ class Leira_Letter_Avatar_Admin
 	 *
 	 * @since 1.0.0
 	 */
-	public function render_letters_settings()
-	{
-		$letters = get_network_option(null, 'leira_letter_avatar_letters', 2);
-		$letters = $this->sanitize->letters($letters);
+	public function render_letters_settings() {
+		$letters = get_network_option( null, 'leira_letter_avatar_letters', 2 );
+		$letters = $this->sanitize->letters( $letters );
 
-		$bold = get_network_option(null, 'leira_letter_avatar_bold', false);
-		$bold = $this->sanitize->boolean($bold);
+		$bold = get_network_option( null, 'leira_letter_avatar_bold', false );
+		$bold = $this->sanitize->boolean( $bold );
 
-		$uppercase = get_network_option(null, 'leira_letter_avatar_uppercase', true);
-		$uppercase = $this->sanitize->boolean($uppercase);
+		$uppercase = get_network_option( null, 'leira_letter_avatar_uppercase', true );
+		$uppercase = $this->sanitize->boolean( $uppercase );
 		?>
 		<fieldset>
 			<legend class="screen-reader-text">
-				<span><?php esc_html_e('Letters settings', 'leira-letter-avatar') ?></span>
+				<span><?php esc_html_e( 'Letters settings', 'leira-letter-avatar' ) ?></span>
 			</legend>
 			<label for="settings_letter">
-				<?php esc_html_e('Fill avatar image with at most', 'leira-letter-avatar') ?>
+				<?php esc_html_e( 'Fill avatar image with at most', 'leira-letter-avatar' ) ?>
 				<select name="leira_letter_avatar_letters" id="settings_letter">
 					<option value="1"
-						<?php selected(1, $letters) ?>><?php esc_html_e('1 letter', 'leira-letter-avatar') ?>
+						<?php selected( 1, $letters ) ?>><?php esc_html_e( '1 letter', 'leira-letter-avatar' ) ?>
 					</option>
-					<option value="2" <?php selected(2, $letters) ?>>
-						<?php esc_html_e('2 letters', 'leira-letter-avatar') ?>
+					<option value="2" <?php selected( 2, $letters ) ?>>
+						<?php esc_html_e( '2 letters', 'leira-letter-avatar' ) ?>
 					</option>
 				</select>
 			</label>
 			<p class="description">
-				<?php esc_html_e('The letters are the initials of the user taken from first name and last name. If those fields are not set, the plugin will try to determine letters base on Nickname, Display Name, username or email, in that order.',
-					'leira-letter-avatar') ?>
+				<?php esc_html_e( 'The letters are the initials of the user taken from first name and last name. If those fields are not set, the plugin will try to determine letters base on Nickname, Display Name, username or email, in that order.',
+					'leira-letter-avatar' ) ?>
 			</p>
 			<br>
 			<label for="settings_bold">
 				<input type='checkbox'
 					   id="settings_bold"
 					   name='leira_letter_avatar_bold'
-					<?php checked(true, $bold); ?>
+					<?php checked( true, $bold ); ?>
 					   value='1'>
-				<?php echo wp_kses_post(__('Make letters <b>bold</b>', 'leira-letter-avatar')) ?>
+				<?php echo wp_kses_post( __( 'Make letters <b>bold</b>', 'leira-letter-avatar' ) ) ?>
 			</label>
 			<br>
 			<label for="settings_uppercase">
 				<input type='checkbox'
 					   id="settings_uppercase"
 					   name='leira_letter_avatar_uppercase'
-					<?php checked(true, $uppercase); ?>
+					<?php checked( true, $uppercase ); ?>
 					   value='1'>
-				<?php esc_html_e('Make letters uppercase', 'leira-letter-avatar') ?>
+				<?php esc_html_e( 'Make letters uppercase', 'leira-letter-avatar' ) ?>
 			</label>
 		</fieldset>
 		<?php
@@ -629,17 +616,16 @@ class Leira_Letter_Avatar_Admin
 	 *
 	 * @since 1.2.2
 	 */
-	public function render_color_settings()
-	{
-		$color_method = get_network_option(null, 'leira_letter_avatar_color_method', 'auto');
-		$color_method = $this->sanitize->color_method($color_method);
+	public function render_color_settings() {
+		$color_method = get_network_option( null, 'leira_letter_avatar_color_method', 'auto' );
+		$color_method = $this->sanitize->color_method( $color_method );
 
-		$color = get_network_option(null, 'leira_letter_avatar_color', 'ffffff');
-		$color = $this->sanitize->background($color);
+		$color = get_network_option( null, 'leira_letter_avatar_color', 'ffffff' );
+		$color = $this->sanitize->background( $color );
 		?>
 		<fieldset>
 			<legend class="screen-reader-text">
-				<span><?php esc_html_e('Color settings', 'leira-letter-avatar') ?></span>
+				<span><?php esc_html_e( 'Color settings', 'leira-letter-avatar' ) ?></span>
 			</legend>
 			<div>
 				<div>
@@ -648,9 +634,9 @@ class Leira_Letter_Avatar_Admin
 							   id="leira_letter_avatar_color_method_auto"
 							   name="leira_letter_avatar_color_method"
 							   value="auto"
-							<?php checked('auto', $color_method); ?>>
-						<?php esc_html_e('Automatically determine letters color based on background color',
-							'leira-letter-avatar') ?>
+							<?php checked( 'auto', $color_method ); ?>>
+						<?php esc_html_e( 'Automatically determine letters color based on background color',
+							'leira-letter-avatar' ) ?>
 					</label>
 				</div>
 				<div>
@@ -659,13 +645,13 @@ class Leira_Letter_Avatar_Admin
 							   id="leira_letter_avatar_color_method_fixed"
 							   name="leira_letter_avatar_color_method"
 							   value="fixed"
-							<?php checked('fixed', $color_method); ?>>
-						<?php esc_html_e('Use this color for the letters', 'leira-letter-avatar') ?>
+							<?php checked( 'fixed', $color_method ); ?>>
+						<?php esc_html_e( 'Use this color for the letters', 'leira-letter-avatar' ) ?>
 					</label>
 					<input type="text"
 						   name="leira_letter_avatar_color"
 						   data-picker_default="#ffffff"
-						   value="#<?php echo esc_attr($color); ?>"
+						   value="#<?php echo esc_attr( $color ); ?>"
 						   class="leira-letter-avatar-color-field">
 				</div>
 			</div>
@@ -678,57 +664,57 @@ class Leira_Letter_Avatar_Admin
 	 *
 	 * @since 1.0.0
 	 */
-	public function render_background_settings()
-	{
-		$method = get_network_option(null, 'leira_letter_avatar_method');
-		$method = $this->sanitize->method($method);
+	public function render_background_settings() {
+		$method = get_network_option( null, 'leira_letter_avatar_method' );
+		$method = $this->sanitize->method( $method );
 
-		$bg = get_network_option(null, 'leira_letter_avatar_bg', 'fc91ad');
-		$bg = $this->sanitize->background($bg);
+		$bg = get_network_option( null, 'leira_letter_avatar_bg', 'fc91ad' );
+		$bg = $this->sanitize->background( $bg );
 
-		$bgs = get_network_option(null, 'leira_letter_avatar_bgs', '');
-		$bgs = $this->sanitize->backgrounds($bgs);
+		$bgs = get_network_option( null, 'leira_letter_avatar_bgs', '' );
+		$bgs = $this->sanitize->backgrounds( $bgs );
 		?>
 		<fieldset>
 			<legend class="screen-reader-text">
-				<span><?php esc_html_e('Background settings', 'leira-letter-avatar') ?></span>
+				<span><?php esc_html_e( 'Background settings', 'leira-letter-avatar' ) ?></span>
 			</legend>
 			<div>
 				<div>
 					<label for="leira_letter_avatar_method_auto">
 						<input type="radio" name="leira_letter_avatar_method" value="auto"
-							   id="leira_letter_avatar_method_auto" <?php checked('auto', $method); ?>>
-						<?php esc_html_e('Automatically determine background color for each user',
-							'leira-letter-avatar') ?>
+							   id="leira_letter_avatar_method_auto" <?php checked( 'auto', $method ); ?>>
+						<?php esc_html_e( 'Automatically determine background color for each user',
+							'leira-letter-avatar' ) ?>
 					</label>
 				</div>
 				<div>
 					<label for="leira_letter_avatar_method_fixed">
 						<input type="radio" name="leira_letter_avatar_method" value="fixed"
-							   id="leira_letter_avatar_method_fixed" <?php checked('fixed', $method); ?>>
-						<?php esc_html_e('Use this background color for all users', 'leira-letter-avatar') ?>
+							   id="leira_letter_avatar_method_fixed" <?php checked( 'fixed', $method ); ?>>
+						<?php esc_html_e( 'Use this background color for all users', 'leira-letter-avatar' ) ?>
 					</label>
 					<input type="text"
 						   name="leira_letter_avatar_bg"
 						   data-picker_default="#fc91ad"
 						   data-picker_palettes="#fc91ad,#37c5ab,#fd9a00,#794fcf,#19C976"
-						   value="#<?php echo esc_attr($bg); ?>"
+						   value="#<?php echo esc_attr( $bg ); ?>"
 						   class="leira-letter-avatar-color-field">
 				</div>
 				<div>
 					<label for="leira_letter_avatar_method_random">
 						<input type="radio" name="leira_letter_avatar_method"
 							   id="leira_letter_avatar_method_random"
-							   value="random" <?php checked('random', $method); ?>>
-						<?php esc_html_e('Use a random background color from the list below:', 'leira-letter-avatar') ?>
+							   value="random" <?php checked( 'random', $method ); ?>>
+						<?php esc_html_e( 'Use a random background color from the list below:',
+							'leira-letter-avatar' ) ?>
 					</label>
 					<p>
                         <textarea name="leira_letter_avatar_bgs" rows="3" cols="50" id=""
-								  class="large-text code"><?php echo esc_textarea($bgs) ?></textarea>
+								  class="large-text code"><?php echo esc_textarea( $bgs ) ?></textarea>
 					</p>
 					<p class="description">
-						<?php esc_html_e('Use comma to separate each color. Colors should be in hex format (i.e. fc91ad).',
-							'leira-letter-avatar') ?>
+						<?php esc_html_e( 'Use comma to separate each color. Colors should be in hex format (i.e. fc91ad).',
+							'leira-letter-avatar' ) ?>
 					</p>
 				</div>
 			</div>
@@ -746,30 +732,29 @@ class Leira_Letter_Avatar_Admin
 	 * @return string
 	 * @since 1.2.0
 	 */
-	public function admin_footer_text($footer_text)
-	{
+	public function admin_footer_text( $footer_text ) {
 		$current_screen = get_current_screen();
 
 		// Add the dashboard pages
 		$pages[] = 'settings_page_leira_letter_avatar';
 
-		if (isset($current_screen->id) && in_array($current_screen->id, $pages)) {
+		if ( isset( $current_screen->id ) && in_array( $current_screen->id, $pages ) ) {
 			// Change the footer text
-			if (!get_network_option(null, 'leira_letter_avatar_footer_rated')) {
+			if ( ! get_network_option( null, 'leira_letter_avatar_footer_rated' ) ) {
 
 				ob_start(); ?>
 				<a href="https://wordpress.org/support/plugin/leira-letter-avatar/reviews/?filter=5" target="_blank"
 				   class="leira-letter-avatar-admin-rating-link"
-				   data-rated="<?php esc_attr_e('Thanks :)', 'leira-letter-avatar') ?>"
-				   data-nonce="<?php echo esc_html(wp_create_nonce($this->nonce_action)) ?>">
+				   data-rated="<?php esc_attr_e( 'Thanks :)', 'leira-letter-avatar' ) ?>"
+				   data-nonce="<?php echo esc_html( wp_create_nonce( $this->nonce_action ) ) ?>">
 					&#9733;&#9733;&#9733;&#9733;&#9733;
 				</a>
 				<?php $link = ob_get_clean();
 
 				ob_start();
 				/* translators: link to rate the plugin */
-				printf(esc_html__('If you like Letter Avatar please consider leaving a %s review. It will help us to grow the plugin and make it more popular. Thank you.',
-					'leira-letter-avatar'), wp_kses_post($link)) ?>
+				printf( esc_html__( 'If you like Letter Avatar please consider leaving a %s review. It will help us to grow the plugin and make it more popular. Thank you.',
+					'leira-letter-avatar' ), wp_kses_post( $link ) ) ?>
 
 				<?php $footer_text = ob_get_clean();
 			}
@@ -783,19 +768,18 @@ class Leira_Letter_Avatar_Admin
 	 *
 	 * @since 1.2.0
 	 */
-	public function footer_rated()
-	{
-		$nonce = isset($_REQUEST['nonce']) ? sanitize_text_field(wp_unslash($_REQUEST['nonce'])) : '';
+	public function footer_rated() {
+		$nonce = isset( $_REQUEST['nonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ) : '';
 
-		if (!wp_verify_nonce($nonce, $this->nonce_action)) {
-			wp_send_json_error(esc_js(__('Wrong Nonce', 'leira-letter-avatar')));
+		if ( ! wp_verify_nonce( $nonce, $this->nonce_action ) ) {
+			wp_send_json_error( esc_js( __( 'Wrong Nonce', 'leira-letter-avatar' ) ) );
 		}
 
-		if (!is_user_logged_in() || !current_user_can('manage_options')) {
-			wp_send_json_error(__('Please login as administrator', 'leira-letter-avatar'));
+		if ( ! is_user_logged_in() || ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( __( 'Please login as administrator', 'leira-letter-avatar' ) );
 		}
 
-		update_network_option(null, 'leira_letter_avatar_footer_rated', 1);
+		update_network_option( null, 'leira_letter_avatar_footer_rated', 1 );
 		wp_send_json_success();
 	}
 
