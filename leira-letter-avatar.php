@@ -16,7 +16,7 @@
  * Plugin Name:       Leira Letter Avatar
  * Plugin URI:        https://wordpress.org/plugins/leira-letter-avatar/
  * Description:       Enables custom avatars for users based on its initial letters.
- * Version:           1.3.10
+ * Version:           1.3.11
  * Author:            Ariel
  * Author URI:        https://leira.dev
  * License:           GPL-2.0+
@@ -35,7 +35,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'LEIRA_LETTER_AVATAR_VERSION', '1.3.10' );
+define( 'LEIRA_LETTER_AVATAR_VERSION', '1.3.11' );
 
 /**
  * The code that runs during plugin activation.
