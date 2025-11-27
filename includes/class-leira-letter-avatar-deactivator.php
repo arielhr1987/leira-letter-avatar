@@ -37,8 +37,8 @@ class Leira_Letter_Avatar_Deactivator{
 		 *
 		 * @since 1.3.1
 		 */
-		if ( get_network_option( null, 'avatar_default' ) == 'leira_letter_avatar' ) {
-			update_network_option( null, 'avatar_default', 'mystery' );
+		if ( get_option( 'avatar_default' ) == 'leira_letter_avatar' ) {
+			update_option( 'avatar_default', 'mystery' );
 		}
 	}
 

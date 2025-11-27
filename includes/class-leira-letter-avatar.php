@@ -342,7 +342,7 @@ class Leira_Letter_Avatar{
 	 * @return bool
 	 */
 	public function is_active() {
-		$option = get_network_option( null, 'avatar_default', 'mystery' );
+		$option = get_option( 'avatar_default', 'mystery' );
 
 		return $option === 'leira_letter_avatar';
 	}
