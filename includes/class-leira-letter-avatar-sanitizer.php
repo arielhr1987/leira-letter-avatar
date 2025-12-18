@@ -72,11 +72,20 @@ class Leira_Letter_Avatar_Sanitizer{
 			'wavatar',
 			'monsterid',
 			'retro',
+			'robohash',
+			'initials',
+			'color',
 		);
 		$avatar_defaults = array_fill_keys( $avatar_defaults, '' );
 		$avatar_defaults = apply_filters( 'avatar_defaults', $avatar_defaults );
 		$value           = sanitize_text_field( $value );
-		$value           = isset( $avatar_defaults[ $value ] ) ? $value : 'mystery';
+
+		/**
+		 * If WP changes the array $avatar_defaults in wp-admin/options-discussion.php file,
+		 * we would need to update our array as well.
+		 * To avoid this, return the value as is.
+		 */
+		//$value           = isset( $avatar_defaults[ $value ] ) ? $value : 'mystery';
 
 		return $value;
 	}
@@ -170,7 +179,7 @@ class Leira_Letter_Avatar_Sanitizer{
 	public function backgrounds( $value ) {
 		$value  = sanitize_text_field( $value );
 		$values = explode( ',', $value );
-		$values = array_map( function( $value ) {
+		$values = array_map( function ( $value ) {
 			return trim( trim( $value ), '#' );
 		}, $values );
 		$values = array_filter( $values, 'sanitize_hex_color_no_hash' );
@@ -204,7 +213,7 @@ class Leira_Letter_Avatar_Sanitizer{
 	 * @since 1.3.10
 	 */
 	public function numeric( $value ) {
-		$value = filter_var( $value, FILTER_SANITIZE_NUMBER_FLOAT , FILTER_FLAG_ALLOW_FRACTION );
+		$value = filter_var( $value, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
 
 		return $value;
 	}

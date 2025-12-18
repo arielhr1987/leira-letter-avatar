@@ -22,6 +22,12 @@
 			"options": {
 				"activate": true
 			}
+		},
+		{
+			"step": "setSiteOptions",
+			"options": {
+				"avatar_default" : "leira_letter_avatar"
+			}
 		}
 	]
 }

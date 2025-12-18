@@ -1,6 +1,6 @@
 {
     "require-dev": {
-        "johnpbloch/wordpress": "6.8.2"
+        "johnpbloch/wordpress": "6.9"
     },
     "config": {
         "allow-plugins": {
