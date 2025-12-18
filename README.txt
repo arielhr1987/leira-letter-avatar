@@ -3,7 +3,7 @@ Contributors: arielhr1987, jlcd0894, ivankuraev
 Donate link: https://github.com/arielhr1987
 Tags: user, avatar, image, letter, initial
 Requires at least: 4.7
-Tested up to: 6.8
+Tested up to: 6.9
 Stable tag: 1.3.12
 Requires PHP: 8.0
 License: GPLv2 or later
