@@ -258,8 +258,8 @@ class Leira_Letter_Avatar_Public{
 		}
 		$args = array_merge( array(
 			'size'     => 300,
-			'gravatar' => get_network_option( null, 'leira_letter_avatar_gravatar', false ),
-			'rating'   => get_network_option( null, 'avatar_rating', 'G' )
+			'gravatar' => get_option( 'leira_letter_avatar_gravatar', false ),
+			'rating'   => get_option( 'avatar_rating', 'G' )
 		), $args );
 
 		$size       = $args['size'];
@@ -368,12 +368,12 @@ class Leira_Letter_Avatar_Public{
 		}
 
 		$regex         = '/([^\pL]*(\pL)\pL*)/u';// \pL => matches any kind of letter from any language
-		$letters_count = get_network_option( null, 'leira_letter_avatar_letters', 2 );
+		$letters_count = get_option( 'leira_letter_avatar_letters', 2 );
 		$letters_count = $this->sanitize->letters( $letters_count );
 		$letters       = preg_replace( $regex, "$2", $letters );           //get all initials in the string
 		$letters       = mb_substr( $letters, 0, $letters_count, 'UTF-8' );//reduce to 2 or fewer initials
 
-		if ( get_network_option( null, 'leira_letter_avatar_uppercase', true ) ) {
+		if ( get_option( 'leira_letter_avatar_uppercase', true ) ) {
 			/**
 			 * Use mb_strtoupper in case initials contain letters with accents
 			 */
@@ -413,12 +413,12 @@ class Leira_Letter_Avatar_Public{
 			'font-size'  => $size * $font_ratio,
 			//'length'     => '', //image text length already set
 			'name'       => $letters,
-			'rounded'    => get_network_option( null, 'leira_letter_avatar_rounded', true ),
+			'rounded'    => get_option( 'leira_letter_avatar_rounded', true ),
 			'background' => $bg,
-			'bold'       => get_network_option( null, 'leira_letter_avatar_bold', false ),
+			'bold'       => get_option( 'leira_letter_avatar_bold', false ),
 			//'uppercase'  => '', //already set
 			'color'      => $color,
-			'format'     => get_network_option( null, 'leira_letter_avatar_format', 'svg' )
+			'format'     => get_option( 'leira_letter_avatar_format', 'svg' )
 		);
 
 		$url_args = apply_filters( 'leira_letter_avatar_url_args', $url_args, $id_or_email );
@@ -714,7 +714,7 @@ class Leira_Letter_Avatar_Public{
 		/**
 		 * Determine avatar url parameters base on user and email hash
 		 */
-		$current_option = get_network_option( null, 'leira_letter_avatar_method', 'auto' );
+		$current_option = get_option( 'leira_letter_avatar_method', 'auto' );
 		$current_option = $this->sanitize->method( $current_option );
 
 		/**
@@ -722,11 +722,11 @@ class Leira_Letter_Avatar_Public{
 		 */
 		switch ( $current_option ) {
 			case  'fixed':
-				$bg = get_network_option( null, 'leira_letter_avatar_bg' );
+				$bg = get_option( 'leira_letter_avatar_bg' );
 				$bg = $this->sanitize->background( $bg );
 				break;
 			case 'random':
-				$backgrounds = get_network_option( null, 'leira_letter_avatar_bgs', 'fc91ad' );
+				$backgrounds = get_option( 'leira_letter_avatar_bgs', 'fc91ad' );
 				$backgrounds = $this->sanitize->backgrounds( $backgrounds );
 				$backgrounds = explode( ',', $backgrounds );
 				if ( empty( $backgrounds ) ) {
@@ -775,12 +775,12 @@ class Leira_Letter_Avatar_Public{
 	 * @since 1.3.11
 	 */
 	protected function get_avatar_color( string $bg ): string {
-		$color_method = get_network_option( null, 'leira_letter_avatar_color_method', 'auto' );
+		$color_method = get_option( 'leira_letter_avatar_color_method', 'auto' );
 		$color_method = $this->sanitize->color_method( $color_method );
 		//By default, find the best contrast color for the background
 		$color = $this->get_contrast_color( $bg );
 		if ( $color_method == 'fixed' ) {
-			$color = get_network_option( null, 'leira_letter_avatar_color', 'ffffff' );
+			$color = get_option( 'leira_letter_avatar_color', 'ffffff' );
 		}
 		$color = trim( trim( $color ), '#' );
 		$color = $this->sanitize->background( $color );

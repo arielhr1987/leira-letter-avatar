@@ -164,7 +164,7 @@ class Leira_Letter_Avatar_Admin{
 	public function admin_body_class( $classes ) {
 		if ( leira_letter_avatar()->is_active() ) {
 			$classes .= ' leira_letter_avatar';
-			if ( get_network_option( null, 'leira_letter_avatar_rounded', true ) ) {
+			if ( get_option( 'leira_letter_avatar_rounded', true ) ) {
 				$classes .= ' leira_letter_avatar_rounded';
 			}
 		}
@@ -472,7 +472,7 @@ class Leira_Letter_Avatar_Admin{
 	 */
 	public function render_active_settings() {
 
-		$option = get_network_option( null, 'avatar_default', 'mystery' );
+		$option = get_option( 'avatar_default', 'mystery' );
 		$option = $this->sanitize->avatar_default( $option );
 		?>
 		<label for="settings_avatar_default">
@@ -491,7 +491,7 @@ class Leira_Letter_Avatar_Admin{
 	 */
 	public function render_gravatar_settings() {
 
-		$gravatar = get_network_option( null, 'leira_letter_avatar_gravatar', false );
+		$gravatar = get_option( 'leira_letter_avatar_gravatar', false );
 		$gravatar = $this->sanitize->boolean( $gravatar );
 		?>
 		<label for="settings_gravatar">
@@ -510,7 +510,7 @@ class Leira_Letter_Avatar_Admin{
 	 */
 	public function render_format_settings() {
 
-		$format = get_network_option( null, 'leira_letter_avatar_format', 'svg' );
+		$format = get_option( 'leira_letter_avatar_format', 'svg' );
 		$format = $this->sanitize->format( $format );
 		?>
 		<label for="settings_format">
@@ -533,7 +533,7 @@ class Leira_Letter_Avatar_Admin{
 	 * @since 1.0.0
 	 */
 	public function render_shape_settings() {
-		$rounded = get_network_option( null, 'leira_letter_avatar_rounded', true );
+		$rounded = get_option( 'leira_letter_avatar_rounded', true );
 		$rounded = $this->sanitize->boolean( $rounded );
 		?>
 		<fieldset>
@@ -561,13 +561,13 @@ class Leira_Letter_Avatar_Admin{
 	 * @since 1.0.0
 	 */
 	public function render_letters_settings() {
-		$letters = get_network_option( null, 'leira_letter_avatar_letters', 2 );
+		$letters = get_option( 'leira_letter_avatar_letters', 2 );
 		$letters = $this->sanitize->letters( $letters );
 
-		$bold = get_network_option( null, 'leira_letter_avatar_bold', false );
+		$bold = get_option( 'leira_letter_avatar_bold', false );
 		$bold = $this->sanitize->boolean( $bold );
 
-		$uppercase = get_network_option( null, 'leira_letter_avatar_uppercase', true );
+		$uppercase = get_option( 'leira_letter_avatar_uppercase', true );
 		$uppercase = $this->sanitize->boolean( $uppercase );
 		?>
 		<fieldset>
@@ -617,10 +617,10 @@ class Leira_Letter_Avatar_Admin{
 	 * @since 1.2.2
 	 */
 	public function render_color_settings() {
-		$color_method = get_network_option( null, 'leira_letter_avatar_color_method', 'auto' );
+		$color_method = get_option( 'leira_letter_avatar_color_method', 'auto' );
 		$color_method = $this->sanitize->color_method( $color_method );
 
-		$color = get_network_option( null, 'leira_letter_avatar_color', 'ffffff' );
+		$color = get_option( 'leira_letter_avatar_color', 'ffffff' );
 		$color = $this->sanitize->background( $color );
 		?>
 		<fieldset>
@@ -665,13 +665,13 @@ class Leira_Letter_Avatar_Admin{
 	 * @since 1.0.0
 	 */
 	public function render_background_settings() {
-		$method = get_network_option( null, 'leira_letter_avatar_method' );
+		$method = get_option( 'leira_letter_avatar_method' );
 		$method = $this->sanitize->method( $method );
 
-		$bg = get_network_option( null, 'leira_letter_avatar_bg', 'fc91ad' );
+		$bg = get_option( 'leira_letter_avatar_bg', 'fc91ad' );
 		$bg = $this->sanitize->background( $bg );
 
-		$bgs = get_network_option( null, 'leira_letter_avatar_bgs', '' );
+		$bgs = get_option( 'leira_letter_avatar_bgs', '' );
 		$bgs = $this->sanitize->backgrounds( $bgs );
 		?>
 		<fieldset>
@@ -740,7 +740,7 @@ class Leira_Letter_Avatar_Admin{
 
 		if ( isset( $current_screen->id ) && in_array( $current_screen->id, $pages ) ) {
 			// Change the footer text
-			if ( ! get_network_option( null, 'leira_letter_avatar_footer_rated' ) ) {
+			if ( ! get_option( 'leira_letter_avatar_footer_rated' ) ) {
 
 				ob_start(); ?>
 				<a href="https://wordpress.org/support/plugin/leira-letter-avatar/reviews/?filter=5" target="_blank"
@@ -779,7 +779,7 @@ class Leira_Letter_Avatar_Admin{
 			wp_send_json_error( __( 'Please login as administrator', 'leira-letter-avatar' ) );
 		}
 
-		update_network_option( null, 'leira_letter_avatar_footer_rated', 1 );
+		update_option( 'leira_letter_avatar_footer_rated', 1 );
 		wp_send_json_success();
 	}
 
